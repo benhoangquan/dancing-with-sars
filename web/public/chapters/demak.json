@@ -496,6 +496,19 @@
         "license": "Copernicus DEM licence: free use with attribution. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA",
         "url": "https://planetarycomputer.microsoft.com/dataset/cop-dem-glo-30",
         "nasa": false
+      },
+      {
+        "id": "overture",
+        "mission": "Overture Maps",
+        "product": "Overture Maps buildings and transportation themes",
+        "collection": "overturemaps-us-west-2",
+        "maturity": "n/a",
+        "granules": [],
+        "dates": [],
+        "provider": "Overture Maps Foundation",
+        "license": "ODbL (buildings and roads include OpenStreetMap data, (c) OpenStreetMap contributors)",
+        "url": "https://overturemaps.org/",
+        "nasa": false
       }
     ],
     "footprint": {
@@ -555,6 +568,13 @@
           "layerId": "sar_2026"
         }
       ]
+    },
+    "impact": {
+      "geojson": "data/demak/impact.geojson",
+      "bytes": 256088,
+      "sha256": "c8972b488bb1e7d6f2b5c464267aada4415cb6e63895916c2520007647d4b2fc",
+      "counts": { "buildings": 2004, "road_segments": 0 },
+      "sourceIds": ["overture"]
     }
   }
 }

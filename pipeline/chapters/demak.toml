@@ -39,6 +39,13 @@ label = "Optical, dry season 2026"
 mode = "median"
 window = ["2026-06-01", "2026-10-15"]
 
+[impact]   # Layer 1: buildings and main roads on the Sayung coast (sar overture); no counts, the footprint is a stand-in
+area = [110.505, -6.925, 110.53, -6.90]   # Timbulsloko
+buildings = true
+building_points = true   # dense villages: one point per building keeps the file small
+roads = true
+road_classes = ["motorway", "trunk", "primary", "secondary"]
+
 [flyover]
 duration = 20  # Act I; the last waypoint is the chapter's openingCamera (pitch 52)
 exaggeration = 1.5

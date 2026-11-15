@@ -15,6 +15,7 @@ import { useStory } from "@/lib/store";
 import { chapterTokens } from "@/lib/tokens";
 import type { Chapter } from "@/types/chapter";
 import { BeatGlassCard } from "./BeatGlassCard";
+import { ImpactKey } from "./ImpactKey";
 
 const RadarCompareMap = dynamic(() => import("@/components/map/RadarCompareMap"), { ssr: false });
 
@@ -84,6 +85,7 @@ export function PlaceChapter({ chapter, onExit }: { chapter: Chapter; onExit: ()
       {o.legend && (
         <div data-story-root className="pointer-events-auto fixed left-1/2 top-[5.25rem] z-20 w-[min(26rem,calc(100vw-1.5rem))] -translate-x-1/2">
           <RadarLegendPill chapter={chapter} visibleLayerIds={[...new Set([...panes.a, ...panes.b])]} />
+          <ImpactKey chapter={chapter} />
         </div>
       )}
 

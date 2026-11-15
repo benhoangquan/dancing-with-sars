@@ -53,6 +53,13 @@ pattern = "fishbone"
 seed = 1101
 max_px = 640
 
+[impact]   # Layer 1: roads near the clearings and the Indigenous territory at the south edge (sar overture)
+area = [-63.75, -10.40, -63.35, -9.70]
+roads = true
+road_classes = ["primary", "secondary", "tertiary", "unclassified", "residential", "track"]
+near_m = 1000
+territories = [3614774]   # OSM relation: Terra Indigena Uru-Eu-Wau-Wau
+
 [flyover]
 duration = 20  # Act I; the last waypoint is the chapter's openingCamera (pitch 52)
 exaggeration = 1.5

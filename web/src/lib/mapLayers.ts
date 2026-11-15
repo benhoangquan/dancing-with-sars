@@ -225,3 +225,40 @@ export class LayerManager {
     if (this.wanted.includes(id)) this.show(id);
   };
 }
+
+export const IMPACT_SOURCE = "impact";
+
+/** Map layers for the human-infrastructure overlay: territories, roads and buildings, brighter near the change. */
+export function impactLayers(): import("maplibre-gl").LayerSpecification[] {
+  const near = ["==", ["get", "near"], true];
+  return [
+    {
+      id: "impact-territory",
+      type: "line",
+      source: IMPACT_SOURCE,
+      filter: ["==", ["get", "kind"], "territory"],
+      paint: { "line-color": "#FFD60A", "line-width": 2, "line-dasharray": [2, 1.5], "line-opacity": 0.9 },
+    },
+    {
+      id: "impact-road",
+      type: "line",
+      source: IMPACT_SOURCE,
+      filter: ["==", ["get", "kind"], "road"],
+      paint: { "line-color": ["case", near, "#FF9F0A", "#FFFFFF"], "line-width": ["case", near, 1.8, 1], "line-opacity": ["case", near, 0.95, 0.5] },
+    },
+    {
+      id: "impact-building",
+      type: "fill",
+      source: IMPACT_SOURCE,
+      filter: ["all", ["==", ["get", "kind"], "building"], ["==", ["geometry-type"], "Polygon"]],
+      paint: { "fill-color": ["case", near, "#FF453A", "#FFFFFF"], "fill-opacity": ["case", near, 0.95, 0.7] },
+    },
+    {
+      id: "impact-building-point",
+      type: "circle",
+      source: IMPACT_SOURCE,
+      filter: ["all", ["==", ["get", "kind"], "building"], ["==", ["geometry-type"], "Point"]],
+      paint: { "circle-radius": 1.6, "circle-color": "#FFFFFF", "circle-opacity": 0.85 },
+    },
+  ] as import("maplibre-gl").LayerSpecification[];
+}

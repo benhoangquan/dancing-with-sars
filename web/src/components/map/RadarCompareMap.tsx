@@ -9,7 +9,7 @@ import { absoluteAssetUrl, assetUrl } from "@/lib/asset";
 import { type Beat, paneLayers, radarCamera } from "@/lib/beats";
 import { cameraAt } from "@/lib/camera";
 import { springEase } from "@/lib/ease";
-import { LayerManager, TERRAIN_SOURCE, baseStyle, cogDem } from "@/lib/mapLayers";
+import { IMPACT_SOURCE, LayerManager, TERRAIN_SOURCE, baseStyle, cogDem, impactLayers } from "@/lib/mapLayers";
 import { clock } from "@/lib/store";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import { Landmarks } from "@/components/place/Landmarks";
@@ -181,6 +181,20 @@ export default function RadarCompareMap({ chapter, beat, mode, reduced, videoAct
       r.mgrA = r.mgrB = undefined;
     };
   }, [ready, chapter.slug, chapter.generated.layers, flyover]);
+
+  // Buildings, roads and territories (Layer 1), on both sides of the swipe during Act II.
+  useEffect(() => {
+    const r = rt.current;
+    const impact = chapter.generated.impact;
+    if (!ready || !r || !impact) return;
+    for (const map of [r.a, r.b]) {
+      if (!map.getSource(IMPACT_SOURCE)) {
+        map.addSource(IMPACT_SOURCE, { type: "geojson", data: assetUrl(impact.geojson) });
+        for (const layer of impactLayers()) map.addLayer(layer);
+      }
+      for (const layer of impactLayers()) map.setLayoutProperty(layer.id, "visibility", mode === "radar" ? "visible" : "none");
+    }
+  }, [ready, chapter.generated.impact, mode]);
 
   // A new beat or mode: which layers each map shows, and where radar mode looks.
   useEffect(() => {

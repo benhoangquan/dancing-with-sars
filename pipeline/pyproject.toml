@@ -17,6 +17,7 @@ dependencies = [
     "pillow>=11",
     "shapely>=2.0",
     "imageio-ffmpeg>=0.5",
+    "overturemaps>=0.10",
 ]
 
 [project.scripts]

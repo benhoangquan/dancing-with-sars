@@ -24,6 +24,7 @@ const SUFFIX: Record<Unit, string> = {
   "m/day": " m/day",
   "cm/yr": " cm/yr",
   km2: " km²",
+  km: " km",
 };
 
 export const unitSuffix = (unit: Unit) => SUFFIX[unit];

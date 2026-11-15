@@ -78,7 +78,7 @@
     "HttpsUrl": { "type": "string", "pattern": "^https://[^\\s]+$" },
     "Color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
     "Id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
-    "Unit": { "enum": ["dB", "cm", "ha", "m", "ratio", "%", "count", "cm/month", "m/day", "cm/yr", "km2"] },
+    "Unit": { "enum": ["dB", "cm", "ha", "m", "ratio", "%", "count", "cm/month", "m/day", "cm/yr", "km2", "km"] },
     "ScaleReference": { "enum": ["football-pitch", "central-park", "manhattan", "echo-power", "per-decade"] },
     "Fact": {
       "type": "object", "additionalProperties": false, "required": ["id", "value", "unit", "decimals", "label", "source"],

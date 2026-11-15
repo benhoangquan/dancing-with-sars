@@ -156,6 +156,21 @@ def cmd_landmarks(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_overture(args: argparse.Namespace) -> int:
+    from .impact import build_impact
+
+    failed = 0
+    for slug in args.slugs or sorted(p.stem for p in CHAPTERS_DIR.glob("*.json")):
+        try:
+            path = build_impact(slug)
+        except Exception as e:
+            print(f"FAIL  {slug}: {type(e).__name__}: {e}", file=sys.stderr)
+            failed += 1
+            continue
+        print(f"wrote {path.relative_to(path.parents[2])} (impact overlay)")
+    return 1 if failed else 0
+
+
 def cmd_globe(_: argparse.Namespace) -> int:
     from .globe import build_globe
 
@@ -187,6 +202,9 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("dem", help="write Copernicus GLO-30 terrain COGs for chapters")
     p.add_argument("slugs", nargs="*")
     p.set_defaults(func=cmd_dem)
+    p = sub.add_parser("overture", help="write buildings, roads and territories for the radar stage")
+    p.add_argument("slugs", nargs="*")
+    p.set_defaults(func=cmd_overture)
     p = sub.add_parser("landmarks", help="sample radar readings at each chapter's landmark pins")
     p.add_argument("slugs", nargs="*")
     p.set_defaults(func=cmd_landmarks)

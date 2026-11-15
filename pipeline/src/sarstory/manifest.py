@@ -111,6 +111,9 @@ def carry_extras(new: dict, old: dict) -> None:
     if not gen or not prev:
         return
     have = {s["id"] for s in gen["sources"]}
+    for key, value in prev.get("stats", {}).items():  # stats written by `sar overture`
+        if key.startswith("impact_") and key not in gen["stats"]:
+            gen["stats"][key] = value
     for key in CARRIED:
         if key in gen or key not in prev:
             continue

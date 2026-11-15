@@ -53,7 +53,7 @@ export type NumberPair = [number, number];
  * This interface was referenced by `Chapter`'s JSON-Schema
  * via the `definition` "Unit".
  */
-export type Unit = "dB" | "cm" | "ha" | "m" | "ratio" | "%" | "count" | "cm/month" | "m/day" | "cm/yr" | "km2";
+export type Unit = "dB" | "cm" | "ha" | "m" | "ratio" | "%" | "count" | "cm/month" | "m/day" | "cm/yr" | "km2" | "km";
 /**
  * This interface was referenced by `Chapter`'s JSON-Schema
  * via the `definition` "StageMode".

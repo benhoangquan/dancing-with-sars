@@ -117,10 +117,9 @@ def test_gcov_build_writes_a_valid_manifest_with_real_layers_and_the_measured_nu
     assert verify_assets(obj, root / "public") == []
     g = obj["generated"]
     assert {lyr["status"] for lyr in g["layers"]} == {"real"}
-    # terrain written by `sar dem` survives the rebuild, with its source
-    assert {s["id"] for s in g["sources"]} == {"nisar-gcov", "hls"} | (
-        {"copernicus-dem"} if "dem" in g else set()
-    )
+    # terrain and overlays written by `sar dem` and `sar overture` survive the rebuild, with their sources
+    carried = {sid for key in ("dem", "impact") if key in g for sid in g[key]["sourceIds"]}
+    assert {s["id"] for s in g["sources"]} == {"nisar-gcov", "hls"} | carried
     nisar = next(s for s in g["sources"] if s["id"] == "nisar-gcov")
     assert nisar["maturity"] == "provisional" and nisar["collection"] == "NISAR_L2_GCOV_PROVISIONAL_V1"
     assert len(nisar["granules"]) == len(days) and nisar["dates"][0] == "2026-06-25"

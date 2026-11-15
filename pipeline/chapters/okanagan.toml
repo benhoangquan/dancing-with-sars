@@ -1,0 +1,65 @@
+slug = "okanagan"
+collection = "NISAR_L2_GCOV_PROVISIONAL_V1"
+product = "GCOV"
+
+[windows]
+before = ["2026-06-17", "2026-07-11"]
+after = ["2026-09-09", "2026-10-03"]
+smoke_scene = "2026-08-16"
+
+[series]
+start = "2026-06-17"
+count = 10
+
+[processing]
+max_dates = 8
+drop_threshold_db = 2.0   # fire: smaller drop than clearing, dB
+min_before_db = -16.0
+mmu_ha = 1.0
+stretch_hh = [-20.0, 0.0]
+stretch_hv = [-28.0, -8.0]
+stretch_ratio = [0.0, 15.0]
+
+[fixture]
+pattern = "burn"
+seed = 2202
+max_px = 640
+
+[flyover]
+duration = 36
+exaggeration = 2.0
+
+[[flyover.waypoints]]
+t = 0
+center = [-119.50, 50.00]
+zoom = 9.4
+pitch = 0
+bearing = 0
+
+[[flyover.waypoints]]
+t = 8
+center = [-119.60, 49.92]
+zoom = 10.2
+pitch = 65
+bearing = -35
+
+[[flyover.waypoints]]
+t = 16
+center = [-119.45, 50.05]
+zoom = 10.6
+pitch = 70
+bearing = 25
+
+[[flyover.waypoints]]
+t = 26
+center = [-119.42, 50.02]
+zoom = 10.9
+pitch = 40
+bearing = 15
+
+[[flyover.waypoints]]
+t = 36
+center = [-119.50, 50.00]
+zoom = 9.9
+pitch = 0
+bearing = 0

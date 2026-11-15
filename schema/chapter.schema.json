@@ -1,0 +1,319 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dancing-with-sars.invalid/schema/chapter.schema.json",
+  "title": "Chapter",
+  "description": "One scrollytelling chapter manifest (schemaVersion 1). Authored fields are edited by hand; `generated` is written by the sar pipeline.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "slug", "order", "theme", "accent", "kicker", "title", "dek", "aoi", "radar", "legend", "beats", "action", "generated"],
+  "properties": {
+    "schemaVersion": { "const": "1" },
+    "slug": { "type": "string", "pattern": "^[a-z0-9-]{2,40}$" },
+    "order": { "type": "integer", "minimum": 1 },
+    "theme": { "enum": ["forest", "fire", "ground", "water", "ice"] },
+    "accent": { "$ref": "#/$defs/Color" },
+    "kicker": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "dek": { "type": "string", "minLength": 1 },
+    "aoi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bbox", "placeName", "countryCode"],
+      "properties": {
+        "bbox": { "$ref": "#/$defs/BBox" },
+        "placeName": { "type": "string", "minLength": 1 },
+        "countryCode": { "type": "string", "pattern": "^[A-Z]{2}$" }
+      }
+    },
+    "radar": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["product", "band", "mechanism", "polarizations", "explainer"],
+      "properties": {
+        "product": { "enum": ["GCOV", "GUNW", "GOFF"] },
+        "band": { "enum": ["L", "S"] },
+        "mechanism": { "enum": ["volume-scattering-loss", "specular-reflection", "double-bounce", "interferometric-phase", "pixel-offset"] },
+        "polarizations": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["HH", "HV", "VV", "VH"] } },
+        "explainer": { "type": "string", "minLength": 1, "maxLength": 400 }
+      }
+    },
+    "legend": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/LegendEntry" } },
+    "beats": { "type": "array", "minItems": 4, "maxItems": 7, "items": { "$ref": "#/$defs/Beat" } },
+    "action": { "$ref": "#/$defs/ActionContent" },
+    "generated": { "$ref": "#/$defs/Generated" }
+  },
+  "$defs": {
+    "LonLat": {
+      "type": "array", "prefixItems": [{ "type": "number", "minimum": -180, "maximum": 180 }, { "type": "number", "minimum": -90, "maximum": 90 }],
+      "items": false, "minItems": 2, "maxItems": 2, "description": "WGS84 [lon, lat]"
+    },
+    "BBox": {
+      "type": "array", "prefixItems": [{ "type": "number", "minimum": -180, "maximum": 180 }, { "type": "number", "minimum": -90, "maximum": 90 }, { "type": "number", "minimum": -180, "maximum": 180 }, { "type": "number", "minimum": -90, "maximum": 90 }],
+      "items": false, "minItems": 4, "maxItems": 4, "description": "[west, south, east, north]"
+    },
+    "NumberPair": { "type": "array", "prefixItems": [{ "type": "number" }, { "type": "number" }], "items": false, "minItems": 2, "maxItems": 2 },
+    "ISODate": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "DateOrRange": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}(/\\d{4}-\\d{2}-\\d{2})?$" },
+    "DatePair": { "type": "array", "prefixItems": [{ "$ref": "#/$defs/ISODate" }, { "$ref": "#/$defs/ISODate" }], "items": false, "minItems": 2, "maxItems": 2 },
+    "AssetPath": { "type": "string", "pattern": "^(?![A-Za-z][A-Za-z0-9+.-]*:)(?!/)(?!.*\\.\\.)[A-Za-z0-9._/-]+$", "description": "Relative to web/public. No leading slash, scheme or '..'." },
+    "HttpsUrl": { "type": "string", "pattern": "^https://[^\\s]+$" },
+    "Color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+    "Id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+    "Unit": { "enum": ["dB", "cm", "ha", "m", "ratio", "%", "count", "cm/month"] },
+    "StageMode": { "enum": ["flyover", "radar", "split"] },
+    "DataStatus": { "enum": ["real", "fallback", "illustrative"] },
+    "Camera": {
+      "type": "object", "additionalProperties": false, "required": ["center", "zoom", "pitch", "bearing"],
+      "properties": {
+        "center": { "$ref": "#/$defs/LonLat" },
+        "zoom": { "type": "number", "minimum": 0, "maximum": 22 },
+        "pitch": { "type": "number", "minimum": 0, "maximum": 85 },
+        "bearing": { "type": "number", "minimum": -180, "maximum": 180 }
+      }
+    },
+    "LegendSwatch": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": false, "required": ["kind", "color"], "properties": { "kind": { "const": "solid" }, "color": { "$ref": "#/$defs/Color" } } },
+        {
+          "type": "object", "additionalProperties": false, "required": ["kind", "stops", "domain", "unit"],
+          "properties": {
+            "kind": { "const": "ramp" },
+            "stops": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/Color" } },
+            "domain": { "$ref": "#/$defs/NumberPair" },
+            "unit": { "$ref": "#/$defs/Unit" }
+          }
+        }
+      ]
+    },
+    "LegendEntry": {
+      "type": "object", "additionalProperties": false, "required": ["id", "layerIds", "swatch", "label", "meaning"],
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "layerIds": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Id" }, "description": "Shown when any of these layers is visible." },
+        "swatch": { "$ref": "#/$defs/LegendSwatch" },
+        "label": { "type": "string", "minLength": 1 },
+        "meaning": { "type": "string", "minLength": 1 }
+      }
+    },
+    "Beat": {
+      "type": "object", "additionalProperties": false, "required": ["id", "headline", "body", "stage"],
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "eyebrow": { "type": "string" },
+        "headline": { "type": "string", "minLength": 1 },
+        "body": { "type": "string", "minLength": 1, "description": "May contain {stat:key} tokens resolved from generated.stats." },
+        "stage": {
+          "type": "object", "additionalProperties": false, "required": ["mode", "flyover", "left", "right", "swipe"],
+          "properties": {
+            "mode": { "$ref": "#/$defs/StageMode" },
+            "flyover": {
+              "type": "object", "additionalProperties": false, "required": ["from", "to", "playback"],
+              "properties": {
+                "from": { "type": "number", "minimum": 0 },
+                "to": { "type": "number", "minimum": 0 },
+                "playback": { "enum": ["scrub", "play-hold"] }
+              }
+            },
+            "camera": { "$ref": "#/$defs/Camera" },
+            "left": { "$ref": "#/$defs/Id" },
+            "right": { "$ref": "#/$defs/Id" },
+            "flyoverLayer": { "$ref": "#/$defs/Id" },
+            "swipe": { "type": "number", "minimum": 0, "maximum": 1 },
+            "overlays": { "type": "array", "items": { "$ref": "#/$defs/Id" } },
+            "annotations": { "type": "array", "items": { "$ref": "#/$defs/Id" } }
+          }
+        },
+        "readout": {
+          "type": "object", "additionalProperties": false, "required": ["seriesId"],
+          "properties": {
+            "seriesId": { "$ref": "#/$defs/Id" },
+            "window": { "$ref": "#/$defs/DatePair" },
+            "cursor": { "$ref": "#/$defs/ISODate" },
+            "statKey": { "$ref": "#/$defs/Id" }
+          }
+        }
+      }
+    },
+    "MetricSource": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "url", "accessed"],
+      "properties": { "name": { "type": "string", "minLength": 1 }, "url": { "$ref": "#/$defs/HttpsUrl" }, "accessed": { "$ref": "#/$defs/ISODate" } }
+    },
+    "ImpactMetricStat": {
+      "type": "object", "additionalProperties": false, "required": ["label", "statKey", "source"],
+      "properties": { "label": { "type": "string", "minLength": 1 }, "statKey": { "$ref": "#/$defs/Id" }, "source": { "$ref": "#/$defs/MetricSource" } }
+    },
+    "ImpactMetricValue": {
+      "type": "object", "additionalProperties": false, "required": ["label", "value", "unit", "source"],
+      "properties": { "label": { "type": "string", "minLength": 1 }, "value": { "type": "number" }, "unit": { "type": "string", "minLength": 1 }, "source": { "$ref": "#/$defs/MetricSource" } }
+    },
+    "ImpactMetric": { "oneOf": [{ "$ref": "#/$defs/ImpactMetricStat" }, { "$ref": "#/$defs/ImpactMetricValue" }] },
+    "Organization": {
+      "type": "object", "additionalProperties": false, "required": ["name", "url", "focus", "region", "cta", "verified"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "url": { "$ref": "#/$defs/HttpsUrl" },
+        "focus": { "type": "string", "minLength": 1 },
+        "region": { "type": "string", "minLength": 1 },
+        "cta": {
+          "type": "object", "additionalProperties": false, "required": ["label", "url"],
+          "properties": { "label": { "type": "string", "minLength": 1 }, "url": { "$ref": "#/$defs/HttpsUrl" } }
+        },
+        "verified": {
+          "type": "object", "additionalProperties": false, "required": ["on", "how"],
+          "properties": { "on": { "$ref": "#/$defs/ISODate" }, "how": { "type": "string", "minLength": 1 } }
+        }
+      }
+    },
+    "ActionContent": {
+      "type": "object", "additionalProperties": false, "required": ["headline", "body", "metrics", "organizations"],
+      "properties": {
+        "headline": { "type": "string", "minLength": 1 },
+        "body": { "type": "string", "minLength": 1 },
+        "metrics": { "type": "array", "minItems": 2, "maxItems": 4, "items": { "$ref": "#/$defs/ImpactMetric" } },
+        "organizations": { "type": "array", "minItems": 2, "maxItems": 3, "items": { "$ref": "#/$defs/Organization" } }
+      }
+    },
+    "LayerRender": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": false, "required": ["type"], "properties": { "type": { "const": "rgba" } } },
+        {
+          "type": "object", "additionalProperties": false, "required": ["type", "scheme", "domain", "unit"],
+          "properties": {
+            "type": { "const": "ramp" },
+            "scheme": { "type": "string", "minLength": 1 },
+            "domain": { "$ref": "#/$defs/NumberPair" },
+            "unit": { "$ref": "#/$defs/Unit" }
+          }
+        }
+      ]
+    },
+    "Layer": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "kind", "label", "date", "cog", "render", "preview", "bounds", "sourceIds", "status", "bytes", "sha256"],
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "kind": { "enum": ["sar-composite", "sar-db", "optical", "change", "displacement", "coherence"] },
+        "label": { "type": "string", "minLength": 1 },
+        "date": { "$ref": "#/$defs/DateOrRange" },
+        "cog": { "$ref": "#/$defs/AssetPath" },
+        "render": { "$ref": "#/$defs/LayerRender" },
+        "stretch": {
+          "type": "object", "additionalProperties": false, "required": ["HH", "HV", "ratio"],
+          "properties": { "HH": { "$ref": "#/$defs/NumberPair" }, "HV": { "$ref": "#/$defs/NumberPair" }, "ratio": { "$ref": "#/$defs/NumberPair" } }
+        },
+        "preview": { "$ref": "#/$defs/AssetPath" },
+        "bounds": { "$ref": "#/$defs/BBox" },
+        "sourceIds": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "status": { "$ref": "#/$defs/DataStatus" },
+        "bytes": { "type": "integer", "minimum": 0 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "SeriesPoint": {
+      "type": "object", "additionalProperties": false, "required": ["t", "v"],
+      "properties": { "t": { "$ref": "#/$defs/ISODate" }, "v": { "type": "number" } }
+    },
+    "Series": {
+      "type": "object", "additionalProperties": false, "required": ["id", "label", "unit", "kind", "points", "sourceIds", "status"],
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "label": { "type": "string", "minLength": 1 },
+        "unit": { "$ref": "#/$defs/Unit" },
+        "kind": { "enum": ["hv-backscatter", "displacement", "affected-area"] },
+        "points": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/SeriesPoint" } },
+        "reference": {
+          "type": "object", "additionalProperties": false, "required": ["label", "points"],
+          "properties": { "label": { "type": "string", "minLength": 1 }, "points": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/SeriesPoint" } } }
+        },
+        "sourceIds": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "status": { "$ref": "#/$defs/DataStatus" }
+      }
+    },
+    "Stat": {
+      "type": "object", "additionalProperties": false, "required": ["value", "unit", "decimals", "label", "method"],
+      "properties": {
+        "value": { "type": "number" },
+        "unit": { "$ref": "#/$defs/Unit" },
+        "decimals": { "type": "integer", "minimum": 0, "maximum": 6 },
+        "label": { "type": "string", "minLength": 1 },
+        "method": { "type": "string", "minLength": 1 }
+      }
+    },
+    "Waypoint": {
+      "type": "object", "additionalProperties": false, "required": ["t", "camera"],
+      "properties": { "t": { "type": "number", "minimum": 0 }, "camera": { "$ref": "#/$defs/Camera" } }
+    },
+    "Flyover": {
+      "type": "object", "additionalProperties": false, "required": ["duration", "exaggeration", "waypoints"],
+      "properties": {
+        "duration": { "type": "number", "exclusiveMinimum": 0 },
+        "exaggeration": { "type": "number", "minimum": 0, "maximum": 5 },
+        "waypoints": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/Waypoint" } },
+        "video": {
+          "type": "object", "additionalProperties": false, "required": ["src", "poster", "width", "height", "fps", "keyint", "bytes"],
+          "properties": {
+            "src": { "$ref": "#/$defs/AssetPath" },
+            "poster": { "$ref": "#/$defs/AssetPath" },
+            "width": { "type": "integer", "minimum": 1 },
+            "height": { "type": "integer", "minimum": 1 },
+            "fps": { "type": "number", "exclusiveMinimum": 0 },
+            "keyint": { "type": "integer", "minimum": 1 },
+            "bytes": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "PointGeometry": {
+      "type": "object", "additionalProperties": false, "required": ["type", "coordinates"],
+      "properties": { "type": { "const": "Point" }, "coordinates": { "$ref": "#/$defs/LonLat" } }
+    },
+    "PolygonGeometry": {
+      "type": "object", "additionalProperties": false, "required": ["type", "coordinates"],
+      "properties": {
+        "type": { "const": "Polygon" },
+        "coordinates": { "type": "array", "minItems": 1, "items": { "type": "array", "minItems": 4, "items": { "$ref": "#/$defs/LonLat" } } }
+      }
+    },
+    "Annotation": {
+      "type": "object", "additionalProperties": false, "required": ["id", "label", "kind", "geometry"],
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "label": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["pin", "area"] },
+        "geometry": { "oneOf": [{ "$ref": "#/$defs/PointGeometry" }, { "$ref": "#/$defs/PolygonGeometry" }] }
+      }
+    },
+    "Source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "mission", "product", "collection", "maturity", "granules", "dates", "provider", "license", "url", "nasa"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "mission": { "enum": ["NISAR", "Sentinel-1", "HLS", "NASADEM", "Synthetic"] },
+        "product": { "type": "string", "minLength": 1 },
+        "collection": { "type": "string", "minLength": 1 },
+        "maturity": { "enum": ["beta", "provisional", "validated", "n/a"] },
+        "granules": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "dates": { "type": "array", "items": { "$ref": "#/$defs/ISODate" } },
+        "provider": { "type": "string", "minLength": 1 },
+        "license": { "type": "string", "minLength": 1 },
+        "url": { "$ref": "#/$defs/HttpsUrl" },
+        "nasa": { "type": "boolean" }
+      }
+    },
+    "Generated": {
+      "type": "object", "additionalProperties": false,
+      "required": ["pipelineVersion", "builtAt", "layers", "series", "stats", "flyover", "annotations", "sources"],
+      "properties": {
+        "pipelineVersion": { "type": "string", "minLength": 1 },
+        "builtAt": { "type": "string", "format": "date-time" },
+        "layers": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Layer" } },
+        "series": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Series" } },
+        "stats": { "type": "object", "patternProperties": { "^[a-z0-9_]+$": { "$ref": "#/$defs/Stat" } }, "additionalProperties": false },
+        "flyover": { "$ref": "#/$defs/Flyover" },
+        "annotations": { "type": "array", "items": { "$ref": "#/$defs/Annotation" } },
+        "sources": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Source" } }
+      }
+    }
+  }
+}

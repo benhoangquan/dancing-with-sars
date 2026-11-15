@@ -1,0 +1,59 @@
+slug = "san-joaquin"
+collection = "NISAR_L2_GUNW_BETA_V1"
+product = "GUNW"
+
+[windows]
+optical = "2026-10-03"
+
+[series]
+start = "2026-06-17"
+count = 10
+
+[processing]
+stretch_hh = [-20.0, 0.0]
+stretch_hv = [-28.0, -8.0]
+stretch_ratio = [0.0, 15.0]
+
+[fixture]
+pattern = "bowl"
+seed = 3303
+max_px = 640
+
+[flyover]
+duration = 36
+exaggeration = 3.0
+
+[[flyover.waypoints]]
+t = 0
+center = [-119.50, 36.15]
+zoom = 8.9
+pitch = 0
+bearing = 0
+
+[[flyover.waypoints]]
+t = 8
+center = [-119.60, 36.05]
+zoom = 9.6
+pitch = 55
+bearing = 30
+
+[[flyover.waypoints]]
+t = 16
+center = [-119.55, 36.12]
+zoom = 10.2
+pitch = 50
+bearing = -20
+
+[[flyover.waypoints]]
+t = 26
+center = [-119.50, 36.10]
+zoom = 10.4
+pitch = 25
+bearing = 10
+
+[[flyover.waypoints]]
+t = 36
+center = [-119.50, 36.15]
+zoom = 9.5
+pitch = 0
+bearing = 0

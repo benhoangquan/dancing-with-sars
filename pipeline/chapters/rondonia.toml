@@ -1,0 +1,64 @@
+slug = "rondonia"
+collection = "NISAR_L2_GCOV_PROVISIONAL_V1"
+product = "GCOV"
+
+[windows]
+before = ["2026-06-17", "2026-07-11"]
+after = ["2026-09-09", "2026-10-03"]
+
+[series]
+start = "2026-06-17"
+count = 10
+
+[processing]
+max_dates = 8
+drop_threshold_db = 3.0   # HV before minus after, dB
+min_before_db = -16.0     # pixel must start as forest
+mmu_ha = 1.0
+stretch_hh = [-20.0, 0.0]
+stretch_hv = [-28.0, -8.0]
+stretch_ratio = [0.0, 15.0]
+
+[fixture]
+pattern = "fishbone"
+seed = 1101
+max_px = 640
+
+[flyover]
+duration = 36
+exaggeration = 1.5
+
+[[flyover.waypoints]]
+t = 0
+center = [-63.35, -10.05]
+zoom = 8.9
+pitch = 0
+bearing = 0
+
+[[flyover.waypoints]]
+t = 8
+center = [-63.45, -10.12]
+zoom = 9.9
+pitch = 58
+bearing = -28
+
+[[flyover.waypoints]]
+t = 16
+center = [-63.30, -9.98]
+zoom = 10.5
+pitch = 62
+bearing = 22
+
+[[flyover.waypoints]]
+t = 26
+center = [-63.28, -10.04]
+zoom = 10.8
+pitch = 35
+bearing = 30
+
+[[flyover.waypoints]]
+t = 36
+center = [-63.35, -10.05]
+zoom = 9.7
+pitch = 0
+bearing = 0

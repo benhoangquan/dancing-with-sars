@@ -1,0 +1,443 @@
+{
+  "schemaVersion": "1",
+  "slug": "okanagan",
+  "order": 2,
+  "theme": "fire",
+  "accent": "#FF9F0A",
+  "kicker": "Okanagan, British Columbia",
+  "title": "Seeing through the smoke",
+  "dek": "Smoke hides a burning hillside from optical satellites. L-band radar passes through it and measures how much canopy the fire took.",
+  "aoi": {
+    "bbox": [-119.85, 49.75, -119.15, 50.25],
+    "placeName": "Okanagan Valley",
+    "countryCode": "CA"
+  },
+  "radar": {
+    "product": "GCOV",
+    "band": "L",
+    "mechanism": "volume-scattering-loss",
+    "polarizations": ["HH", "HV"],
+    "explainer": "L-band radar passes through smoke and cloud. Standing forest scatters it back strongly in the HV channel. A burned stand keeps its trunks but loses needles, twigs and branches, so HV falls. Water acts like a mirror and returns almost nothing, so lakes look dark."
+  },
+  "legend": [
+    {
+      "id": "sar_forest",
+      "layerIds": ["sar_before", "sar_after"],
+      "swatch": { "kind": "solid", "color": "#A6C263" },
+      "label": "Yellow-green",
+      "meaning": "Standing forest, strong HV return."
+    },
+    {
+      "id": "sar_burn",
+      "layerIds": ["sar_before", "sar_after"],
+      "swatch": { "kind": "solid", "color": "#868091" },
+      "label": "Grey-violet",
+      "meaning": "Burned forest. The canopy that scattered the radar is gone, so HV falls."
+    },
+    {
+      "id": "sar_water",
+      "layerIds": ["sar_before", "sar_after"],
+      "swatch": { "kind": "solid", "color": "#000D55" },
+      "label": "Dark navy",
+      "meaning": "Open water. It reflects the radar away from the satellite, so almost nothing returns."
+    },
+    {
+      "id": "optical_ground",
+      "layerIds": ["optical_before"],
+      "swatch": { "kind": "solid", "color": "#1E4824" },
+      "label": "Dark green",
+      "meaning": "Forest canopy in visible light."
+    },
+    {
+      "id": "optical_smoke",
+      "layerIds": ["optical_smoke"],
+      "swatch": { "kind": "solid", "color": "#C4BEB8" },
+      "label": "Grey haze",
+      "meaning": "Smoke between the satellite and the ground. Optical sensors cannot see through it."
+    },
+    {
+      "id": "optical_glow",
+      "layerIds": ["optical_smoke"],
+      "swatch": { "kind": "solid", "color": "#FF8C28" },
+      "label": "Orange glow",
+      "meaning": "Hot spots along the edge of the fire."
+    },
+    {
+      "id": "hv_drop",
+      "layerIds": ["hv_change"],
+      "swatch": {
+        "kind": "ramp",
+        "stops": ["#ffffcc", "#fed976", "#fd8d3c", "#e31a1c", "#800026"],
+        "domain": [2, 10],
+        "unit": "dB"
+      },
+      "label": "HV drop",
+      "meaning": "How many decibels the HV signal fell between the two windows. Only pixels with a clear drop from forest are drawn."
+    }
+  ],
+  "beats": [
+    {
+      "id": "valley",
+      "eyebrow": "Okanagan, British Columbia",
+      "headline": "A valley in a dry summer",
+      "body": "In August 2026 wildfires burned in the Okanagan, in forest above the lakes. This view starts from the ground before the fires.",
+      "stage": {
+        "mode": "flyover",
+        "flyover": { "from": 0, "to": 8, "playback": "scrub" },
+        "left": "optical_before",
+        "right": "sar_before",
+        "swipe": 0.5
+      }
+    },
+    {
+      "id": "smoke",
+      "eyebrow": "Optical meets smoke",
+      "headline": "Smoke hides the ground",
+      "body": "About {stat:smoke_cloud_pct} of this optical scene sits under haze. Radar is not affected: it measures the ground through the smoke.",
+      "stage": {
+        "mode": "radar",
+        "flyover": { "from": 8, "to": 16, "playback": "scrub" },
+        "left": "optical_smoke",
+        "right": "sar_after",
+        "swipe": 0.5,
+        "annotations": ["water_dark"]
+      }
+    },
+    {
+      "id": "scar",
+      "eyebrow": "Between two radar passes",
+      "headline": "The scar in the signal",
+      "body": "The same hillsides, before and after. Where the canopy burned, HV fell by {stat:hv_drop_db} on average. Lakes stay dark in both: water reflects radar away.",
+      "stage": {
+        "mode": "radar",
+        "flyover": { "from": 16, "to": 26, "playback": "scrub" },
+        "left": "sar_before",
+        "right": "sar_after",
+        "swipe": 0.5,
+        "overlays": ["hv_change"],
+        "annotations": ["burn_scar", "water_dark"]
+      },
+      "readout": { "seriesId": "burned_area", "statKey": "hv_drop_db" }
+    },
+    {
+      "id": "measured",
+      "eyebrow": "Measured",
+      "headline": "Counting what burned",
+      "body": "The burn scar covers {stat:burned_ha} of the study area. The series shows burned area growing radar date by radar date, across {stat:n_dates} dates.",
+      "stage": {
+        "mode": "split",
+        "flyover": { "from": 26, "to": 32, "playback": "scrub" },
+        "left": "optical_before",
+        "right": "sar_after",
+        "swipe": 0.5,
+        "overlays": ["hv_change"],
+        "annotations": ["burn_scar"]
+      },
+      "readout": { "seriesId": "burned_area", "statKey": "burned_ha" }
+    },
+    {
+      "id": "act",
+      "eyebrow": "What helps",
+      "headline": "Help burned forest recover",
+      "body": "A burn scar is the start of recovery work: replanting, erosion control and forest management. Two organizations fund reforestation.",
+      "stage": {
+        "mode": "flyover",
+        "flyover": { "from": 32, "to": 36, "playback": "play-hold" },
+        "left": "optical_before",
+        "right": "sar_after",
+        "swipe": 0.5
+      }
+    }
+  ],
+  "action": {
+    "headline": "Help burned forest recover",
+    "body": "This analysis mapped {stat:burned_ha} of burn scar in the study area. These organizations fund tree planting and forest restoration.",
+    "metrics": [
+      {
+        "label": "Burned area in the study area",
+        "statKey": "burned_ha",
+        "source": {
+          "name": "This project: NISAR L2 GCOV, HV drop mask",
+          "url": "https://nisar-docs.asf.alaska.edu/gcov/",
+          "accessed": "2026-11-14"
+        }
+      },
+      {
+        "label": "Average HV drop in the burn scar",
+        "statKey": "hv_drop_db",
+        "source": {
+          "name": "This project: NISAR L2 GCOV, HV drop mask",
+          "url": "https://nisar-docs.asf.alaska.edu/gcov/",
+          "accessed": "2026-11-14"
+        }
+      },
+      {
+        "label": "Optical scene under smoke",
+        "statKey": "smoke_cloud_pct",
+        "source": {
+          "name": "This project: HLS Fmask haze share",
+          "url": "https://nisar-docs.asf.alaska.edu/gcov/",
+          "accessed": "2026-11-14"
+        }
+      }
+    ],
+    "organizations": [
+      {
+        "name": "One Tree Planted",
+        "url": "https://onetreeplanted.org/",
+        "focus": "Environmental nonprofit that plants trees around the world.",
+        "region": "Worldwide, including the United States and Canada",
+        "cta": { "label": "Plant trees with One Tree Planted", "url": "https://onetreeplanted.org/" },
+        "verified": {
+          "on": "2026-11-14",
+          "how": "HTTP 200 on homepage; the guessed donate path returned 404, so the homepage is linked"
+        }
+      },
+      {
+        "name": "American Forests",
+        "url": "https://www.americanforests.org/",
+        "focus": "Oldest national nonprofit conservation organization in the United States, working for healthy forests.",
+        "region": "United States",
+        "cta": { "label": "Support American Forests", "url": "https://www.americanforests.org/" },
+        "verified": { "on": "2026-11-14", "how": "HTTP 200 on homepage; region read from its About page" }
+      }
+    ]
+  },
+  "generated": {
+    "pipelineVersion": "0.1.0+fixture",
+    "builtAt": "2026-11-15T02:08:46Z",
+    "layers": [
+      {
+        "id": "optical_before",
+        "kind": "optical",
+        "label": "Optical, before",
+        "date": "2026-06-17/2026-07-11",
+        "cog": "data/okanagan/optical_before.tif",
+        "render": { "type": "rgba" },
+        "preview": "data/okanagan/optical_before.png",
+        "bounds": [-120.234375, 49.382373, -118.828125, 50.289339],
+        "sourceIds": ["synthetic"],
+        "status": "illustrative",
+        "bytes": 494255,
+        "sha256": "aa4d8ea0143ec726f0e512fc9b17d23f1ba78fa781a1484ee3629a6a7a90e708"
+      },
+      {
+        "id": "optical_smoke",
+        "kind": "optical",
+        "label": "Optical, smoke",
+        "date": "2026-08-16",
+        "cog": "data/okanagan/optical_smoke.tif",
+        "render": { "type": "rgba" },
+        "preview": "data/okanagan/optical_smoke.png",
+        "bounds": [-120.234375, 49.382373, -118.828125, 50.289339],
+        "sourceIds": ["synthetic"],
+        "status": "illustrative",
+        "bytes": 418297,
+        "sha256": "e93ad6237bf93bbdc18a72a9961f0356ac6ee1a519993c939867cf6b5db54bbb"
+      },
+      {
+        "id": "sar_before",
+        "kind": "sar-composite",
+        "label": "Radar composite, before",
+        "date": "2026-06-17/2026-07-11",
+        "cog": "data/okanagan/sar_before.tif",
+        "render": { "type": "rgba" },
+        "stretch": {
+          "HH": [-20.0, 0.0],
+          "HV": [-28.0, -8.0],
+          "ratio": [0.0, 15.0]
+        },
+        "preview": "data/okanagan/sar_before.png",
+        "bounds": [-120.234375, 49.382373, -118.828125, 50.289339],
+        "sourceIds": ["synthetic"],
+        "status": "illustrative",
+        "bytes": 731633,
+        "sha256": "65eeaa3ab88b3b7a5a2cc47297f6b410cb3a21a1c7e4b45957298da8d02180e3"
+      },
+      {
+        "id": "sar_after",
+        "kind": "sar-composite",
+        "label": "Radar composite, after",
+        "date": "2026-09-09/2026-10-03",
+        "cog": "data/okanagan/sar_after.tif",
+        "render": { "type": "rgba" },
+        "stretch": {
+          "HH": [-20.0, 0.0],
+          "HV": [-28.0, -8.0],
+          "ratio": [0.0, 15.0]
+        },
+        "preview": "data/okanagan/sar_after.png",
+        "bounds": [-120.234375, 49.382373, -118.828125, 50.289339],
+        "sourceIds": ["synthetic"],
+        "status": "illustrative",
+        "bytes": 733863,
+        "sha256": "895e95f959d1eceb3db60e2acb1dcc5d493c6f9c29df4bf58435ef5fd87fe5ff"
+      },
+      {
+        "id": "hv_change",
+        "kind": "change",
+        "label": "Radar HV drop",
+        "date": "2026-06-17/2026-10-03",
+        "cog": "data/okanagan/hv_change.tif",
+        "render": {
+          "type": "ramp",
+          "scheme": "BrewerYlOrRd9",
+          "domain": [2, 10],
+          "unit": "dB"
+        },
+        "preview": "data/okanagan/hv_change.png",
+        "bounds": [-120.234375, 49.382373, -118.828125, 50.289339],
+        "sourceIds": ["synthetic"],
+        "status": "illustrative",
+        "bytes": 59561,
+        "sha256": "dc8d1c90b3572492d21edb345307cbe9398fffed77299f2b7716dff9a6859dc4"
+      }
+    ],
+    "series": [
+      {
+        "id": "burned_area",
+        "label": "Burned area, cumulative",
+        "unit": "ha",
+        "kind": "affected-area",
+        "points": [
+          { "t": "2026-06-17", "v": 0.0 },
+          { "t": "2026-06-29", "v": 0.0 },
+          { "t": "2026-07-11", "v": 0.0 },
+          { "t": "2026-07-23", "v": 0.0 },
+          { "t": "2026-08-04", "v": 820.0 },
+          { "t": "2026-08-16", "v": 3692.0 },
+          { "t": "2026-08-28", "v": 6053.0 },
+          { "t": "2026-09-09", "v": 6732.0 },
+          { "t": "2026-09-21", "v": 6734.0 },
+          { "t": "2026-10-03", "v": 6734.0 }
+        ],
+        "sourceIds": ["synthetic"],
+        "status": "illustrative"
+      }
+    ],
+    "stats": {
+      "burned_ha": {
+        "value": 6734.0,
+        "unit": "ha",
+        "decimals": 0,
+        "label": "Burned area",
+        "method": "Area of pixels whose HV fell by more than the threshold. Synthetic pattern, not a measurement."
+      },
+      "hv_drop_db": {
+        "value": 5.0,
+        "unit": "dB",
+        "decimals": 1,
+        "label": "HV drop in the burn scar",
+        "method": "Mean HV before minus after inside the mask. Synthetic pattern, not a measurement."
+      },
+      "smoke_cloud_pct": {
+        "value": 55.0,
+        "unit": "%",
+        "decimals": 0,
+        "label": "Optical scene under smoke",
+        "method": "Share of pixels with haze above one half. Synthetic pattern, not a measurement."
+      },
+      "n_dates": {
+        "value": 10.0,
+        "unit": "count",
+        "decimals": 0,
+        "label": "Radar dates",
+        "method": "Acquisition dates in the series. Synthetic pattern, not a measurement."
+      }
+    },
+    "flyover": {
+      "duration": 36,
+      "exaggeration": 2.0,
+      "waypoints": [
+        {
+          "t": 0,
+          "camera": {
+            "center": [-119.5, 50.0],
+            "zoom": 9.4,
+            "pitch": 0,
+            "bearing": 0
+          }
+        },
+        {
+          "t": 8,
+          "camera": {
+            "center": [-119.6, 49.92],
+            "zoom": 10.2,
+            "pitch": 65,
+            "bearing": -35
+          }
+        },
+        {
+          "t": 16,
+          "camera": {
+            "center": [-119.45, 50.05],
+            "zoom": 10.6,
+            "pitch": 70,
+            "bearing": 25
+          }
+        },
+        {
+          "t": 26,
+          "camera": {
+            "center": [-119.42, 50.02],
+            "zoom": 10.9,
+            "pitch": 40,
+            "bearing": 15
+          }
+        },
+        {
+          "t": 36,
+          "camera": {
+            "center": [-119.5, 50.0],
+            "zoom": 9.9,
+            "pitch": 0,
+            "bearing": 0
+          }
+        }
+      ]
+    },
+    "annotations": [
+      {
+        "id": "water_dark",
+        "label": "Water: dark in radar",
+        "kind": "pin",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [-119.639397, 49.999609]
+        }
+      },
+      {
+        "id": "burn_scar",
+        "label": "Burn scar",
+        "kind": "area",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [-119.455345, 50.119531],
+              [-119.36, 50.119531],
+              [-119.36, 49.932812],
+              [-119.455345, 49.932812],
+              [-119.455345, 50.119531]
+            ]
+          ]
+        }
+      }
+    ],
+    "sources": [
+      {
+        "id": "synthetic",
+        "mission": "Synthetic",
+        "product": "Synthetic pattern (illustrative)",
+        "collection": "none",
+        "maturity": "n/a",
+        "granules": [],
+        "dates": [],
+        "provider": "this project",
+        "license": "CC0-1.0",
+        "url": "https://nisar-docs.asf.alaska.edu/gcov/",
+        "nasa": false
+      }
+    ]
+  }
+}

@@ -159,3 +159,16 @@ def test_city_outlines_drop_small_islands_and_are_saved_once(tmp_path):
     calls = []
     build_cities(tmp_path, get=lambda r: calls.append(r), pause=0, log=lambda *_: None)
     assert calls == []
+
+
+def test_synthesized_ambience_loops_seamlessly_and_encodes_under_budget(tmp_path):
+    import numpy as np
+
+    from sarstory.audio import LOOP_S, MAX_BYTES, RATE, encode_loop, synth, write_wav
+
+    s = synth("fire", seconds=4)
+    assert s.shape == (4 * RATE,) and np.abs(s).max() <= 1
+    wav, mp3 = tmp_path / "x.wav", tmp_path / "x.mp3"
+    write_wav(wav, synth("wind", seconds=LOOP_S))
+    encode_loop(wav, mp3)
+    assert 0 < mp3.stat().st_size <= MAX_BYTES

@@ -16,6 +16,7 @@ import { chapterTokens } from "@/lib/tokens";
 import type { Chapter } from "@/types/chapter";
 import { BeatGlassCard } from "./BeatGlassCard";
 import { ImpactKey } from "./ImpactKey";
+import { SoundCredit } from "./SoundCredit";
 
 const RadarCompareMap = dynamic(() => import("@/components/map/RadarCompareMap"), { ssr: false });
 
@@ -145,6 +146,7 @@ export function PlaceChapter({ chapter, onExit }: { chapter: Chapter; onExit: ()
         </section>
       </main>
 
+      <SoundCredit chapter={chapter} />
       <ActionModal chapter={chapter} open={modal === "action"} onClose={() => setModal(null)} />
     </>
   );

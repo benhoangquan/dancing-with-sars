@@ -171,6 +171,15 @@ def cmd_overture(args: argparse.Namespace) -> int:
     return 1 if failed else 0
 
 
+def cmd_audio(args: argparse.Namespace) -> int:
+    from .audio import build_audio
+
+    for slug in args.slugs or sorted(p.stem for p in CHAPTERS_DIR.glob("*.json")):
+        path = build_audio(slug)
+        print(f"wrote {path.relative_to(path.parents[2])} (soundscape)")
+    return 0
+
+
 def cmd_globe(_: argparse.Namespace) -> int:
     from .globe import build_globe
 
@@ -205,6 +214,9 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("overture", help="write buildings, roads and territories for the radar stage")
     p.add_argument("slugs", nargs="*")
     p.set_defaults(func=cmd_overture)
+    p = sub.add_parser("audio", help="cut the before and after ambience loops for each place")
+    p.add_argument("slugs", nargs="*")
+    p.set_defaults(func=cmd_audio)
     p = sub.add_parser("landmarks", help="sample radar readings at each chapter's landmark pins")
     p.add_argument("slugs", nargs="*")
     p.set_defaults(func=cmd_landmarks)

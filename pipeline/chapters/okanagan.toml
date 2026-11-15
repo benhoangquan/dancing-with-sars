@@ -56,6 +56,10 @@ area = [-119.62, 50.02, -119.44, 50.14]
 buildings = true
 near_m = 2000
 
+[soundscape]   # Layer 5 (sar audio): forest, then wind and fire (synthesized: Commons had no free fire recording)
+before = { commons = "File:20090610 0 ambience.ogg", start_s = 35, label = "Forest birds" }
+after = { synth = "fire", label = "Wind and fire" }
+
 [flyover]
 duration = 20  # Act I; the last waypoint is the chapter's openingCamera (pitch 52)
 exaggeration = 2.0

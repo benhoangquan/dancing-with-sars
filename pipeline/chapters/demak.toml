@@ -46,6 +46,10 @@ building_points = true   # dense villages: one point per building keeps the file
 roads = true
 road_classes = ["motorway", "trunk", "primary", "secondary"]
 
+[soundscape]   # Layer 5 (sar audio): land, then the sea that moved in
+before = { commons = "File:20090610 0 ambience.ogg", start_s = 60, label = "Birds on land" }
+after = { commons = "File:Ocean Waves on a Tropical Beach.ogg", start_s = 20, label = "Waves" }
+
 [flyover]
 duration = 20  # Act I; the last waypoint is the chapter's openingCamera (pitch 52)
 exaggeration = 1.5

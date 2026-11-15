@@ -576,5 +576,23 @@
       "counts": { "buildings": 2004, "road_segments": 0 },
       "sourceIds": ["overture"]
     }
+  },
+  "soundscape": {
+    "before": {
+      "src": "data/demak/sound_before.mp3",
+      "label": "Birds on land",
+      "credit": "nille, via Wikimedia Commons. Not recorded at this place.",
+      "license": "Public domain",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:20090610_0_ambience.ogg",
+      "synthesized": false
+    },
+    "after": {
+      "src": "data/demak/sound_after.mp3",
+      "label": "Waves",
+      "credit": "Jarrod stanley, via Wikimedia Commons. Not recorded at this place.",
+      "license": "CC0",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ocean_Waves_on_a_Tropical_Beach.ogg",
+      "synthesized": false
+    }
   }
 }

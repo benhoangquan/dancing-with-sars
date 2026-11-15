@@ -41,3 +41,13 @@ Interface freeze: `schema/chapter.schema.json` changes are additive only (new op
 - American Forests describes itself as the oldest national conservation nonprofit in the United States. The Okanagan chapter is in British Columbia, so a Canadian organization may fit better. The user decides.
 - Add a beat or metric on what the Okanagan fires did on the ground, sourced from BC Wildfire Service or a primary news report, once read.
 - Add a sourced metric on groundwater pumping and subsidence (for example a USGS San Joaquin Valley page) to the San Joaquin chapter.
+
+## 2026-11-14: milestone 2 decisions
+
+- **Overlays sit on the after side only.** A beat's `stage.overlays` (for example the HV drop mask) are drawn on the right-hand map in radar and split modes, not on both. The mask is the result of comparing the two scenes; drawing it on the "before" half showed clearing that had not happened yet and made the swipe show no difference. This replaces the plan's "overlays drawn on both sides".
+- **Scroll engine:** one `requestAnimationFrame` loop measures each `[data-section]` against the viewport center line (`locate` in `src/lib/beats.ts`) instead of an IntersectionObserver plus a scroll listener. Same behavior, one code path, and the pure `locate` function is unit-tested.
+- **Annotations use deck.gl on a separate canvas.** MapLibre's 3D terrain does not drape deck.gl layers, so each point is lifted to `map.queryTerrainElevation` and drawn as a 3D position. Areas are densified so outlines follow the relief.
+- **Chart colors.** Data marks use steps of the chapter hues at OKLCH lightness 0.66 (`src/lib/chartColors.ts`), validated with the dataviz skill's `validate_palette.js` against the card surface. The vivid accents stay on UI chrome. The reference series is `#6e6e73`, chosen because the first gray tried (`#8e8e93`) failed the normal-vision floor against the blue. Cards that hold data marks use a denser frosted surface (`glass-data`, 88% opaque) so a 2px line stays legible over bright imagery; text cards keep the 72% glass of the brief.
+- **`tabular-nums`** is used on every changing counter, as the brief asks, even though the dataviz skill prefers proportional figures for large static numbers: a live value that changes width as the cursor moves would jitter.
+- **Headless WebGL in tests.** On a machine whose `DISPLAY` points at an unreachable X server, ANGLE's SwiftShader backend fails (`xcb_connect() failed`) and Chromium has no WebGL. The Playwright config removes `DISPLAY` and `WAYLAND_DISPLAY` from the browser's environment only.
+- **Debug handle.** `?debug` in the URL exposes the two MapLibre maps as `window.__sar`, for tests and troubleshooting.

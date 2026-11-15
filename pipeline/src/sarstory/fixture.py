@@ -41,7 +41,7 @@ SYNTHETIC_SOURCE = {
     "nasa": False,
 }
 HV_DROP_RENDER = {"type": "ramp", "scheme": "BrewerYlOrRd9", "domain": [2, 10], "unit": "dB"}
-DISPLACEMENT_RENDER = {"type": "ramp", "scheme": "BrewerRdBu11", "domain": [-15, 15], "unit": "cm"}
+DISPLACEMENT_RENDER = {"type": "ramp", "scheme": "SarDivergingDark", "domain": [-15, 15], "unit": "cm"}
 COHERENCE_RENDER = {"type": "ramp", "scheme": "BrewerGreys9", "domain": [0, 1], "unit": "ratio"}
 RGBA = {"type": "rgba"}
 NOTE = "Synthetic pattern, not a measurement."

@@ -25,12 +25,12 @@
       "layerIds": ["displacement"],
       "swatch": {
         "kind": "ramp",
-        "stops": ["#67001f", "#d6604d", "#f7f7f7", "#4393c3", "#053061"],
+        "stops": ["#ff7a59", "#b34a38", "#2c2c2e", "#3a6ea8", "#64b5ff"],
         "domain": [-15, 15],
         "unit": "cm"
       },
       "label": "Red to blue",
-      "meaning": "Red: the ground moved away from the satellite, which means sinking. White: no change. Blue: the ground moved toward the satellite."
+      "meaning": "Red: the ground moved away from the satellite, which means sinking. Dark: no change. Blue: the ground moved toward the satellite. Brighter means more motion."
     },
     {
       "id": "coherence",
@@ -192,7 +192,7 @@
   },
   "generated": {
     "pipelineVersion": "0.1.0+fixture",
-    "builtAt": "2026-11-15T02:17:16Z",
+    "builtAt": "2026-11-15T02:40:44Z",
     "layers": [
       {
         "id": "optical_after",
@@ -235,7 +235,7 @@
         "cog": "data/san-joaquin/displacement.tif",
         "render": {
           "type": "ramp",
-          "scheme": "BrewerRdBu11",
+          "scheme": "SarDivergingDark",
           "domain": [-15, 15],
           "unit": "cm"
         },

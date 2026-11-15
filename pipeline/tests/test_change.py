@@ -90,3 +90,20 @@ def test_palettes():
         "values above the domain clip to the last color"
     )
     assert rgba[3, 0].tolist() == [255, 255, 0, 255]
+
+
+def test_dark_diverging_ramp_has_a_dark_neutral_middle_and_matches_the_web_stops():
+    import re
+    from pathlib import Path
+
+    from sarstory.palettes import BREWER
+
+    stops = BREWER["SarDivergingDark"]
+    out = ramp_rgba(np.array([[-15.0, 0.0, 15.0]]), "SarDivergingDark", (-15, 15))
+    assert out[:3, 0, 0].tolist() == list(hex_to_rgb(stops[0]))
+    assert out[:3, 0, 2].tolist() == list(hex_to_rgb(stops[-1]))
+    mid = out[:3, 0, 1].tolist()
+    assert max(mid) < 70, "zero displacement must be dark on a dark stage, not white"
+    ts = (Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "ramps.ts").read_text()
+    block = re.search(r"SAR_DIVERGING_DARK[^\[]*\[(.*?)\]", ts, re.S).group(1)
+    assert re.findall(r"#[0-9a-fA-F]{6}", block) == stops, "web and pipeline ramps must match"

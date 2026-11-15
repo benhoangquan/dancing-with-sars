@@ -1,4 +1,8 @@
-"""ColorBrewer ramps used by the web layers, so Python previews match the browser's `#color:` ramps."""
+"""Color ramps used by the web layers, so Python previews match the browser.
+
+ColorBrewer ramps are drawn in the browser by the COG protocol's `#color:` fragment; project ramps are
+drawn by `web/src/lib/ramps.ts`. Stops are equally spaced across the layer's domain.
+"""
 
 from __future__ import annotations
 
@@ -41,6 +45,11 @@ BREWER = {
         "#000000",
     ],
 }
+
+# Diverging ramp for dark stages: a dark neutral at zero, warm for negative values, cool for positive
+# ones, brighter with magnitude. Keep in step with SAR_DIVERGING_DARK in web/src/lib/ramps.ts (a test
+# compares them).
+BREWER["SarDivergingDark"] = ["#ff7a59", "#b34a38", "#2c2c2e", "#3a6ea8", "#64b5ff"]
 
 
 def hex_to_rgb(color: str) -> tuple[int, int, int]:

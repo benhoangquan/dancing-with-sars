@@ -1,0 +1,46 @@
+{
+  "name": "dancing-with-sars-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "gen:types": "node scripts/gen-types.mjs",
+    "validate:chapters": "node scripts/validate-chapters.mjs",
+    "check:links": "node scripts/check-links.mjs",
+    "prebuild": "npm run validate:chapters",
+    "build": "next build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "test": "vitest run",
+    "smoke": "playwright test",
+    "verify": "npm run gen:types && git diff --exit-code -- src/types && npm run validate:chapters && npm run typecheck && npm run lint && npm run test && npm run build"
+  },
+  "dependencies": {
+    "next": "16.4.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "maplibre-gl": "^5.24.1",
+    "@deck.gl/core": "~9.4.1",
+    "@deck.gl/layers": "~9.4.1",
+    "@deck.gl/mapbox": "~9.4.1",
+    "@geomatico/maplibre-cog-protocol": "^0.10.0",
+    "motion": "^14.14.0",
+    "zustand": "^5.1.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "@tailwindcss/turbopack": "4.3.3",
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.6",
+    "json-schema-to-typescript": "^16.0.0",
+    "serve": "^14.2.8",
+    "tailwindcss": "4.3.3",
+    "typescript": "^5",
+    "vitest": "^5.1.0"
+  }
+}

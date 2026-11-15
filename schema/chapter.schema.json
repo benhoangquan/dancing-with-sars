@@ -44,17 +44,19 @@
   },
   "$defs": {
     "LonLat": {
+      "tsType": "[number, number]",
       "type": "array", "prefixItems": [{ "type": "number", "minimum": -180, "maximum": 180 }, { "type": "number", "minimum": -90, "maximum": 90 }],
       "items": false, "minItems": 2, "maxItems": 2, "description": "WGS84 [lon, lat]"
     },
     "BBox": {
+      "tsType": "[number, number, number, number]",
       "type": "array", "prefixItems": [{ "type": "number", "minimum": -180, "maximum": 180 }, { "type": "number", "minimum": -90, "maximum": 90 }, { "type": "number", "minimum": -180, "maximum": 180 }, { "type": "number", "minimum": -90, "maximum": 90 }],
       "items": false, "minItems": 4, "maxItems": 4, "description": "[west, south, east, north]"
     },
-    "NumberPair": { "type": "array", "prefixItems": [{ "type": "number" }, { "type": "number" }], "items": false, "minItems": 2, "maxItems": 2 },
+    "NumberPair": { "tsType": "[number, number]", "type": "array", "prefixItems": [{ "type": "number" }, { "type": "number" }], "items": false, "minItems": 2, "maxItems": 2 },
     "ISODate": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
     "DateOrRange": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}(/\\d{4}-\\d{2}-\\d{2})?$" },
-    "DatePair": { "type": "array", "prefixItems": [{ "$ref": "#/$defs/ISODate" }, { "$ref": "#/$defs/ISODate" }], "items": false, "minItems": 2, "maxItems": 2 },
+    "DatePair": { "tsType": "[ISODate, ISODate]", "type": "array", "prefixItems": [{ "$ref": "#/$defs/ISODate" }, { "$ref": "#/$defs/ISODate" }], "items": false, "minItems": 2, "maxItems": 2 },
     "AssetPath": { "type": "string", "pattern": "^(?![A-Za-z][A-Za-z0-9+.-]*:)(?!/)(?!.*\\.\\.)[A-Za-z0-9._/-]+$", "description": "Relative to web/public. No leading slash, scheme or '..'." },
     "HttpsUrl": { "type": "string", "pattern": "^https://[^\\s]+$" },
     "Color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },

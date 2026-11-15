@@ -7,7 +7,7 @@ Data contract: `schema/chapter.schema.json` (canonical) and `docs/data_contract.
 - `cd pipeline && uv sync && uv run ruff check . && uv run pytest` runs Python checks and the repo rules.
 - `cd pipeline && uv run sar fixture --all && uv run sar validate` writes and validates the illustrative chapter data.
 - `cd web && npm run verify` runs gen:types, type diff check, manifest validation, typecheck, lint, unit tests and the static build.
-- `cd web && npm run smoke -- --trace off` runs the Playwright smoke test against `out/`.
+- `cd web && npm run smoke -- --trace off` runs the Playwright smoke test against `out/` (added in milestone 2).
 
 ## Contract rules
 - `schema/chapter.schema.json` is the source. `web/src/types/chapter.ts` is generated: never edit it by hand.

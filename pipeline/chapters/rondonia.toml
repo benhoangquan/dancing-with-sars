@@ -1,5 +1,5 @@
 slug = "rondonia"
-collection = "NISAR_L2_GCOV_PROVISIONAL_V1"
+collections = ["NISAR_L2_GCOV_V1", "NISAR_L2_GCOV_PROVISIONAL_V1", "NISAR_L2_GCOV_BETA_V1"]  # best maturity first
 product = "GCOV"
 
 [windows]
@@ -18,6 +18,9 @@ mmu_ha = 1.0
 stretch_hh = [-20.0, 0.0]
 stretch_hv = [-28.0, -8.0]
 stretch_ratio = [0.0, 15.0]
+
+[discover]
+min_coverage = 0.9  # share of the study area a granule footprint must cover
 
 [fixture]
 pattern = "fishbone"

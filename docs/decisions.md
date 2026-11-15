@@ -51,3 +51,12 @@ Interface freeze: `schema/chapter.schema.json` changes are additive only (new op
 - **`tabular-nums`** is used on every changing counter, as the brief asks, even though the dataviz skill prefers proportional figures for large static numbers: a live value that changes width as the cursor moves would jitter.
 - **Headless WebGL in tests.** On a machine whose `DISPLAY` points at an unreachable X server, ANGLE's SwiftShader backend fails (`xcb_connect() failed`) and Chromium has no WebGL. The Playwright config removes `DISPLAY` and `WAYLAND_DISPLAY` from the browser's environment only.
 - **Debug handle.** `?debug` in the URL exposes the two MapLibre maps as `window.__sar`, for tests and troubleshooting.
+
+## 2026-11-14: milestone 3, data discovery (no login needed)
+
+- **All three chapters have real NISAR data**, so the first rung of the data ladder is feasible everywhere. `sar discover` writes `pipeline/reports/<slug>-availability.md`; the table is in `DATA_SOURCES.md`.
+- **The gate groups by track, not by frame.** The first version grouped by `STACK_ID` (track, direction, frame) and reported "no NISAR data" for Rondonia, because its 100 by 77 km study area is wider than one frame (each of the nearest frames covered 37 to 81 percent). One pass is cut into consecutive frames, so an acquisition is now every frame of one pass on one day, with coverage measured as the union of the footprints. `fetch` must read and mosaic every frame of an acquisition. A test reproduces the two-frame case.
+- **Provisional is the data of record.** Validated (`_V1`) releases begin 2026-10-22 over these areas and cannot give a before scene. Do not mix collections inside one comparison.
+- **Maturity labels.** `maturity_of` classifies by name: a name containing PROVISIONAL or BETA is that maturity, and only a plain `_V1` is validated. An earlier version checked the `V1` suffix first and labeled provisional data as validated; a test caught it.
+- **Interferogram windows overlap rather than contain.** A pair belongs to the displacement series if its date span touches the window, since a real pair for the 2026-06-17 cycle has reference date 2026-06-16.
+- **Next step needs the user:** Earthdata Login. Search is public; reading granule contents is not. Run `cd pipeline && uv run python -c "import earthaccess; earthaccess.login(strategy='interactive', persist=True)"` in your own terminal. `~/.netrc` exists but has no Earthdata entry as of this date.

@@ -1,4 +1,4 @@
-"""`sar` command line. Milestone 1 commands: fixture, validate, clean."""
+"""`sar` command line: fixture, validate, clean, discover."""
 
 from __future__ import annotations
 
@@ -9,6 +9,7 @@ import sys
 from . import fixture, manifest
 from .config import CACHE_DIR, CHAPTERS_DIR, DATA_DIR, chapter_slugs
 from .invariants import check_invariants
+from .nisar import discover as nisar_discover
 
 
 def cmd_fixture(args: argparse.Namespace) -> int:
@@ -63,6 +64,29 @@ def cmd_validate(args: argparse.Namespace) -> int:
     return 1 if problems else 0
 
 
+def cmd_discover(args: argparse.Namespace) -> int:
+    slugs = chapter_slugs() if args.all else args.slugs
+    if not slugs:
+        print("sar discover: name a chapter or pass --all", file=sys.stderr)
+        return 2
+    missing = 0
+    for slug in slugs:
+        try:
+            report, path = nisar_discover.run(slug)
+        except Exception as e:  # network or catalog errors should name the chapter and keep going
+            print(f"FAIL  {slug}: {type(e).__name__}: {e}", file=sys.stderr)
+            missing += 1
+            continue
+        sel = report.selected
+        shown = path.relative_to(path.parents[2])
+        if sel:
+            print(f"ok    {slug}  {sel.short_name} ({sel.maturity}), stack {sel.choice.stack}  -> {shown}")
+        else:
+            print(f"none  {slug}  no stack with data in every window; step down the ladder  -> {shown}")
+            missing += 1
+    return 1 if missing else 0
+
+
 def cmd_clean(_: argparse.Namespace) -> int:
     shutil.rmtree(CACHE_DIR, ignore_errors=True)
     print(f"removed {CACHE_DIR}")
@@ -80,6 +104,10 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("validate", help="check manifests against the schema and their asset files")
     p.add_argument("slugs", nargs="*")
     p.set_defaults(func=cmd_validate)
+    p = sub.add_parser("discover", help="search the public NISAR catalog and choose a stack (no login)")
+    p.add_argument("slugs", nargs="*")
+    p.add_argument("--all", action="store_true", help="every chapter with a processing config")
+    p.set_defaults(func=cmd_discover)
     p = sub.add_parser("clean", help="remove the pipeline cache")
     p.set_defaults(func=cmd_clean)
     args = parser.parse_args(argv)

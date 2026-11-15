@@ -1,7 +1,15 @@
 @import "tailwindcss";
 
-/* Design tokens: dark OLED stage, frosted glass cards, system font stack, spring easing. */
+/* Design tokens: a light Apple canvas for the globe scenes, a black stage for places, frosted glass, the system
+   font stack and spring easing. */
 @theme {
+  --color-light-canvas: #ffffff;
+  --color-light-surface: #f5f5f7;
+  --color-light-ink: #1d1d1f;
+  --color-light-ink-dim: #6e6e73;
+  --color-apple-blue: #0071e3;
+  --color-apple-blue-hover: #0077ed;
+  --color-radar-alert: #ff3b30;
   --color-stage: #000000;
   --color-stage-raised: #0a0a0c;
   --color-glass: rgb(28 28 30 / 0.72);
@@ -21,8 +29,25 @@
   --duration-fade: 600ms;
   --duration-camera: 1600ms;
 
-  --tracking-display: -0.025em;
+  --tracking-display: -0.03em;
   --radius-card: 1.5rem;
+}
+
+/* Light glass over the globe; dark glass over the radar stage. Both blur and saturate what is behind them. */
+@utility glass-light {
+  background-color: rgb(255 255 255 / 0.82);
+  border: 1px solid rgb(0 0 0 / 0.08);
+  border-radius: var(--radius-card);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+}
+
+@utility glass-dark {
+  background-color: rgb(28 28 30 / 0.74);
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: var(--radius-card);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
 }
 
 /* Frosted card: blur and saturate what is behind it, not the card itself. */
@@ -52,13 +77,17 @@
 }
 
 html {
+  background: var(--color-light-canvas);
+  color-scheme: light;
+}
+html[data-scene="PLACE_CHAPTER"] {
   background: var(--color-stage);
   color-scheme: dark;
 }
 
 body {
-  background: var(--color-stage);
-  color: var(--color-ink);
+  background: transparent;
+  color: var(--color-light-ink);
   font-family: var(--font-sans);
   font-size: 17px;
   line-height: 1.47;
@@ -124,3 +153,55 @@ body {
   100% { box-shadow: 0 0 0 0 rgb(255 255 255 / 0); }
 }
 .cta-pulse { animation: cta-pulse 2s var(--ease-spring) infinite; }
+
+/* Apple sheet for the Discovery and Action modals. */
+.sheet {
+  background: #ffffff;
+  border-radius: 1.75rem;
+  box-shadow: 0 30px 80px rgb(0 0 0 / 0.25);
+}
+@media (max-width: 639px) {
+  .sheet { border-radius: 1.5rem 1.5rem 0 0; }
+}
+
+/* Scene 1: three feathered blur bands under a white wash over the top of the globe. */
+.hero-blur-band { position: absolute; inset: 0; display: block; }
+.hero-blur-24 { -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px); mask-image: linear-gradient(to bottom, #000 0%, #000 35%, transparent 60%); }
+.hero-blur-12 { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); mask-image: linear-gradient(to bottom, transparent 25%, #000 50%, transparent 80%); }
+.hero-blur-4 { -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); mask-image: linear-gradient(to bottom, transparent 55%, #000 80%, transparent 100%); }
+.hero-blur-wash { position: absolute; inset: 0; display: block; background: linear-gradient(to bottom, rgb(255 255 255 / 0.92) 0%, rgb(255 255 255 / 0.65) 55%, rgb(255 255 255 / 0) 100%); }
+
+/* Hotspot pins: a beacon and an Apple Maps callout pill. */
+.globe-pin { display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: 0; padding: 0; cursor: pointer; font: inherit; }
+.globe-pin-label {
+  order: -1;
+  border-radius: 999px; padding: 5px 11px; font-size: 13px; font-weight: 600; white-space: nowrap;
+  background: rgb(255 255 255 / 0.9); color: var(--color-light-ink); border: 1px solid rgb(0 0 0 / 0.08);
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.18);
+  -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%);
+  transition: transform 240ms var(--ease-spring);
+}
+.globe-pin-dot { width: 12px; height: 12px; border-radius: 999px; border: 2px solid #fff; box-shadow: 0 1px 4px rgb(0 0 0 / 0.35); }
+.globe-pin-active .globe-pin-dot { background: var(--color-radar-alert); animation: beacon 2.2s var(--ease-spring) infinite; }
+.globe-pin-watched .globe-pin-dot { background: #8e8e93; }
+.globe-pin-watched .globe-pin-label { color: var(--color-light-ink-dim); font-weight: 500; opacity: 0; pointer-events: none; }
+.globe-pin-watched:hover .globe-pin-label, .globe-pin-watched:focus-visible .globe-pin-label { opacity: 1; }
+.globe-pin-watched .globe-pin-dot { width: 9px; height: 9px; }
+.globe-pin:hover .globe-pin-label, .globe-pin:focus-visible .globe-pin-label { transform: scale(1.06); }
+.globe-pin:focus-visible { outline: none; }
+.globe-pin:focus-visible .globe-pin-label { outline: 2px solid var(--color-apple-blue); outline-offset: 2px; }
+.globe-root[data-scene="HERO_GLOBE"] .globe-pin-label { opacity: 0; }
+@keyframes beacon {
+  0% { box-shadow: 0 0 0 0 rgb(255 59 48 / 0.6); }
+  70% { box-shadow: 0 0 0 12px rgb(255 59 48 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(255 59 48 / 0); }
+}
+
+/* Ground-truth pins on the radar stage. */
+.landmark-pin { display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; border: 0; padding: 0; cursor: pointer; color: #fff; font: inherit; }
+.landmark-pin-head { width: 22px; height: 22px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 2px solid #fff; box-shadow: 0 2px 8px rgb(0 0 0 / 0.5); }
+.landmark-pin-label { order: -1; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: rgb(28 28 30 / 0.74); border: 1px solid rgb(255 255 255 / 0.14); white-space: nowrap; }
+.landmark-pin:focus-visible .landmark-pin-label { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* Act I lower third reads over bright terrain. */
+.lower-third { text-shadow: 0 1px 18px rgb(0 0 0 / 0.55); }

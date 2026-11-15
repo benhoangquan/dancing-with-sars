@@ -34,5 +34,10 @@ export function startStoryScroll(root: HTMLElement, chapters: Chapter[], prefers
     if (s.t !== t || s.p !== at.p) clock.setState({ t, p: at.p });
   };
   raf = requestAnimationFrame(frame);
-  return () => cancelAnimationFrame(raf);
+  const replay = () => flyoverClock.restart();
+  window.addEventListener("sar:replay", replay);
+  return () => {
+    cancelAnimationFrame(raf);
+    window.removeEventListener("sar:replay", replay);
+  };
 }

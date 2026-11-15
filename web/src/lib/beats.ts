@@ -5,16 +5,7 @@ import { cameraAt } from "./camera";
 export type Beat = Chapter["beats"][number];
 export type FlyoverWindow = Beat["stage"]["flyover"];
 
-export const MODES: { id: StageMode; label: string; short: string }[] = [
-  { id: "flyover", label: "Flyover", short: "Flyover" },
-  { id: "radar", label: "Radar Compare", short: "Compare" },
-  { id: "split", label: "Split", short: "Split" },
-];
-
 export const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
-
-/** A user pin (from the segmented control) wins over the beat's own mode until the chapter changes. */
-export const effectiveMode = (beat: Beat, pinned: StageMode | null): StageMode => pinned ?? beat.stage.mode;
 
 /** Flyover time for a scrub beat at scroll progress `p` (0 to 1). */
 export const scrubTime = (f: FlyoverWindow, p: number) => f.from + (f.to - f.from) * clamp01(p);

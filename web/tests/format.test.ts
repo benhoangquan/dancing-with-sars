@@ -35,19 +35,35 @@ describe("format", () => {
 describe("tokens", () => {
   const stats = { cleared_ha: stat(7648, "ha", 0), hv_drop_db: stat(5.5, "dB", 1) };
   it("fills tokens with formatted stats", () => {
-    expect(fillTokens("Lost {stat:cleared_ha}; HV fell {stat:hv_drop_db}.", stats)).toBe(
+    expect(fillTokens("Lost {stat:cleared_ha}; HV fell {stat:hv_drop_db}.", { stats })).toBe(
       "Lost 7,648 ha; HV fell 5.5 dB.",
     );
   });
   it("splits text so each stat can render in its own span", () => {
-    expect(splitTokens("a {stat:cleared_ha} b", stats)).toEqual([
+    expect(splitTokens("a {stat:cleared_ha} b", { stats })).toEqual([
       { kind: "text", text: "a " },
       { kind: "stat", key: "cleared_ha", text: "7,648 ha" },
       { kind: "text", text: " b" },
     ]);
   });
   it("leaves text without tokens alone and throws on an unknown stat", () => {
-    expect(fillTokens("plain", stats)).toBe("plain");
-    expect(() => fillTokens("{stat:nope}", stats)).toThrow(/no stat/);
+    expect(fillTokens("plain", { stats })).toBe("plain");
+    expect(() => fillTokens("{stat:nope}", { stats })).toThrow(/no stat/);
   });
+});
+
+describe("facts and scale anchors", () => {
+  const stats = { cleared_ha: stat(374, "ha", 0), hv_drop_db: stat(6.0, "dB", 1) };
+  const fact = { id: "sinking", value: 13, unit: "cm/yr" as const, decimals: 0, label: "x", source: { name: "s", url: "https://x.test", accessed: "2026-11-15" } };
+  it("resolve facts and attach the everyday comparison", () => {
+    const parts = splitTokens("Sank {fact:sinking} and lost {stat:cleared_ha}.", {
+      stats,
+      facts: [fact],
+      anchors: { sinking: "per-decade", cleared_ha: "central-park" },
+    });
+    expect(parts[1]).toMatchObject({ kind: "fact", text: "13 cm/yr", anchor: "1.3 m per decade" });
+    expect(parts[3]).toMatchObject({ kind: "stat", key: "cleared_ha" });
+    expect((parts[3] as { anchor: string }).anchor).toMatch(/Central Park/);
+  });
+  it("throw on unknown facts", () => expect(() => fillTokens("{fact:nope}", { stats })).toThrow(/no fact/));
 });

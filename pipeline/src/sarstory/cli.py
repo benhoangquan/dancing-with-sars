@@ -154,6 +154,13 @@ def cmd_globe(_: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_cities(_: argparse.Namespace) -> int:
+    from .cities import build_cities
+
+    build_cities()
+    return 0
+
+
 def cmd_clean(_: argparse.Namespace) -> int:
     shutil.rmtree(CACHE_DIR, ignore_errors=True)
     print(f"removed {CACHE_DIR}")
@@ -171,6 +178,8 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("dem", help="write Copernicus GLO-30 terrain COGs for chapters")
     p.add_argument("slugs", nargs="*")
     p.set_defaults(func=cmd_dem)
+    p = sub.add_parser("cities", help="save reference city outlines for the city-scale comparison")
+    p.set_defaults(func=cmd_cities)
     p = sub.add_parser("globe", help="save NASA Blue Marble tiles for the globe scenes")
     p.set_defaults(func=cmd_globe)
     p = sub.add_parser("validate", help="check manifests against the schema and their asset files")

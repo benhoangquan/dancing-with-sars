@@ -23,6 +23,11 @@ export class FlyoverClock {
   private playKey = "";
   private playStart = 0;
 
+  /** Play the current play-hold beat again from its start (the Replay button). */
+  restart() {
+    this.playKey = "";
+  }
+
   /** Advance by `dtSec`. `nowMs` is a monotonic clock, `beatKey` identifies the active beat. */
   update(nowMs: number, dtSec: number, beatKey: string, beat: Beat, p: number): number {
     const f = beat.stage.flyover;

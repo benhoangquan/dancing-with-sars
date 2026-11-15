@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import {
   type Beat,
   type SectionBox,
-  effectiveMode,
   locate,
   paneLayers,
   playHoldTime,
@@ -28,10 +27,6 @@ const beat = (over: Partial<Beat["stage"]> = {}): Beat => ({
 });
 
 describe("mode and layers", () => {
-  it("lets a pin override the beat mode", () => {
-    expect(effectiveMode(beat(), null)).toBe("radar");
-    expect(effectiveMode(beat(), "split")).toBe("split");
-  });
   it("shows the flyover layer alone in flyover mode", () => {
     expect(paneLayers(beat(), "flyover")).toEqual({ a: ["sar_before"], b: [] });
     expect(paneLayers(beat({ flyoverLayer: "optical_after", overlays: ["hv_change"] }), "flyover")).toEqual({
@@ -163,21 +158,25 @@ describe("FlyoverClock", () => {
 });
 
 describe("store", () => {
-  it("clears the pinned mode on chapter change only, and resets swipe per beat", () => {
+  it("resets the swipe and closes any popover when the beat changes", () => {
     const s = useStory;
-    s.setState({ chapterIdx: 0, beatIdx: 0, pinnedMode: null, swipe: 0.5 });
-    s.getState().pinMode("split");
+    s.setState({ chapterIdx: 0, beatIdx: 0, swipe: 0.5, popover: "pin" });
     s.getState().setSwipe(0.8);
     s.getState().setActive(0, 1, 0.3);
-    expect(s.getState().pinnedMode).toBe("split");
     expect(s.getState().swipe).toBe(0.3);
-    s.getState().setActive(1, 0, 0.5);
-    expect(s.getState().pinnedMode).toBeNull();
-    expect(s.getState().swipe).toBe(0.5);
+    expect(s.getState().popover).toBeNull();
+  });
+  it("saves the globe view on entering a place and returns to the hotspot globe on leaving", () => {
+    const s = useStory;
+    const view = { center: [10, 20] as [number, number], zoom: 2, bearing: 0, pitch: 0 };
+    s.getState().enterPlace("demak", view);
+    expect(s.getState()).toMatchObject({ scene: "PLACE_CHAPTER", place: "demak", savedGlobeView: view, beatIdx: 0 });
+    s.getState().leavePlace();
+    expect(s.getState()).toMatchObject({ scene: "HOTSPOT_GLOBE", place: null, leftPlace: "demak", savedGlobeView: view });
   });
   it("keeps the user's swipe when the active beat has not changed", () => {
     const s = useStory;
-    s.setState({ chapterIdx: 0, beatIdx: 2, pinnedMode: null, swipe: 0.5 });
+    s.setState({ chapterIdx: 0, beatIdx: 2, swipe: 0.5 });
     s.getState().setSwipe(0.9);
     s.getState().setActive(0, 2, 0.5);
     expect(s.getState().swipe).toBe(0.9);

@@ -9,9 +9,10 @@ import { absoluteAssetUrl, assetUrl } from "@/lib/asset";
 import { type Beat, paneLayers, radarCamera } from "@/lib/beats";
 import { cameraAt } from "@/lib/camera";
 import { springEase } from "@/lib/ease";
-import { LayerManager, TERRAIN_SOURCE, baseStyle } from "@/lib/mapLayers";
+import { LayerManager, TERRAIN_SOURCE, baseStyle, cogDem } from "@/lib/mapLayers";
 import { clock } from "@/lib/store";
 import { useMediaQuery } from "@/lib/useMediaQuery";
+import { Landmarks } from "@/components/place/Landmarks";
 import type { Camera, Chapter, StageMode } from "@/types/chapter";
 
 type Props = {
@@ -21,6 +22,8 @@ type Props = {
   reduced: boolean;
   /** A pre-rendered flyover video covers pane A (and the live map there is hidden). */
   videoActive: boolean;
+  /** Ground-truth pins and their popover (Act II). */
+  showLandmarks?: boolean;
 };
 
 interface Runtime {
@@ -64,7 +67,7 @@ function PaneTag({ side, text }: { side: "left" | "right"; text?: string }) {
  * (clipped by the swipe divider in radar mode, beside A in split mode). Cameras are driven by the flyover
  * clock in flyover and split modes, and by the beat's own camera in radar mode.
  */
-export default function RadarCompareMap({ chapter, beat, mode, reduced, videoActive }: Props) {
+export default function RadarCompareMap({ chapter, beat, mode, reduced, videoActive, showLandmarks = false }: Props) {
   const elA = useRef<HTMLDivElement>(null);
   const elB = useRef<HTMLDivElement>(null);
   const rt = useRef<Runtime | null>(null);
@@ -73,6 +76,7 @@ export default function RadarCompareMap({ chapter, beat, mode, reduced, videoAct
     modeRef.current = mode;
   }, [mode]);
   const [ready, setReady] = useState(false);
+  const [mapA, setMapA] = useState<MlMap | null>(null);
   const finePointer = useMediaQuery("(pointer: fine)");
   const flyover = chapter.generated.flyover;
 
@@ -92,10 +96,12 @@ export default function RadarCompareMap({ chapter, beat, mode, reduced, videoAct
         protocolRegistered = true;
       }
       const first = flyover.waypoints[0].camera;
+      const dem = chapter.generated.dem;
+      const style = baseStyle(dem ? cogDem(absoluteAssetUrl(dem.cog)) : undefined);
       const make = (container: HTMLElement) => {
         const map = new ml.Map({
           container,
-          style: baseStyle(),
+          style,
           center: first.center,
           zoom: first.zoom,
           pitch: first.pitch,
@@ -133,6 +139,7 @@ export default function RadarCompareMap({ chapter, beat, mode, reduced, videoAct
       rt.current = { setColorFunction: cog.setColorFunction, a: A.map, b: B.map, overlayA: A.overlay, overlayB: B.overlay };
       // Test and debugging handle, only with ?debug in the URL.
       if (new URLSearchParams(window.location.search).has("debug")) (window as unknown as { __sar?: unknown }).__sar = { a: A.map, b: B.map };
+      setMapA(A.map);
       setReady(true);
       cleanup = () => {
         observers.forEach((o) => o.disconnect());
@@ -148,6 +155,7 @@ export default function RadarCompareMap({ chapter, beat, mode, reduced, videoAct
     return () => {
       cancelled = true;
       setReady(false);
+      setMapA(null);
       cleanup();
     };
     // The maps are created once; the first waypoint is only their starting camera.
@@ -255,6 +263,7 @@ export default function RadarCompareMap({ chapter, beat, mode, reduced, videoAct
         <div ref={elB} style={FILL} />
         <PaneTag side="right" text={labelOf(shown.b[0])} />
       </div>
+      {mapA && <Landmarks map={mapA} chapter={chapter} show={showLandmarks && mode === "radar"} />}
       {mode === "radar" && (
         <div className="glass absolute right-5 top-[7.5rem] z-30 hidden flex-col overflow-hidden rounded-full! lg:flex">
           {([1, -1] as const).map((d) => (

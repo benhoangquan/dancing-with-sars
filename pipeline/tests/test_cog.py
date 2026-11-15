@@ -139,3 +139,23 @@ def test_globe_tiles_cover_every_zoom_and_are_saved_once(tmp_path):
     assert build_globe(tmp_path, max_zoom=1, get=fake_get, log=lambda *_: None) == 5
     assert (tmp_path / "1" / "1" / "0.webp").exists() and "/1/0/1.jpeg" in calls[-2]
     assert build_globe(tmp_path, max_zoom=1, get=fake_get, log=lambda *_: None) == 0
+
+
+def test_city_outlines_drop_small_islands_and_are_saved_once(tmp_path):
+    from sarstory.cities import CITIES, build_cities
+
+    def square(x, y, d):
+        return [[x, y], [x + d, y], [x + d, y + d], [x, y + d], [x, y]]
+
+    def fake_get(_relation):
+        return {"type": "MultiPolygon", "coordinates": [[square(0, 0, 0.3)], [square(1, 1, 0.01)]]}
+
+    paths = build_cities(tmp_path, get=fake_get, pause=0, log=lambda *_: None)
+    assert len(paths) == len(CITIES)
+    import json
+
+    doc = json.loads(paths[0].read_text())
+    assert doc["geometry"]["type"] == "Polygon" and "ODbL" in doc["license"]
+    calls = []
+    build_cities(tmp_path, get=lambda r: calls.append(r), pause=0, log=lambda *_: None)
+    assert calls == []

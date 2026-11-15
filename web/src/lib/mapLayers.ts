@@ -68,13 +68,21 @@ const DEM: RasterDEMSourceSpecification = {
   attribution: "Terrain: Mapzen, AWS Open Data",
 };
 
-/** Black stage, terrain from free AWS tiles, a light hillshade over the imagery, and a black sky. */
-export function baseStyle(): StyleSpecification {
+/** Terrain from the chapter's own Copernicus COG (`cog://...#dem`), so no tile server is needed at runtime. */
+export const cogDem = (absoluteCogUrl: string): RasterDEMSourceSpecification => ({
+  type: "raster-dem",
+  url: `cog://${absoluteCogUrl}#dem`,
+  tileSize: 256,
+  attribution: "Terrain: Copernicus DEM GLO-30, ESA and Airbus",
+});
+
+/** Black stage, terrain (the chapter's DEM COG, else free AWS tiles), a light hillshade, and a black sky. */
+export function baseStyle(dem: RasterDEMSourceSpecification = DEM): StyleSpecification {
   return {
     version: 8,
     sources: {
-      [TERRAIN_SOURCE]: DEM,
-      [HILLSHADE_SOURCE]: DEM,
+      [TERRAIN_SOURCE]: dem,
+      [HILLSHADE_SOURCE]: { ...dem },
     },
     layers: [
       { id: "stage", type: "background", paint: { "background-color": "#000000" } },

@@ -13,7 +13,12 @@ const STEP = 0.05;
 export function SwipeDivider() {
   const swipe = useStory((s) => s.swipe);
   const setSwipe = useStory((s) => s.setSwipe);
+  const setDragging = useStory((s) => s.setDragging);
   const dragging = useRef(false);
+  const drag = (on: boolean) => {
+    dragging.current = on;
+    setDragging(on);
+  };
 
   const move = (clientX: number) => setSwipe(clientX / window.innerWidth);
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -34,13 +39,13 @@ export function SwipeDivider() {
       aria-valuenow={Math.round(swipe * 100)}
       onKeyDown={onKeyDown}
       onPointerDown={(e) => {
-        dragging.current = true;
+        drag(true);
         e.currentTarget.setPointerCapture(e.pointerId);
         move(e.clientX);
       }}
       onPointerMove={(e) => dragging.current && move(e.clientX)}
-      onPointerUp={() => (dragging.current = false)}
-      onPointerCancel={() => (dragging.current = false)}
+      onPointerUp={() => drag(false)}
+      onPointerCancel={() => drag(false)}
       className="group absolute inset-y-0 z-20 w-11 -translate-x-1/2 cursor-ew-resize touch-none outline-none"
       style={{ left: "calc(var(--swipe, 0.5) * 100%)" }}
     >

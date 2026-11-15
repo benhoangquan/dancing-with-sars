@@ -172,6 +172,26 @@
     }
   ],
   "scaleAnchors": { "land_lost_ha": "central-park", "subsidence_max_cmyr": "per-decade" },
+  "landmarks": [
+    {
+      "id": "timbulsloko",
+      "label": "Timbulsloko",
+      "lonLat": [110.5182, -6.9135],
+      "note": "A village in Sayung district whose lanes and houses now stand in tidal water. Point from OpenStreetMap."
+    },
+    {
+      "id": "bedono",
+      "label": "Bedono",
+      "lonLat": [110.4847, -6.9272],
+      "note": "A Sayung village on the eroding coast, next to the new Semarang–Demak toll road embankment. Point from OpenStreetMap."
+    },
+    {
+      "id": "surodadi",
+      "label": "Surodadi",
+      "lonLat": [110.5218, -6.8839],
+      "note": "A coastal village north of Timbulsloko. Point from OpenStreetMap."
+    }
+  ],
   "action": {
     "headline": "Help the coast grow back",
     "body": "About {fact:land_lost_ha} of this coast has been lost to the sea since 1984. These organizations restore mangroves with the communities who live there.",
@@ -503,6 +523,38 @@
       "sourceIds": ["copernicus-dem"],
       "bytes": 1220502,
       "sha256": "609737ed62656ed726c0a192544154224011197313e4a9a5f7035418d1d3235e"
+    },
+    "landmarkReadings": {
+      "timbulsloko": [
+        { "label": "HH, 2026", "value": -8.0, "unit": "dB", "decimals": 1, "layerId": "sar_2026" },
+        {
+          "label": "HV, 2026",
+          "value": -14.2,
+          "unit": "dB",
+          "decimals": 1,
+          "layerId": "sar_2026"
+        }
+      ],
+      "bedono": [
+        { "label": "HH, 2026", "value": -6.8, "unit": "dB", "decimals": 1, "layerId": "sar_2026" },
+        {
+          "label": "HV, 2026",
+          "value": -11.7,
+          "unit": "dB",
+          "decimals": 1,
+          "layerId": "sar_2026"
+        }
+      ],
+      "surodadi": [
+        { "label": "HH, 2026", "value": -7.6, "unit": "dB", "decimals": 1, "layerId": "sar_2026" },
+        {
+          "label": "HV, 2026",
+          "value": -14.6,
+          "unit": "dB",
+          "decimals": 1,
+          "layerId": "sar_2026"
+        }
+      ]
     }
   }
 }

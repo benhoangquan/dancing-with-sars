@@ -92,6 +92,37 @@ def annotations(specs: list[dict], stack: Stack, an: Analysis) -> list[dict]:
     return out
 
 
+def mask_footprint(mask: np.ndarray, stack: Stack, area_ha: float, label: str) -> dict | None:
+    """The loss mask as a simplified lon/lat MultiPolygon, for the city-scale comparison."""
+    from rasterio.features import shapes
+    from rasterio.warp import transform_geom
+    from shapely.geometry import MultiPolygon, mapping, shape
+
+    polys = [
+        shape(transform_geom(f"EPSG:{stack.epsg}", "EPSG:4326", geom))
+        for geom, v in shapes(mask.astype(np.uint8), mask=mask, transform=stack.transform)
+        if v == 1
+    ]
+    if not polys:
+        return None
+    multi = MultiPolygon([p for p in polys if p.geom_type == "Polygon"]).simplify(
+        0.0002, preserve_topology=True
+    )
+
+    def r(c):
+        return [round(c[0], 6), round(c[1], 6)] if isinstance(c[0], float | int) else [r(x) for x in c]
+
+    geom = mapping(multi)
+    return {
+        "kind": "shape",
+        "label": label,
+        "areaHa": round(float(area_ha), 1),
+        "geometry": {"type": geom["type"], "coordinates": r(geom["coordinates"])},
+        "sourceIds": ["nisar-gcov"],
+        "status": "real",
+    }
+
+
 def nisar_source(index: dict, stack: Stack) -> dict:
     return {
         "id": "nisar-gcov",
@@ -275,4 +306,9 @@ def build(
         "annotations": annotations(cfg["annotations"], stack, an),
         "sources": sources,
     }
+    footprint = mask_footprint(
+        an.mask, stack, an.stats["area_ha"], real.get("footprint_label", real["area_label"])
+    )
+    if footprint:
+        manifest["generated"]["footprint"] = footprint
     return write_manifest(slug, manifest, chapters_dir)

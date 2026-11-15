@@ -147,6 +147,15 @@ def cmd_dem(args: argparse.Namespace) -> int:
     return 1 if failed else 0
 
 
+def cmd_landmarks(args: argparse.Namespace) -> int:
+    from .landmarks import build_landmarks
+
+    for slug in args.slugs or sorted(p.stem for p in CHAPTERS_DIR.glob("*.json")):
+        path = build_landmarks(slug)
+        print(f"wrote {path.relative_to(path.parents[2])} (landmark readings)")
+    return 0
+
+
 def cmd_globe(_: argparse.Namespace) -> int:
     from .globe import build_globe
 
@@ -178,6 +187,9 @@ def main(argv: list[str] | None = None) -> int:
     p = sub.add_parser("dem", help="write Copernicus GLO-30 terrain COGs for chapters")
     p.add_argument("slugs", nargs="*")
     p.set_defaults(func=cmd_dem)
+    p = sub.add_parser("landmarks", help="sample radar readings at each chapter's landmark pins")
+    p.add_argument("slugs", nargs="*")
+    p.set_defaults(func=cmd_landmarks)
     p = sub.add_parser("cities", help="save reference city outlines for the city-scale comparison")
     p.set_defaults(func=cmd_cities)
     p = sub.add_parser("globe", help="save NASA Blue Marble tiles for the globe scenes")

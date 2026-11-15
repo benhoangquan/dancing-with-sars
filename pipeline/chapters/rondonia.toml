@@ -25,6 +25,7 @@ min_coverage = 0.9  # share of the study area a granule footprint must cover
 [real]
 area_key = "cleared_ha"
 area_label = "Forest cleared"
+footprint_label = "New clearings found by NISAR"
 series_kind = "hv"                       # HV in the loss mask, date by date
 series_id = "hv_cleared"
 series_label = "HV backscatter in cleared pixels"

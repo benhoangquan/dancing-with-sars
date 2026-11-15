@@ -162,6 +162,20 @@
     "burn_hv_drop_db": "echo-power",
     "placebo_sd_db": "echo-power"
   },
+  "landmarks": [
+    {
+      "id": "inside_perimeter",
+      "label": "Inside the burn",
+      "lonLat": [-119.53, 50.08],
+      "note": "The burn's echo compared with the forest around it: median HV inside the Quilpituk Creek perimeter minus median HV in the ring of forest, averaged over the passes before and after the fire. The gap narrowed as the canopy thinned."
+    },
+    {
+      "id": "forest_outside",
+      "label": "Forest around the burn",
+      "lonLat": [-119.5658, 50.0574],
+      "note": "Unburned forest in the ring the burn is compared with. Rain and season move this forest's echo and the burn's together, so the comparison cancels them."
+    }
+  ],
   "action": {
     "headline": "Help burned forest recover",
     "body": "The mapped perimeter of the Quilpituk Creek fire encloses {stat:burned_ha} above Okanagan Lake. These organizations fund replanting and forest restoration.",
@@ -999,6 +1013,24 @@
       "sourceIds": ["copernicus-dem"],
       "bytes": 3711367,
       "sha256": "962f9955f6109858384133164ec5b86cf725cc6ce3a4d26efd792c0e427b1d5a"
+    },
+    "landmarkReadings": {
+      "inside_perimeter": [
+        {
+          "label": "Burn minus forest, before",
+          "value": 1.7,
+          "unit": "dB",
+          "decimals": 1,
+          "layerId": "sar_before"
+        },
+        {
+          "label": "Burn minus forest, after",
+          "value": 0.9,
+          "unit": "dB",
+          "decimals": 1,
+          "layerId": "sar_after"
+        }
+      ]
     }
   }
 }

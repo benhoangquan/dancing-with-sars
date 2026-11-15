@@ -94,3 +94,22 @@ def test_equal_area_square_has_the_cited_area():
 
     utm = transform_geom("EPSG:4326", "EPSG:32749", equal_area_square([110.575, -6.9], 2534.0))
     assert shape(utm).area / 1e4 == pytest.approx(2534.0, rel=0.01)
+
+
+def test_perimeter_pins_show_the_burn_minus_forest_gap_not_one_patch():
+    from sarstory.landmarks import perimeter_readings
+
+    cfg = {"perimeter": {"started": "2026-08-02", "mapped": "2026-08-21"}}
+    pts = [("2026-07-01", -12.0, -13.7), ("2026-07-25", -12.6, -14.4), ("2026-09-11", -13.0, -13.8)]
+    manifest = {
+        "generated": {
+            "series": [
+                {
+                    "points": [{"t": t, "v": a} for t, a, _ in pts],
+                    "reference": {"points": [{"t": t, "v": b} for t, _, b in pts]},
+                }
+            ]
+        }
+    }
+    rows = perimeter_readings(cfg, manifest)["inside_perimeter"]
+    assert [r["value"] for r in rows] == [1.8, 0.8]

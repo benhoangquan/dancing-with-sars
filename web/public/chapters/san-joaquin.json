@@ -45,13 +45,6 @@
       "meaning": "How well the two radar passes match. Dark pixels give unreliable ground motion, and the displacement layer leaves them out."
     },
     {
-      "id": "sar_fields",
-      "layerIds": ["sar_after"],
-      "swatch": { "kind": "solid", "color": "#808680" },
-      "label": "Grey-green",
-      "meaning": "Irrigated farmland. Each field returns its own level of radar signal."
-    },
-    {
       "id": "optical_fields",
       "layerIds": ["optical_after"],
       "swatch": { "kind": "solid", "color": "#5C8038" },
@@ -69,7 +62,7 @@
         "mode": "flyover",
         "flyover": { "from": 0, "to": 8, "playback": "scrub" },
         "left": "optical_after",
-        "right": "sar_after",
+        "right": "coherence",
         "swipe": 0.5
       }
     },

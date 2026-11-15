@@ -27,6 +27,14 @@ Granules are full frames of 1.6 to 7.1 GB, so the pipeline reads only the study-
 
 NISAR public L-band data covers acquisitions from 2026-06-17 onward (ASF DAAC notice, 2026-07-21). The earlier record is released in stages through the end of 2026. Access needs an Earthdata Login account, set up by the user.
 
+## What is real in the site today
+
+| Chapter | Radar | Optical | Status |
+|---|---|---|---|
+| `rondonia` | NISAR GCOV provisional, measured | HLS, real | **real** |
+| `okanagan` | fetched, no burn scar inside this box | not built | illustrative (see `docs/decisions.md`) |
+| `san-joaquin` | fetched, corrected, not yet reliable | not built | illustrative (see `docs/decisions.md`) |
+
 ## Licenses
 
 NISAR, OPERA, HLS and NASADEM follow NASA open data policy. Confirm each product's license page before release; the pipeline writes these into each chapter manifest under `generated.sources`.

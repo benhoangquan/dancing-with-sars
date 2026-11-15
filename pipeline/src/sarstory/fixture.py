@@ -251,7 +251,12 @@ def _fishbone(slug: str, cfg: dict, grid: Grid, rng: np.random.Generator, w: Wri
     }
     patch = largest_patches(mask, 1)
     annotations = [
-        {"id": "main_road", "label": "Main road", "kind": "pin", "geometry": _pin(grid, *a["road_pin"])}
+        {
+            "id": "largest_clearing",
+            "label": "Largest new clearing",
+            "kind": "pin",
+            "geometry": _pin(grid, *a["road_pin"]),
+        }
     ]
     if patch:
         annotations.append(

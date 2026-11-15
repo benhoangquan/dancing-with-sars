@@ -7,6 +7,7 @@ Data contract: `schema/chapter.schema.json` (canonical) and `docs/data_contract.
 - `cd pipeline && uv sync && uv run ruff check . && uv run pytest` runs Python checks and the repo rules.
 - `cd pipeline && uv run sar fixture --all && uv run sar validate` writes and validates the illustrative chapter data.
 - `cd pipeline && uv run sar discover --all` searches the public NISAR catalog (no login) and writes `pipeline/reports/`.
+- `cd pipeline && uv run sar fetch <slug>` then `uv run sar build <slug>` (add `--reuse-optical` to skip the network) make real layers. Fetch needs an Earthdata Login in `~/.netrc`.
 - `cd web && npm run verify` runs gen:types, type diff check, manifest validation, typecheck, lint, unit tests and the static build.
 - `cd web && npm run build && npm run smoke -- --trace off` runs the Playwright smoke tests against `out/`. Run `npx playwright install chromium` once. Screenshots land in `web/e2e/__screens__/` (ignored): look at them after a visual change.
 - Add `?debug` to the URL to expose the two maps as `window.__sar`.

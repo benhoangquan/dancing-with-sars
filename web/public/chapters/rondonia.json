@@ -23,16 +23,23 @@
     {
       "id": "sar_forest",
       "layerIds": ["sar_before", "sar_after"],
-      "swatch": { "kind": "solid", "color": "#9EB866" },
+      "swatch": { "kind": "solid", "color": "#B0D853" },
       "label": "Yellow-green",
       "meaning": "Standing forest. Branches and leaves scatter the radar in every direction, so the cross-polarized HV channel is strong."
     },
     {
       "id": "sar_cleared",
       "layerIds": ["sar_before", "sar_after"],
-      "swatch": { "kind": "solid", "color": "#7360A1" },
-      "label": "Violet",
+      "swatch": { "kind": "solid", "color": "#646E7A" },
+      "label": "Slate grey",
       "meaning": "Cleared ground. Bare soil and pasture return much less HV."
+    },
+    {
+      "id": "sar_water",
+      "layerIds": ["sar_before", "sar_after"],
+      "swatch": { "kind": "solid", "color": "#3E457E" },
+      "label": "Indigo",
+      "meaning": "Rivers and open water. They reflect the radar away, so very little returns."
     },
     {
       "id": "optical_forest",
@@ -92,7 +99,7 @@
       "id": "fishbone",
       "eyebrow": "Between two radar passes",
       "headline": "The fishbone spreads",
-      "body": "The same ground, before and after. Where branch roads opened new clearings, the HV signal fell by {stat:hv_drop_db} on average.",
+      "body": "The same ground, before and after. Where new clearings opened, the HV signal fell by {stat:hv_drop_db} on average.",
       "stage": {
         "mode": "radar",
         "flyover": { "from": 16, "to": 26, "playback": "scrub" },
@@ -100,7 +107,13 @@
         "right": "sar_after",
         "swipe": 0.5,
         "overlays": ["hv_change"],
-        "annotations": ["main_road", "new_clearing"]
+        "annotations": ["new_clearing"],
+        "camera": {
+          "center": [-63.568, -9.818],
+          "zoom": 12.4,
+          "pitch": 30,
+          "bearing": 0
+        }
       },
       "readout": { "seriesId": "hv_cleared", "statKey": "hv_drop_db" }
     },
@@ -190,42 +203,42 @@
     ]
   },
   "generated": {
-    "pipelineVersion": "0.1.0+fixture",
-    "builtAt": "2026-11-15T02:17:13Z",
+    "pipelineVersion": "0.1.0+nisar",
+    "builtAt": "2026-11-15T03:52:00Z",
     "layers": [
       {
         "id": "optical_before",
         "kind": "optical",
         "label": "Optical, before",
-        "date": "2026-06-17/2026-07-11",
+        "date": "2026-06-18/2026-07-08",
         "cog": "data/rondonia/optical_before.tif",
         "render": { "type": "rgba" },
         "preview": "data/rondonia/optical_before.png",
-        "bounds": [-63.984375, -10.487812, -62.578125, -9.102097],
-        "sourceIds": ["synthetic"],
-        "status": "illustrative",
-        "bytes": 376832,
-        "sha256": "4b1a28825aba01c1b1baf58edbf2dfdd998d9b8f9289e6bc5bd116f91a208d35"
+        "bounds": [-63.984375, -10.487812, -62.578125, -9.449062],
+        "sourceIds": ["hls"],
+        "status": "real",
+        "bytes": 3997598,
+        "sha256": "00958c8125fb28c2aebf384c021be275ab061a3819bfa9270ec04b1a0ea71c1c"
       },
       {
         "id": "optical_after",
         "kind": "optical",
         "label": "Optical, after",
-        "date": "2026-09-09/2026-10-03",
+        "date": "2026-09-11/2026-10-03",
         "cog": "data/rondonia/optical_after.tif",
         "render": { "type": "rgba" },
         "preview": "data/rondonia/optical_after.png",
-        "bounds": [-63.984375, -10.487812, -62.578125, -9.102097],
-        "sourceIds": ["synthetic"],
-        "status": "illustrative",
-        "bytes": 402536,
-        "sha256": "25271bd1c4dad82b2f8cc0f8688c479c7cc57ba75a4f2bc4dd80af33813ace5e"
+        "bounds": [-63.984375, -10.487812, -62.578125, -9.449062],
+        "sourceIds": ["hls"],
+        "status": "real",
+        "bytes": 3900792,
+        "sha256": "e68599ed2907ba7418037abf103aa4965d7ef0fa664ce7722c7676a2a557ead1"
       },
       {
         "id": "sar_before",
         "kind": "sar-composite",
         "label": "Radar composite, before",
-        "date": "2026-06-17/2026-07-11",
+        "date": "2026-06-25/2026-07-07",
         "cog": "data/rondonia/sar_before.tif",
         "render": { "type": "rgba" },
         "stretch": {
@@ -234,17 +247,17 @@
           "ratio": [0.0, 15.0]
         },
         "preview": "data/rondonia/sar_before.png",
-        "bounds": [-63.984375, -10.487812, -62.578125, -9.102097],
-        "sourceIds": ["synthetic"],
-        "status": "illustrative",
-        "bytes": 923506,
-        "sha256": "cb8ab5b13b995638365f4d8bd0602dc675b5e68c52e8cd900873d109048e2e0d"
+        "bounds": [-63.984375, -10.487812, -62.578125, -9.449062],
+        "sourceIds": ["nisar-gcov"],
+        "status": "real",
+        "bytes": 4807149,
+        "sha256": "e59e310f052495dcbd985deef06f8cafede87aab8b3f040b2b659c15f7f759d5"
       },
       {
         "id": "sar_after",
         "kind": "sar-composite",
         "label": "Radar composite, after",
-        "date": "2026-09-09/2026-10-03",
+        "date": "2026-09-17/2026-09-29",
         "cog": "data/rondonia/sar_after.tif",
         "render": { "type": "rgba" },
         "stretch": {
@@ -253,17 +266,17 @@
           "ratio": [0.0, 15.0]
         },
         "preview": "data/rondonia/sar_after.png",
-        "bounds": [-63.984375, -10.487812, -62.578125, -9.102097],
-        "sourceIds": ["synthetic"],
-        "status": "illustrative",
-        "bytes": 933568,
-        "sha256": "df4f67fcb546e5484838a4b669f5a25234300449c2e3aaf49943ca6d35533cae"
+        "bounds": [-63.984375, -10.487812, -62.578125, -9.449062],
+        "sourceIds": ["nisar-gcov"],
+        "status": "real",
+        "bytes": 4773131,
+        "sha256": "d3890dea65ce3d876e4aa09dd8d8ec712b67e01a26fc869f365690f93a1aa147"
       },
       {
         "id": "hv_change",
         "kind": "change",
         "label": "Radar HV drop",
-        "date": "2026-06-17/2026-10-03",
+        "date": "2026-06-25/2026-09-29",
         "cog": "data/rondonia/hv_change.tif",
         "render": {
           "type": "ramp",
@@ -272,11 +285,11 @@
           "unit": "dB"
         },
         "preview": "data/rondonia/hv_change.png",
-        "bounds": [-63.984375, -10.487812, -62.578125, -9.102097],
-        "sourceIds": ["synthetic"],
-        "status": "illustrative",
-        "bytes": 50054,
-        "sha256": "9bf0b83f59c86bfee4f5b2ce31eb44f0421e5672fe811834cef673412c483db2"
+        "bounds": [-63.984375, -10.487812, -62.578125, -9.449062],
+        "sourceIds": ["nisar-gcov"],
+        "status": "real",
+        "bytes": 85127,
+        "sha256": "ba1813af9b667a1a6c343008565b96e76093a56dffe4f7b4c4a1351009fcc90d"
       }
     ],
     "series": [
@@ -286,71 +299,65 @@
         "unit": "dB",
         "kind": "hv-backscatter",
         "points": [
-          { "t": "2026-06-17", "v": -13.2 },
-          { "t": "2026-06-29", "v": -13.32 },
-          { "t": "2026-07-11", "v": -13.67 },
-          { "t": "2026-07-23", "v": -14.0 },
-          { "t": "2026-08-04", "v": -15.28 },
-          { "t": "2026-08-16", "v": -16.11 },
-          { "t": "2026-08-28", "v": -17.27 },
-          { "t": "2026-09-09", "v": -18.15 },
-          { "t": "2026-09-21", "v": -18.49 },
-          { "t": "2026-10-03", "v": -18.7 }
+          { "t": "2026-06-25", "v": -13.24 },
+          { "t": "2026-07-07", "v": -14.58 },
+          { "t": "2026-07-19", "v": -14.8 },
+          { "t": "2026-08-24", "v": -19.08 },
+          { "t": "2026-09-05", "v": -15.85 },
+          { "t": "2026-09-17", "v": -19.83 },
+          { "t": "2026-09-29", "v": -19.4 }
         ],
+        "sourceIds": ["nisar-gcov"],
+        "status": "real",
         "reference": {
           "label": "Intact forest",
           "points": [
-            { "t": "2026-06-17", "v": -12.96 },
-            { "t": "2026-06-29", "v": -13.35 },
-            { "t": "2026-07-11", "v": -14.04 },
-            { "t": "2026-07-23", "v": -13.11 },
-            { "t": "2026-08-04", "v": -13.49 },
-            { "t": "2026-08-16", "v": -13.45 },
-            { "t": "2026-08-28", "v": -13.12 },
-            { "t": "2026-09-09", "v": -13.43 },
-            { "t": "2026-09-21", "v": -13.24 },
-            { "t": "2026-10-03", "v": -13.19 }
+            { "t": "2026-06-25", "v": -11.38 },
+            { "t": "2026-07-07", "v": -11.61 },
+            { "t": "2026-07-19", "v": -11.39 },
+            { "t": "2026-08-24", "v": -11.7 },
+            { "t": "2026-09-05", "v": -11.15 },
+            { "t": "2026-09-17", "v": -11.6 },
+            { "t": "2026-09-29", "v": -11.57 }
           ]
-        },
-        "sourceIds": ["synthetic"],
-        "status": "illustrative"
+        }
       }
     ],
     "stats": {
       "cleared_ha": {
-        "value": 7648.0,
+        "value": 374.0,
         "unit": "ha",
         "decimals": 0,
         "label": "Forest cleared",
-        "method": "Area of pixels whose HV fell by more than the threshold. Synthetic pattern, not a measurement."
+        "method": "Area of the loss mask. NISAR NISAR_L2_GCOV_PROVISIONAL_V1, 3 dB HV drop from forest, 1 ha minimum patch."
       },
       "hv_drop_db": {
-        "value": 5.5,
+        "value": 6.0,
         "unit": "dB",
         "decimals": 1,
-        "label": "HV drop in cleared pixels",
-        "method": "Mean HV before minus after inside the mask. Synthetic pattern, not a measurement."
+        "label": "HV drop inside the mask",
+        "method": "Mean HV of the before composite minus the after composite inside the mask."
       },
       "hv_before_db": {
-        "value": -13.2,
+        "value": -14.0,
         "unit": "dB",
         "decimals": 1,
         "label": "HV before",
-        "method": "Mean HV inside the mask, before window. Synthetic pattern, not a measurement."
+        "method": "Median composite of the before window."
       },
       "hv_after_db": {
-        "value": -18.7,
+        "value": -20.0,
         "unit": "dB",
         "decimals": 1,
         "label": "HV after",
-        "method": "Mean HV inside the mask, after window. Synthetic pattern, not a measurement."
+        "method": "Median composite of the after window."
       },
       "n_dates": {
-        "value": 10.0,
+        "value": 7.0,
         "unit": "count",
         "decimals": 0,
         "label": "Radar dates",
-        "method": "Acquisition dates in the series. Synthetic pattern, not a measurement."
+        "method": "Acquisition dates in the series."
       }
     },
     "flyover": {
@@ -378,19 +385,19 @@
         {
           "t": 16,
           "camera": {
-            "center": [-63.3, -9.98],
-            "zoom": 10.5,
-            "pitch": 62,
-            "bearing": 22
+            "center": [-63.5, -9.9],
+            "zoom": 10.8,
+            "pitch": 55,
+            "bearing": 10
           }
         },
         {
           "t": 26,
           "camera": {
-            "center": [-63.28, -10.04],
-            "zoom": 10.8,
-            "pitch": 35,
-            "bearing": 30
+            "center": [-63.547, -9.818],
+            "zoom": 11.8,
+            "pitch": 40,
+            "bearing": 20
           }
         },
         {
@@ -406,15 +413,6 @@
     },
     "annotations": [
       {
-        "id": "main_road",
-        "label": "Main road",
-        "kind": "pin",
-        "geometry": {
-          "type": "Point",
-          "coordinates": [-63.377371, -10.050206]
-        }
-      },
-      {
         "id": "new_clearing",
         "label": "New clearing",
         "kind": "area",
@@ -422,11 +420,11 @@
           "type": "Polygon",
           "coordinates": [
             [
-              [-63.44, -9.942629],
-              [-63.297969, -9.942629],
-              [-63.297969, -10.031873],
-              [-63.44, -10.031873],
-              [-63.44, -9.942629]
+              [-63.551701, -9.808054],
+              [-63.542947, -9.808068],
+              [-63.542981, -9.828689],
+              [-63.551735, -9.828675],
+              [-63.551701, -9.808054]
             ]
           ]
         }
@@ -434,17 +432,108 @@
     ],
     "sources": [
       {
-        "id": "synthetic",
-        "mission": "Synthetic",
-        "product": "Synthetic pattern (illustrative)",
-        "collection": "none",
-        "maturity": "n/a",
-        "granules": [],
-        "dates": [],
-        "provider": "this project",
-        "license": "CC0-1.0",
-        "url": "https://nisar-docs.asf.alaska.edu/gcov/",
-        "nasa": false
+        "id": "nisar-gcov",
+        "mission": "NISAR",
+        "product": "L2 GCOV, geocoded polarimetric covariance (HH, HV)",
+        "collection": "NISAR_L2_GCOV_PROVISIONAL_V1",
+        "maturity": "provisional",
+        "granules": [
+          "NISAR_L2_PR_GCOV_023_161_A_172_2005_DHDH_A_20260625T100047_20260625T100122_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_023_161_A_173_2000_DHNA_M_20260625T100121_20260625T100159_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_024_161_A_172_2005_DHDH_A_20260707T100047_20260707T100121_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_024_161_A_173_2000_DHNA_M_20260707T100120_20260707T100158_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_025_161_A_172_2005_DHDH_A_20260719T100046_20260719T100121_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_025_161_A_173_2005_DHDH_A_20260719T100120_20260719T100156_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_028_161_A_172_2005_DHDH_A_20260824T100044_20260824T100119_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_028_161_A_173_2005_DHDH_A_20260824T100118_20260824T100152_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_029_161_A_172_2005_DHDH_A_20260905T100044_20260905T100118_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_029_161_A_173_2005_DHDH_A_20260905T100117_20260905T100152_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_030_161_A_172_2005_DHDH_A_20260917T100044_20260917T100118_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_030_161_A_173_2005_DHDH_A_20260917T100117_20260917T100152_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_031_161_A_172_2005_DHDH_A_20260929T100044_20260929T100118_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_031_161_A_173_2005_DHDH_A_20260929T100117_20260929T100152_P05023_N_F_J_001"
+        ],
+        "dates": ["2026-06-25", "2026-07-07", "2026-07-19", "2026-08-24", "2026-09-05", "2026-09-17", "2026-09-29"],
+        "provider": "NASA-ISRO, distributed by the ASF DAAC",
+        "license": "Open and free to use under NASA's Earth science data policy; cite NISAR and the ASF DAAC",
+        "url": "https://www.earthdata.nasa.gov/data/catalog/asf-nisar-l2-gcov-provisional-v1-1",
+        "nasa": true
+      },
+      {
+        "id": "hls",
+        "mission": "HLS",
+        "product": "Harmonized Landsat Sentinel-2 v2.0 (30 m)",
+        "collection": "HLSS30, HLSL30",
+        "maturity": "validated",
+        "granules": [
+          "HLS.L30.T20LMP.2026172T141411.v2.0",
+          "HLS.L30.T20LMP.2026179T142027.v2.0",
+          "HLS.L30.T20LMP.2026180T141425.v2.0",
+          "HLS.L30.T20LMP.2026259T142100.v2.0",
+          "HLS.L30.T20LMP.2026268T141454.v2.0",
+          "HLS.L30.T20LMP.2026276T141502.v2.0",
+          "HLS.L30.T20LMQ.2026172T141411.v2.0",
+          "HLS.L30.T20LMQ.2026179T142003.v2.0",
+          "HLS.L30.T20LMQ.2026180T141425.v2.0",
+          "HLS.L30.T20LMQ.2026259T142036.v2.0",
+          "HLS.L30.T20LMQ.2026268T141454.v2.0",
+          "HLS.L30.T20LMQ.2026276T141502.v2.0",
+          "HLS.L30.T20LNP.2026172T141411.v2.0",
+          "HLS.L30.T20LNP.2026179T142027.v2.0",
+          "HLS.L30.T20LNP.2026180T141425.v2.0",
+          "HLS.L30.T20LNP.2026259T142100.v2.0",
+          "HLS.L30.T20LNP.2026268T141454.v2.0",
+          "HLS.L30.T20LNP.2026276T141502.v2.0",
+          "HLS.L30.T20LNQ.2026172T141348.v2.0",
+          "HLS.L30.T20LNQ.2026179T142003.v2.0",
+          "HLS.L30.T20LNQ.2026180T141401.v2.0",
+          "HLS.L30.T20LNQ.2026187T142013.v2.0",
+          "HLS.L30.T20LNQ.2026259T142036.v2.0",
+          "HLS.L30.T20LNQ.2026268T141430.v2.0",
+          "HLS.L30.T20LNQ.2026276T141438.v2.0",
+          "HLS.S30.T20LMP.2026179T142711.v2.0",
+          "HLS.S30.T20LMP.2026254T142709.v2.0",
+          "HLS.S30.T20LMP.2026259T142711.v2.0",
+          "HLS.S30.T20LMP.2026264T142709.v2.0",
+          "HLS.S30.T20LMP.2026271T142801.v2.0",
+          "HLS.S30.T20LMQ.2026179T142711.v2.0",
+          "HLS.S30.T20LMQ.2026184T142709.v2.0",
+          "HLS.S30.T20LMQ.2026189T142711.v2.0",
+          "HLS.S30.T20LMQ.2026254T142709.v2.0",
+          "HLS.S30.T20LMQ.2026259T142711.v2.0",
+          "HLS.S30.T20LMQ.2026271T142801.v2.0",
+          "HLS.S30.T20LNP.2026169T142711.v2.0",
+          "HLS.S30.T20LNP.2026179T142711.v2.0",
+          "HLS.S30.T20LNP.2026184T142709.v2.0",
+          "HLS.S30.T20LNP.2026189T142711.v2.0",
+          "HLS.S30.T20LNP.2026254T142709.v2.0",
+          "HLS.S30.T20LNP.2026259T142711.v2.0",
+          "HLS.S30.T20LNP.2026271T142801.v2.0",
+          "HLS.S30.T20LNQ.2026179T142711.v2.0",
+          "HLS.S30.T20LNQ.2026184T142709.v2.0",
+          "HLS.S30.T20LNQ.2026189T142711.v2.0",
+          "HLS.S30.T20LNQ.2026254T142709.v2.0",
+          "HLS.S30.T20LNQ.2026259T142711.v2.0"
+        ],
+        "dates": [
+          "2026-06-18",
+          "2026-06-21",
+          "2026-06-28",
+          "2026-06-29",
+          "2026-07-03",
+          "2026-07-06",
+          "2026-07-08",
+          "2026-09-11",
+          "2026-09-16",
+          "2026-09-21",
+          "2026-09-25",
+          "2026-09-28",
+          "2026-10-03"
+        ],
+        "provider": "NASA and USGS, through Microsoft Planetary Computer",
+        "license": "Open and free to use under NASA's Earth science data policy",
+        "url": "https://www.earthdata.nasa.gov/data/projects/hls",
+        "nasa": true
       }
     ]
   }

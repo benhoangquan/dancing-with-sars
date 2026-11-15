@@ -17,6 +17,22 @@ stretch_ratio = [0.0, 15.0]
 [discover]
 min_coverage = 0.9  # share of the study area a granule footprint must cover
 
+[[annotations]]
+id = "deepest_point"
+label = "Deepest point"
+kind = "hotspot_pin"
+
+[[annotations]]
+id = "subsidence_bowl"
+label = "Sinking over 5 cm"
+kind = "bowl_area"
+
+[[optical]]
+id = "optical_after"
+label = "Optical"
+mode = "median"
+window = ["2026-09-09", "2026-10-03"]
+
 [fixture]
 pattern = "bowl"
 seed = 3303

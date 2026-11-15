@@ -18,7 +18,7 @@ def built(tmp_path_factory):
     chapters.mkdir(parents=True)
     for s in manifest_slugs():
         shutil.copy(CHAPTERS_DIR / f"{s}.json", chapters / f"{s}.json")
-        fixture.build_fixture(s, data_dir=root / "public" / "data", chapters_dir=chapters)
+        fixture.build_fixture(s, data_dir=root / "public" / "data", chapters_dir=chapters, force=True)
     return root
 
 
@@ -68,7 +68,9 @@ def test_fixture_is_deterministic(built, tmp_path):
     chapters = tmp_path / "public" / "chapters"
     chapters.mkdir(parents=True)
     shutil.copy(CHAPTERS_DIR / "rondonia.json", chapters / "rondonia.json")
-    fixture.build_fixture("rondonia", data_dir=tmp_path / "public" / "data", chapters_dir=chapters)
+    fixture.build_fixture(
+        "rondonia", data_dir=tmp_path / "public" / "data", chapters_dir=chapters, force=True
+    )
     a = read_manifest("rondonia", built / "public" / "chapters")["generated"]["layers"]
     b = read_manifest("rondonia", chapters)["generated"]["layers"]
     assert [(x["id"], x["sha256"]) for x in a] == [(x["id"], x["sha256"]) for x in b]

@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 
 const SCREENS = "e2e/__screens__";
@@ -76,7 +77,14 @@ test("the action drawer opens with https links and closes on Escape", async ({ p
   expect(await links.count()).toBeGreaterThanOrEqual(4);
   for (const href of await links.evaluateAll((els) => els.map((e) => e.getAttribute("href")))) expect(href).toMatch(/^https:\/\//);
   for (const rel of await links.evaluateAll((els) => els.map((e) => e.getAttribute("rel")))) expect(rel).toContain("noopener");
-  await expect(dialog.getByText("Illustrative data").first()).toBeVisible();
+  // Provenance is always stated: a caution for synthetic or fallback data, a plain note for measured data.
+  const gen = JSON.parse(readFileSync("public/chapters/rondonia.json", "utf8")).generated;
+  const statuses = new Set<string>([...gen.layers, ...gen.series].map((x: { status: string }) => x.status));
+  if (statuses.has("illustrative")) await expect(dialog.getByText("Illustrative data").first()).toBeVisible();
+  else {
+    await expect(dialog.getByText("NISAR data").first()).toBeVisible();
+    await expect(dialog.getByText("Illustrative data")).toHaveCount(0);
+  }
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();

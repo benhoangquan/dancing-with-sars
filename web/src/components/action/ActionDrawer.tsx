@@ -20,6 +20,7 @@ export function ActionDrawer({ chapter, open, onClose }: Props) {
   const { action, generated } = chapter;
   const statuses = new Set([...generated.layers.map((l) => l.status), ...generated.series.map((s) => s.status)]);
   const caution = statuses.has("illustrative") ? "illustrative" : statuses.has("fallback") ? "fallback" : null;
+  const provisional = generated.sources.some((src) => src.mission === "NISAR" && src.maturity !== "validated");
 
   // Inert background, Escape to close, focus trap, and focus restored to the trigger.
   useEffect(() => {
@@ -101,14 +102,14 @@ export function ActionDrawer({ chapter, open, onClose }: Props) {
                 <p className="mt-3 text-[15px] leading-snug text-ink-dim">
                   <RichText text={action.body} stats={generated.stats} />
                 </p>
-                {caution && (
-                  <p className="mt-3 flex flex-wrap items-center gap-2 text-[12px] leading-snug text-ink-dim">
-                    <StatusBadge status={caution} />
-                    {caution === "illustrative"
-                      ? "The numbers here come from a synthetic pattern, not a measurement."
-                      : "Some numbers here come from a fallback mission."}
-                  </p>
-                )}
+                <p className="mt-3 flex flex-wrap items-center gap-2 text-[12px] leading-snug text-ink-dim">
+                  <StatusBadge status={caution ?? "real"} />
+                  {caution === "illustrative"
+                    ? "The numbers here come from a synthetic pattern, not a measurement."
+                    : caution === "fallback"
+                      ? "Some numbers here come from a fallback mission."
+                      : `Measured from NISAR data by this project${provisional ? ". Provisional products are calibrated but not final" : ""}.`}
+                </p>
               </div>
 
               <section aria-label="Impact metrics">

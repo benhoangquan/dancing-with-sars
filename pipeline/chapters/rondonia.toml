@@ -13,7 +13,7 @@ count = 10
 [processing]
 max_dates = 8
 drop_threshold_db = 3.0   # HV before minus after, dB
-min_before_db = -16.0     # pixel must start as forest
+min_before_db = -15.0     # pixel must start as forest: real HV is bimodal, pasture -17 to -21 dB, forest -10 to -12 dB
 mmu_ha = 1.0
 stretch_hh = [-20.0, 0.0]
 stretch_hv = [-28.0, -8.0]
@@ -21,6 +21,31 @@ stretch_ratio = [0.0, 15.0]
 
 [discover]
 min_coverage = 0.9  # share of the study area a granule footprint must cover
+
+[real]
+area_key = "cleared_ha"
+area_label = "Forest cleared"
+series_kind = "hv"                       # HV in the loss mask, date by date
+series_id = "hv_cleared"
+series_label = "HV backscatter in cleared pixels"
+reference_label = "Intact forest"
+
+[[annotations]]
+id = "new_clearing"
+label = "New clearing"
+kind = "patch_area"
+
+[[optical]]
+id = "optical_before"
+label = "Optical, before"
+mode = "median"
+window = ["2026-06-17", "2026-07-11"]
+
+[[optical]]
+id = "optical_after"
+label = "Optical, after"
+mode = "median"
+window = ["2026-09-09", "2026-10-03"]
 
 [fixture]
 pattern = "fishbone"
@@ -47,17 +72,17 @@ bearing = -28
 
 [[flyover.waypoints]]
 t = 16
-center = [-63.30, -9.98]
-zoom = 10.5
-pitch = 62
-bearing = 22
+center = [-63.50, -9.90]
+zoom = 10.8
+pitch = 55
+bearing = 10
 
 [[flyover.waypoints]]
 t = 26
-center = [-63.28, -10.04]
-zoom = 10.8
-pitch = 35
-bearing = 30
+center = [-63.547, -9.818]   # the largest new clearing found in the data
+zoom = 11.8
+pitch = 40
+bearing = 20
 
 [[flyover.waypoints]]
 t = 36

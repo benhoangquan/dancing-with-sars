@@ -1,4 +1,4 @@
-"""`sar` command line: fixture, validate, clean, discover."""
+"""`sar` command line: fixture, validate, clean, discover, fetch, build."""
 
 from __future__ import annotations
 
@@ -7,9 +7,12 @@ import shutil
 import sys
 
 from . import fixture, manifest
-from .config import CACHE_DIR, CHAPTERS_DIR, DATA_DIR, chapter_slugs
+from .config import CACHE_DIR, CHAPTERS_DIR, DATA_DIR, chapter_slugs, load_config
 from .invariants import check_invariants
 from .nisar import discover as nisar_discover
+from .nisar import fetch as nisar_fetch
+from .nisar.build import build as nisar_build
+from .nisar.build_gunw import build as nisar_build_gunw
 
 
 def cmd_fixture(args: argparse.Namespace) -> int:
@@ -87,6 +90,34 @@ def cmd_discover(args: argparse.Namespace) -> int:
     return 1 if missing else 0
 
 
+def cmd_fetch(args: argparse.Namespace) -> int:
+    failed = 0
+    for slug in args.slugs:
+        try:
+            path = nisar_fetch.run(slug)
+        except Exception as e:
+            print(f"FAIL  {slug}: {type(e).__name__}: {e}", file=sys.stderr)
+            failed += 1
+            continue
+        print(f"ok    {slug}  cached in {path}")
+    return 1 if failed else 0
+
+
+def cmd_build(args: argparse.Namespace) -> int:
+    failed = 0
+    for slug in args.slugs:
+        try:
+            optical = "reuse" if args.reuse_optical else not args.no_optical
+            build_fn = nisar_build_gunw if load_config(slug)["product"] == "GUNW" else nisar_build
+            path = build_fn(slug, optical=optical)
+        except Exception as e:
+            print(f"FAIL  {slug}: {type(e).__name__}: {e}", file=sys.stderr)
+            failed += 1
+            continue
+        print(f"wrote {path.relative_to(path.parents[2])}")
+    return 1 if failed else 0
+
+
 def cmd_clean(_: argparse.Namespace) -> int:
     shutil.rmtree(CACHE_DIR, ignore_errors=True)
     print(f"removed {CACHE_DIR}")
@@ -108,6 +139,18 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("slugs", nargs="*")
     p.add_argument("--all", action="store_true", help="every chapter with a processing config")
     p.set_defaults(func=cmd_discover)
+    p = sub.add_parser(
+        "fetch", help="read each chosen granule's study-area window into the cache (needs login)"
+    )
+    p.add_argument("slugs", nargs="+")
+    p.set_defaults(func=cmd_fetch)
+    p = sub.add_parser("build", help="turn the fetched tiles into a chapter manifest with real layers")
+    p.add_argument("slugs", nargs="+")
+    p.add_argument("--no-optical", action="store_true", help="skip the optical layers (no network needed)")
+    p.add_argument(
+        "--reuse-optical", action="store_true", help="keep the optical layers already in the manifest"
+    )
+    p.set_defaults(func=cmd_build)
     p = sub.add_parser("clean", help="remove the pipeline cache")
     p.set_defaults(func=cmd_clean)
     args = parser.parse_args(argv)

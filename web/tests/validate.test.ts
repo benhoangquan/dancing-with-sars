@@ -8,7 +8,10 @@ const slugs = readdirSync(chaptersDir).filter((f) => f.endsWith(".json")).map((f
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Manifest = any;
 const load = (slug: string): Manifest => JSON.parse(readFileSync(new URL(`${slug}.json`, chaptersDir), "utf8"));
-const clone = (): Manifest => structuredClone(load("rondonia"));
+// The mutation tests below change one thing and expect a specific error, so they start from a known illustrative
+// manifest (written by the pipeline's own fixture builder), not from whatever real data the repo holds.
+const illustrative: Manifest = JSON.parse(readFileSync(new URL("./fixtures/rondonia.illustrative.json", import.meta.url), "utf8"));
+const clone = (): Manifest => structuredClone(illustrative);
 
 describe("repo manifests", () => {
   it("are the three chapters", () => expect(slugs).toEqual(["okanagan", "rondonia", "san-joaquin"]));

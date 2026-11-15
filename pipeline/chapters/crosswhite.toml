@@ -1,0 +1,95 @@
+slug = "crosswhite"
+collections = ["NISAR_L2_GCOV_V1", "NISAR_L2_GCOV_PROVISIONAL_V1", "NISAR_L2_GCOV_BETA_V1"]  # best maturity first
+product = "GCOV"
+
+bbox = [-121.03, 44.22, -120.01, 45.07]
+
+[windows]
+before = ["2026-06-17", "2026-07-14"]
+after = ["2026-09-09", "2026-10-20"]
+
+[series]
+start = "2026-06-17"
+count = 10
+
+[processing]
+max_dates = 8
+drop_threshold_db = 3.0   # HV before minus after, dB
+min_before_db = -15.0     # pixel must start as vegetation
+mmu_ha = 1.0
+stretch_hh = [-20.0, 0.0]
+stretch_hv = [-28.0, -8.0]
+stretch_ratio = [0.0, 15.0]
+
+[discover]
+min_coverage = 0.9  # share of the study area a granule footprint must cover
+[perimeter]   # measured inside a mapped fire perimeter (nisar/perimeter.py), not per pixel
+provider = "wfigs"
+agency = "NIFC interagency"
+fire_name = "Crosswhite"
+source_id = "wfigs"
+started = "2026-07-16"          # discovery date in WFIGS
+mapped = "2026-08-16"           # date of the perimeter polygon in WFIGS
+url = "https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Interagency_Perimeters_YearToDate/FeatureServer/0"
+catalog_url = "https://data-nifc.opendata.arcgis.com/datasets/nifc::wfigs-interagency-fire-perimeters-year-to-date"
+min_acres = 50000
+
+[[optical]]
+id = "optical_baseline"
+label = "Optical, summer 2025"
+mode = "median"
+window = ["2025-07-01", "2025-08-31"]
+
+[[optical]]
+id = "optical_smoke"
+label = "Optical, during the fire"
+mode = "scene"
+date = "2026-07-27"
+
+[[optical]]
+id = "optical_after"
+label = "Optical, after the fire"
+mode = "median"
+window = ["2026-09-15", "2026-10-31"]
+
+[impact]   # Layer 1: buildings near the Crosswhite perimeter (sar overture)
+area = [-120.91, 44.34, -120.13, 44.95]
+buildings = true
+building_points = true
+near_m = 2000
+
+[soundscape]   # Layer 5 (sar audio): forest, then wind and fire (synthesized: Commons had no free fire recording)
+before = { commons = "File:20090610 0 ambience.ogg", start_s = 50, label = "Forest birds" }
+after = { synth = "fire", label = "Wind and fire" }
+
+[flyover]
+duration = 20  # Act I; the last waypoint is the chapter's openingCamera (pitch 52)
+exaggeration = 1.5
+
+[[flyover.waypoints]]
+t = 0
+center = [-120.490, 44.612]
+zoom = 8.7
+pitch = 0
+bearing = 0
+
+[[flyover.waypoints]]
+t = 7
+center = [-120.50, 44.60]
+zoom = 9.4
+pitch = 45
+bearing = 20
+
+[[flyover.waypoints]]
+t = 14
+center = [-120.50, 44.61]
+zoom = 10.0
+pitch = 55
+bearing = 5
+
+[[flyover.waypoints]]
+t = 20
+center = [-120.49, 44.61]
+zoom = 10.3
+pitch = 52
+bearing = 0

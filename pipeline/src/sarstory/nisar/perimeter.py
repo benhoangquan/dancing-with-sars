@@ -84,6 +84,44 @@ def placebo(
     return np.array(out)
 
 
+def placebo_blocks(
+    hv_db: np.ndarray,
+    inside: np.ndarray,
+    pre: list[int],
+    post: list[int],
+    *,
+    min_before_db: float,
+    n: int = PLACEBO_N,
+    seed: int = 0,
+    max_tries: int = 20_000,
+) -> np.ndarray:
+    """For perimeters too large for shifted copies to fit: squares one sixth of the perimeter's area, placed
+    on forest outside the perimeter and its ring, each compared with its own ring."""
+    _, h, w = hv_db.shape
+    side = max(8, int(np.sqrt(inside.sum() / 6)))
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        before = np.nanmedian(hv_db[pre], axis=0)
+    keep_out = ndimage.binary_dilation(inside, iterations=RING_OUTER_PX)
+    rng = np.random.default_rng(seed)
+    out: list[float] = []
+    for _ in range(max_tries):
+        if len(out) >= n:
+            break
+        r, c = int(rng.integers(0, h - side)), int(rng.integers(0, w - side))
+        block = np.zeros_like(inside)
+        block[r : r + side, c : c + side] = True
+        if (block & keep_out).any() or not _median(before[block]) > min_before_db:
+            continue
+        around = ring(block) & ~keep_out
+        if around.sum() < 200:
+            continue
+        value = diff_in_diff(gaps(hv_db, block, around), pre, post)
+        if np.isfinite(value):
+            out.append(value)
+    return np.array(out)
+
+
 @dataclass
 class PerimeterAnalysis:
     pre_days: list[date]
@@ -93,6 +131,7 @@ class PerimeterAnalysis:
     drop_db: float  # positive: HV fell inside relative to the ring
     placebo: np.ndarray
     stats: dict[str, float]
+    placebo_kind: str = "shifted copies of the perimeter"
 
 
 def analyze_perimeter(
@@ -120,6 +159,10 @@ def analyze_perimeter(
     gap = gaps(hv_db, inside, around)
     did = diff_in_diff(gap, pre, post)
     null = placebo(hv_db, inside, pre, post, min_before_db=min_before_db, n=placebo_n)
+    kind = "shifted copies of the perimeter"
+    if len(null) < 30:
+        null = placebo_blocks(hv_db, inside, pre, post, min_before_db=min_before_db, n=placebo_n)
+        kind = "squares of one sixth the perimeter's area"
     if len(null) < 30:
         raise ValueError(f"only {len(null)} placebo positions fit in the scene")
     inside_series = [(d, _median(hv_db[i][inside])) for i, d in enumerate(days)]
@@ -134,5 +177,5 @@ def analyze_perimeter(
         "n_dates": float(len(days)),
     }
     return PerimeterAnalysis(
-        [days[i] for i in pre], [days[i] for i in post], inside_series, ring_series, -did, null, stats
+        [days[i] for i in pre], [days[i] for i in post], inside_series, ring_series, -did, null, stats, kind
     )

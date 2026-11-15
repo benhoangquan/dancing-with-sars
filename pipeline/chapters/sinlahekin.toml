@@ -1,0 +1,25 @@
+slug = "sinlahekin"
+collections = ["NISAR_L2_GCOV_V1", "NISAR_L2_GCOV_PROVISIONAL_V1", "NISAR_L2_GCOV_BETA_V1"]  # best maturity first
+product = "GCOV"
+
+bbox = [-120.04, 48.46, -119.31, 49.1]
+
+[windows]
+before = ["2026-06-17", "2026-07-14"]
+after = ["2026-09-09", "2026-10-20"]
+
+[series]
+start = "2026-06-17"
+count = 10
+
+[processing]
+max_dates = 8
+drop_threshold_db = 3.0   # HV before minus after, dB
+min_before_db = -15.0     # pixel must start as vegetation
+mmu_ha = 1.0
+stretch_hh = [-20.0, 0.0]
+stretch_hv = [-28.0, -8.0]
+stretch_ratio = [0.0, 15.0]
+
+[discover]
+min_coverage = 0.9  # share of the study area a granule footprint must cover

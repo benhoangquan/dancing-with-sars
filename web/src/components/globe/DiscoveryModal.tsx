@@ -27,7 +27,7 @@ export function DiscoveryModal({ chapters, watched, highlight }: Props) {
       <div className="px-8 pb-8 pt-10 text-light-ink max-sm:px-5">
         <p className="text-[12px] font-semibold uppercase tracking-[0.1em] text-light-ink-dim">Take action</p>
         <h2 id="discovery-title" className="display mt-2 text-[32px] font-semibold leading-[1.1]">
-          Three places, three ways to help
+          {chapters.length} places, {chapters.length} ways to help
         </h2>
         <ul className="mt-6 flex flex-col gap-3">
           {chapters.map((c) => {

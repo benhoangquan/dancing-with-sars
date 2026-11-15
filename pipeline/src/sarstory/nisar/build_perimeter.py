@@ -33,27 +33,53 @@ SIMPLIFY_DEG = 0.0001  # about 10 m
 BCWS_LICENSE = "Open Government Licence - British Columbia"
 
 
+def _wfigs_feature(per: dict) -> dict:
+    """One feature from the US interagency WFIGS perimeters (ArcGIS), shaped like the BC one."""
+    query = {
+        "where": f"poly_IncidentName='{per['fire_name']}' AND poly_GISAcres>{per.get('min_acres', 50000)}",
+        "outFields": "poly_IncidentName,poly_GISAcres,poly_PolygonDateTime,attr_FireDiscoveryDateTime",
+        "outSR": "4326",
+        "f": "geojson",
+    }
+    with urllib.request.urlopen(f"{per['url']}/query?{urllib.parse.urlencode(query)}", timeout=60) as r:  # noqa: S310
+        features = json.load(r)["features"]
+    if len(features) != 1:
+        raise RuntimeError(f"expected one perimeter for {per['fire_name']}, got {len(features)}")
+    f = features[0]
+    props = f["properties"]
+    f["properties"] = {
+        "FIRE_SIZE_HECTARES": round(props["poly_GISAcres"] * 0.404686, 1),
+        "TRACK_DATE": datetime.fromtimestamp(props["poly_PolygonDateTime"] / 1000, UTC).date().isoformat(),
+    }
+    return f
+
+
 def fetch_perimeter(cfg: dict, cache_root: Path) -> dict:
     """The fire's perimeter feature as GeoJSON in lon/lat, downloaded once and cached."""
     per = cfg["perimeter"]
-    path = cache_root / cfg["slug"] / f"perimeter_{per['fire_number']}.geojson"
+    key = per.get("fire_number") or per["fire_name"].lower().replace(" ", "-")
+    path = cache_root / cfg["slug"] / f"perimeter_{key}.geojson"
     if not path.exists():
-        query = {
-            "service": "WFS",
-            "version": "2.0.0",
-            "request": "GetFeature",
-            "typeName": per["layer"],
-            "outputFormat": "application/json",
-            "srsName": "EPSG:4326",
-            "CQL_FILTER": f"FIRE_NUMBER='{per['fire_number']}' AND FIRE_YEAR={per['started'][:4]}",
-        }
-        url = f"{per['wfs']}?{urllib.parse.urlencode(query)}"
-        with urllib.request.urlopen(url, timeout=60) as r:  # noqa: S310 (fixed https host from config)
-            features = json.load(r)["features"]
-        if len(features) != 1:
-            raise RuntimeError(f"expected one perimeter for {per['fire_number']}, got {len(features)}")
+        if per.get("provider") == "wfigs":
+            feature = _wfigs_feature(per)
+        else:
+            query = {
+                "service": "WFS",
+                "version": "2.0.0",
+                "request": "GetFeature",
+                "typeName": per["layer"],
+                "outputFormat": "application/json",
+                "srsName": "EPSG:4326",
+                "CQL_FILTER": f"FIRE_NUMBER='{per['fire_number']}' AND FIRE_YEAR={per['started'][:4]}",
+            }
+            url = f"{per['wfs']}?{urllib.parse.urlencode(query)}"
+            with urllib.request.urlopen(url, timeout=60) as r:  # noqa: S310 (fixed https host from config)
+                features = json.load(r)["features"]
+            if len(features) != 1:
+                raise RuntimeError(f"expected one perimeter for {per['fire_number']}, got {len(features)}")
+            feature = features[0]
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(features[0]), encoding="utf-8")
+        path.write_text(json.dumps(feature), encoding="utf-8")
     return json.loads(path.read_text(encoding="utf-8"))
 
 
@@ -64,20 +90,21 @@ def _rounded(geom: dict) -> dict:
     return {"type": geom["type"], "coordinates": r(geom["coordinates"])}
 
 
-def bcws_source(cfg: dict, feature: dict) -> dict:
+def perimeter_source(cfg: dict, feature: dict) -> dict:
     p, per = feature["properties"], cfg["perimeter"]
+    wfigs = per.get("provider") == "wfigs"
     return {
-        "id": "bcws",
-        "mission": "BC Wildfire Service",
-        "product": (
-            f"Fire perimeter {per['fire_number']} ({per['fire_name']}), {p['FIRE_SIZE_HECTARES']:,} ha"
-        ),
-        "collection": per["layer"].split(":", 1)[1],
+        "id": per.get("source_id", "wfigs" if wfigs else "bcws"),
+        "mission": "US Interagency Fire (WFIGS)" if wfigs else "BC Wildfire Service",
+        "product": f"Fire perimeter, {per['fire_name']} ({p['FIRE_SIZE_HECTARES']:,} ha)",
+        "collection": "WFIGS Interagency Fire Perimeters" if wfigs else per["layer"].split(":", 1)[1],
         "maturity": "n/a",
-        "granules": [per["fire_number"]],
+        "granules": [per.get("fire_number", per["fire_name"])],
         "dates": [str(p["TRACK_DATE"])[:10]],
-        "provider": "BC Wildfire Service, Government of British Columbia",
-        "license": BCWS_LICENSE,
+        "provider": "NIFC, US Interagency Fire Program"
+        if wfigs
+        else "BC Wildfire Service, Government of British Columbia",
+        "license": "Public domain (US government data)" if wfigs else BCWS_LICENSE,
         "url": per["catalog_url"],
         "nasa": False,
     }
@@ -146,7 +173,7 @@ def build(
             )
         )
 
-    sources = [nisar_source(index, stack), bcws_source(cfg, feature)]
+    sources = [nisar_source(index, stack), perimeter_source(cfg, feature)]
     extras: dict[str, float] = {}
     old = manifest.get("generated", {})
     if optical == "reuse":
@@ -189,7 +216,7 @@ def build(
             "dB",
             1,
             "Spread of the same measure where nothing burned",
-            f"Standard deviation over {s['placebo_n']:.0f} copies of the perimeter moved onto unburned "
+            f"Standard deviation over {s['placebo_n']:.0f} {an.placebo_kind} moved onto unburned "
             f"forest in the same scene; mean {s['placebo_mean_db']:+.2f} dB, "
             f"{s['placebo_share_as_low']:.1%} as low as the fire.",
         ),
@@ -198,8 +225,8 @@ def build(
             "ha",
             0,
             "Area inside the mapped perimeter",
-            f"BC Wildfire Service perimeter {per['fire_number']}, mapped {per['mapped']}. "
-            "Not a NISAR measurement.",
+            f"{per.get('agency', 'BC Wildfire Service')} perimeter of {per['fire_name']}, "
+            f"mapped {per['mapped']}. Not a NISAR measurement.",
         ),
         "n_dates": stat(s["n_dates"], "count", 0, "Radar dates", "NISAR acquisition dates in the series."),
     }
@@ -222,14 +249,16 @@ def build(
         "sourceIds": ["nisar-gcov"],
         "status": "real",
     }
-    simple = shape(feature["geometry"]).simplify(SIMPLIFY_DEG, preserve_topology=True)
+    # A large perimeter has tens of thousands of vertices; the page queries terrain at each one every frame.
+    tolerance = SIMPLIFY_DEG if bcws_ha < 5_000 else 0.0015 if bcws_ha < 50_000 else 0.004  # 10, 150 or 400 m
+    simple = shape(feature["geometry"]).simplify(tolerance, preserve_topology=True)
     outline = max(simple.geoms, key=lambda g: g.area) if simple.geom_type == "MultiPolygon" else simple
     footprint = {
         "kind": "shape",
         "label": f"{per['fire_name']} fire perimeter",
         "areaHa": round(bcws_ha, 1),
         "geometry": _rounded(mapping(simple)),
-        "sourceIds": ["bcws"],
+        "sourceIds": [per.get("source_id", "wfigs" if per.get("provider") == "wfigs" else "bcws")],
         "status": "fallback",
     }
     annotations = [

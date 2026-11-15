@@ -379,7 +379,7 @@
       "required": ["id", "mission", "product", "collection", "maturity", "granules", "dates", "provider", "license", "url", "nasa"],
       "properties": {
         "id": { "type": "string", "minLength": 1 },
-        "mission": { "enum": ["NISAR", "Sentinel-1", "HLS", "NASADEM", "Synthetic", "Copernicus DEM", "Overture Maps", "OpenStreetMap", "BC Wildfire Service", "Wikimedia Commons", "Published study"] },
+        "mission": { "enum": ["NISAR", "Sentinel-1", "HLS", "NASADEM", "Synthetic", "Copernicus DEM", "Overture Maps", "OpenStreetMap", "BC Wildfire Service", "US Interagency Fire (WFIGS)", "Wikimedia Commons", "Published study"] },
         "product": { "type": "string", "minLength": 1 },
         "collection": { "type": "string", "minLength": 1 },
         "maturity": { "enum": ["beta", "provisional", "validated", "n/a"] },

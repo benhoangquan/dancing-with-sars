@@ -630,6 +630,7 @@ export interface Source {
     | "Overture Maps"
     | "OpenStreetMap"
     | "BC Wildfire Service"
+    | "US Interagency Fire (WFIGS)"
     | "Wikimedia Commons"
     | "Published study";
   product: string;

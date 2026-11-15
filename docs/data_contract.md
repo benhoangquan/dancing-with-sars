@@ -29,6 +29,8 @@ Authored objects reject unknown keys (`additionalProperties: false`).
 | `demak` | `optical_baseline` (2017), `optical_2026`, `sar_2026` | none | `n_dates` | `land_lost_ha`, `subsidence_max_cmyr`, `subsidence_common_cmyr` |
 | `okanagan` | `optical_baseline` (2025), `optical_smoke`, `optical_after`, `sar_before`, `sar_after` | `hv_burned` (with the ring of forest around it) | `burn_hv_drop_db`, `placebo_sd_db`, `burned_ha` (BC Wildfire Service), `smoke_cloud_pct`, `n_dates`, `impact_buildings_near` | none |
 
+`crosswhite` has the same layers, series and stats as `okanagan` (perimeter from WFIGS).
+
 San Joaquin is off the site in v1; its authored manifest lives in `pipeline/tests/data/` so its fixture and GUNW build stay tested.
 
 ## Layer statuses

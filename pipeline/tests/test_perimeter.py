@@ -113,3 +113,19 @@ def test_perimeter_pins_show_the_burn_minus_forest_gap_not_one_patch():
     }
     rows = perimeter_readings(cfg, manifest)["inside_perimeter"]
     assert [r["value"] for r in rows] == [1.8, 0.8]
+
+
+def test_a_perimeter_too_large_for_shifted_copies_falls_back_to_blocks():
+    rng = np.random.default_rng(5)
+    h, w = 160, 200
+    yy, xx = np.mgrid[0:h, 0:w]
+    inside = (yy - 60) ** 2 + (xx - 70) ** 2 < 45**2  # fills a large share of the scene
+    hv = (-13 + rng.normal(0, 1.0, (len(DAYS), h, w))).astype(np.float32)
+    for i, d in enumerate(DAYS):
+        if d > MAPPED:
+            hv[i][inside] -= 1.0
+    a = analyze_perimeter(
+        DAYS, hv, inside, started=STARTED, mapped=MAPPED, min_before_db=-16, pixel_area_m2=3600, placebo_n=40
+    )
+    assert "squares" in a.placebo_kind
+    assert a.drop_db == pytest.approx(1.0, abs=0.2) and a.stats["placebo_sd_db"] < 0.3

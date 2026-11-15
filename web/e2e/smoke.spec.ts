@@ -144,7 +144,7 @@ test("a COG tile request is served as a partial (206) response", async ({ page }
 });
 
 test("screenshots for review", async ({ page }) => {
-  test.setTimeout(240_000);
+  test.setTimeout(480_000);
   await page.goto("/");
   await page.waitForTimeout(2500);
   await page.screenshot({ path: `${SCREENS}/01-hero.png` });

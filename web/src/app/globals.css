@@ -205,3 +205,7 @@ body {
 
 /* Act I lower third reads over bright terrain. */
 .lower-third { text-shadow: 0 1px 18px rgb(0 0 0 / 0.55); }
+
+/* Crowded pins keep their dot; the label appears on hover or focus. */
+.globe-pin[data-crowded] .globe-pin-label { opacity: 0; pointer-events: none; }
+.globe-pin[data-crowded]:hover .globe-pin-label, .globe-pin[data-crowded]:focus-visible .globe-pin-label { opacity: 1; z-index: 5; }

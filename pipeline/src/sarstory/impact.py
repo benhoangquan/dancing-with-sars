@@ -146,7 +146,11 @@ def build_impact(
             # Dense villages: one point per building keeps the file inside the budget.
             geom = g.representative_point() if spec.get("building_points") else g.simplify(0.00002)
             props = {"kind": "building", "near": is_near}
-            features.append({"type": "Feature", "properties": props, "geometry": round_geom(mapping(geom))})
+            if spec.get("near_only") and not is_near:
+                continue  # dense areas: draw only the buildings near the footprint; counts still cover all
+            features.append(
+                {"type": "Feature", "properties": props, "geometry": round_geom(mapping(geom), 4)}
+            )
         counts["buildings"] = len(found)
         if near_zone is not None:
             counts["buildings_near"] = near

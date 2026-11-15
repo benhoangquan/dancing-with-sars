@@ -37,7 +37,7 @@ def _wfigs_feature(per: dict) -> dict:
     """One feature from the US interagency WFIGS perimeters (ArcGIS), shaped like the BC one."""
     query = {
         "where": f"poly_IncidentName='{per['fire_name']}' AND poly_GISAcres>{per.get('min_acres', 50000)}",
-        "outFields": "poly_IncidentName,poly_GISAcres,poly_PolygonDateTime,attr_FireDiscoveryDateTime",
+        "outFields": "poly_IncidentName,poly_GISAcres,poly_PolygonDateTime,poly_DateCurrent",
         "outSR": "4326",
         "f": "geojson",
     }
@@ -49,7 +49,11 @@ def _wfigs_feature(per: dict) -> dict:
     props = f["properties"]
     f["properties"] = {
         "FIRE_SIZE_HECTARES": round(props["poly_GISAcres"] * 0.404686, 1),
-        "TRACK_DATE": datetime.fromtimestamp(props["poly_PolygonDateTime"] / 1000, UTC).date().isoformat(),
+        "TRACK_DATE": datetime.fromtimestamp(
+            (props["poly_PolygonDateTime"] or props["poly_DateCurrent"]) / 1000, UTC
+        )
+        .date()
+        .isoformat(),
     }
     return f
 

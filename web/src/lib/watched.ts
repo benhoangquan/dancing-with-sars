@@ -39,6 +39,13 @@ export const WATCHED: WatchedPlace[] = [
     note: "Checked with NISAR, 2026: the glacier is too fast for the offset search window, and pairs did not agree, so speeds are not published yet.",
   },
   {
+    id: "tartar",
+    name: "Tartar fire",
+    iso3: "USA",
+    pin: [-117.07, 44.43],
+    note: "Checked with NISAR, 2026: radar signal inside the fire perimeter fell, but only 0.5 dB against a noisy background, too close to chance to publish.",
+  },
+  {
     id: "san-joaquin",
     name: "San Joaquin Valley",
     iso3: "USA",

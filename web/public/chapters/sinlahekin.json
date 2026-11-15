@@ -1,0 +1,5084 @@
+{
+  "schemaVersion": "1",
+  "slug": "sinlahekin",
+  "order": 5,
+  "theme": "fire",
+  "accent": "#FF9F0A",
+  "kicker": "Washington, United States",
+  "title": "Radar through the smoke",
+  "dek": "The Sinlahekin fire, which started in July 2026, burned through dry hills in north-central Washington. Smoke hid them from optical satellites. L-band radar saw through it, and inside the mapped perimeter the forest's echo fell.",
+  "aoi": {
+    "bbox": [
+      -120.04,
+      48.46,
+      -119.31,
+      49.1
+    ],
+    "placeName": "Sinlahekin fire, Washington",
+    "countryCode": "US",
+    "iso3": "USA"
+  },
+  "globe": {
+    "pin": [
+      -119.685,
+      48.752
+    ]
+  },
+  "openingCamera": {
+    "center": [
+      -119.685,
+      48.752
+    ],
+    "zoom": 11.2,
+    "pitch": 52,
+    "bearing": 0
+  },
+  "radar": {
+    "product": "GCOV",
+    "band": "L",
+    "mechanism": "volume-scattering-loss",
+    "polarizations": [
+      "HH",
+      "HV"
+    ],
+    "explainer": "NISAR's L-band radar (24 cm waves) passes through smoke and cloud. Its cross-polarized HV echo comes from branches and trunks, so when fire thins a canopy the HV echo weakens. Averaged over a whole perimeter, that drop stands out from the noise of single pixels."
+  },
+  "legend": [
+    {
+      "id": "sar_forest",
+      "layerIds": [
+        "sar_before",
+        "sar_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#C0DC65"
+      },
+      "label": "Yellow-green",
+      "meaning": "Forest: the radar signal scatters around inside the canopy and returns strong in HV."
+    },
+    {
+      "id": "sar_open",
+      "layerIds": [
+        "sar_before",
+        "sar_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#667871"
+      },
+      "label": "Grey-green",
+      "meaning": "Open rangeland, grass and towns: less canopy, so a weaker HV echo."
+    },
+    {
+      "id": "sar_water",
+      "layerIds": [
+        "sar_before",
+        "sar_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#394E5F"
+      },
+      "label": "Dark slate",
+      "meaning": "Reservoirs and rivers: calm water reflects the radar away, so almost nothing returns."
+    },
+    {
+      "id": "optical_smoke",
+      "layerIds": [
+        "optical_smoke"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#E8F2E8"
+      },
+      "label": "Pale haze",
+      "meaning": "Smoke and cloud on the day of the optical scene. The ground under it is hidden."
+    },
+    {
+      "id": "optical_scar",
+      "layerIds": [
+        "optical_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#685B4B"
+      },
+      "label": "Brown",
+      "meaning": "Burned ground after the fire, visible once the smoke cleared."
+    },
+    {
+      "id": "optical_forest",
+      "layerIds": [
+        "optical_baseline",
+        "optical_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#6B6A4E"
+      },
+      "label": "Olive and tan",
+      "meaning": "Dry forest and rangeland in natural colour, before the fire."
+    }
+  ],
+  "beats": [
+    {
+      "id": "land",
+      "eyebrow": "Washington",
+      "headline": "Dry forest and hills",
+      "body": "Dry pine forest and open hills in north-central Washington. This is the summer before the fire, in natural colour.",
+      "stage": {
+        "mode": "flyover",
+        "flyover": {
+          "from": 0,
+          "to": 20,
+          "playback": "play-hold"
+        },
+        "left": "optical_baseline",
+        "right": "sar_before",
+        "swipe": 0.5
+      }
+    },
+    {
+      "id": "smoke",
+      "eyebrow": "During the fire",
+      "headline": "Smoke hides the ground",
+      "body": "Two weeks after the fire was reported, {stat:smoke_cloud_pct} of this optical scene is flagged as smoke or cloud. Drag the divider: the radar view of the same land, through the haze.",
+      "stage": {
+        "mode": "radar",
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
+        "left": "optical_smoke",
+        "right": "sar_before",
+        "swipe": 0.5,
+        "annotations": [
+          "fire_perimeter"
+        ]
+      }
+    },
+    {
+      "id": "scar",
+      "eyebrow": "Between radar passes",
+      "headline": "The echo inside the perimeter",
+      "body": "Before and after, the same land. Inside the mapped perimeter, the HV echo fell by {stat:burn_hv_drop_db} relative to the forest around it.",
+      "stage": {
+        "mode": "radar",
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
+        "left": "sar_before",
+        "right": "sar_after",
+        "swipe": 0.5,
+        "annotations": [
+          "fire_perimeter"
+        ],
+        "camera": {
+          "center": [
+            -119.685,
+            48.752
+          ],
+          "zoom": 11.5,
+          "pitch": 40,
+          "bearing": -10
+        }
+      },
+      "readout": {
+        "seriesId": "hv_burned",
+        "statKey": "burn_hv_drop_db"
+      }
+    },
+    {
+      "id": "measured",
+      "eyebrow": "Measured",
+      "headline": "Bigger than chance",
+      "body": "Squares moved onto unburned land in this scene change by about {stat:placebo_sd_db} either way. The fire's drop is far outside that spread. The perimeter itself covers {stat:burned_ha}. Within one kilometre of it stand {stat:impact_buildings_near} mapped buildings.",
+      "stage": {
+        "mode": "radar",
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
+        "left": "optical_after",
+        "right": "sar_after",
+        "swipe": 0.5,
+        "annotations": [
+          "fire_perimeter"
+        ],
+        "camera": {
+          "center": [
+            -119.685,
+            48.752
+          ],
+          "zoom": 11.5,
+          "pitch": 40,
+          "bearing": -10
+        }
+      },
+      "readout": {
+        "seriesId": "hv_burned",
+        "statKey": "burned_ha"
+      }
+    },
+    {
+      "id": "act",
+      "eyebrow": "What helps",
+      "headline": "Help burned land recover",
+      "body": "After a fire this size, slopes need replanting and protection from erosion before the rains. Two organizations work on forest and landscape restoration in the United States.",
+      "stage": {
+        "mode": "radar",
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
+        "left": "optical_after",
+        "right": "sar_after",
+        "swipe": 0.5
+      }
+    }
+  ],
+  "scaleAnchors": {
+    "burned_ha": "central-park",
+    "burn_hv_drop_db": "echo-power",
+    "placebo_sd_db": "echo-power"
+  },
+  "landmarks": [
+    {
+      "id": "inside_perimeter",
+      "label": "Inside the burn",
+      "lonLat": [
+        -119.685,
+        48.752
+      ],
+      "note": "The burn's echo compared with the land around it: median HV inside the Sinlahekin perimeter minus median HV in the ring around it, averaged over the passes before and after the fire. The gap narrowed."
+    },
+    {
+      "id": "ring_outside",
+      "label": "Land around the burn",
+      "lonLat": [
+        -119.8876,
+        48.8425
+      ],
+      "note": "Unburned land in the ring the burn is compared with. Rain and season move this land's echo and the burn's together, so the comparison cancels them."
+    }
+  ],
+  "action": {
+    "headline": "Help burned land recover",
+    "body": "The mapped perimeter of the Sinlahekin fire encloses {stat:burned_ha} of Washington. These organizations work on restoring forests and landscapes.",
+    "metrics": [
+      {
+        "label": "Area inside the mapped perimeter",
+        "statKey": "burned_ha",
+        "source": {
+          "name": "NIFC WFIGS interagency fire perimeters",
+          "url": "https://data-nifc.opendata.arcgis.com/datasets/nifc::wfigs-interagency-fire-perimeters-year-to-date",
+          "accessed": "2026-11-15"
+        }
+      },
+      {
+        "label": "HV drop inside, relative to the land around it",
+        "statKey": "burn_hv_drop_db",
+        "source": {
+          "name": "This project: NISAR L2 GCOV inside the interagency fire perimeter",
+          "url": "https://nisar-docs.asf.alaska.edu/gcov/",
+          "accessed": "2026-11-15"
+        }
+      },
+      {
+        "label": "Optical scene under smoke or cloud",
+        "statKey": "smoke_cloud_pct",
+        "source": {
+          "name": "This project: HLS Fmask share, 2026-07-27",
+          "url": "https://hls.gsfc.nasa.gov/",
+          "accessed": "2026-11-15"
+        }
+      }
+    ],
+    "organizations": [
+      {
+        "name": "American Forests",
+        "url": "https://www.americanforests.org/",
+        "focus": "Plants and restores forests across the United States, including after wildfires.",
+        "region": "United States",
+        "cta": {
+          "label": "Support American Forests",
+          "url": "https://www.americanforests.org/"
+        },
+        "verified": {
+          "on": "2026-11-15",
+          "how": "HTTP 200 on homepage; the guessed donate path returned 404, so the homepage is linked"
+        }
+      },
+      {
+        "name": "Forterra",
+        "url": "https://forterra.org/",
+        "focus": "Washington land trust with land stewardship and restoration programs, including land in the Cascades.",
+        "region": "Washington",
+        "cta": {
+          "label": "Donate to Forterra",
+          "url": "https://forterra.org/donate/"
+        },
+        "verified": {
+          "on": "2026-11-15",
+          "how": "HTTP 200 on homepage and donate page; its homepage lists a Land Stewardship program and Washington restoration projects but does not mention wildfire"
+        }
+      }
+    ],
+    "local": {
+      "headline": "Act where you live",
+      "body": "Wildfire seasons are getting longer across western North America. Preparing where you live helps firefighters and neighbours.",
+      "steps": [
+        "Learn your local wildfire or emergency alert system and sign up for it.",
+        "Clear dry material within a few metres of buildings, following your local FireSmart or Firewise guidance.",
+        "Support forest restoration after fires, through the organizations on the first tab."
+      ]
+    }
+  },
+  "soundscape": {
+    "before": {
+      "src": "data/sinlahekin/sound_before.mp3",
+      "label": "Forest birds",
+      "credit": "nille, via Wikimedia Commons. Not recorded at this place.",
+      "license": "Public domain",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:20090610_0_ambience.ogg",
+      "synthesized": false
+    },
+    "after": {
+      "src": "data/sinlahekin/sound_after.mp3",
+      "label": "Wind and fire",
+      "credit": "Synthesized for this site with numpy (wind noise and crackle). Not a recording.",
+      "license": "CC0",
+      "sourceUrl": "https://github.com/benhoangquan/dancing-with-sars/blob/main/pipeline/src/sarstory/audio.py",
+      "synthesized": true
+    }
+  },
+  "generated": {
+    "pipelineVersion": "0.1.0+nisar-perimeter",
+    "builtAt": "2026-11-15T18:25:29Z",
+    "layers": [
+      {
+        "id": "optical_baseline",
+        "kind": "optical",
+        "label": "Optical, summer 2025",
+        "date": "2025-07-07/2025-08-30",
+        "cog": "data/sinlahekin/optical_baseline.tif",
+        "render": {
+          "type": "rgba"
+        },
+        "preview": "data/sinlahekin/optical_baseline.webp",
+        "bounds": [
+          -120.234375,
+          48.224673,
+          -119.179687,
+          49.15297
+        ],
+        "sourceIds": [
+          "hls"
+        ],
+        "status": "real",
+        "bytes": 706692,
+        "sha256": "a2fc5165ab20edd9f46fc3a1232840d617f15211bc842d5fc820f03cf12171f7"
+      },
+      {
+        "id": "optical_smoke",
+        "kind": "optical",
+        "label": "Optical, during the fire",
+        "date": "2026-08-09",
+        "cog": "data/sinlahekin/optical_smoke.tif",
+        "render": {
+          "type": "rgba"
+        },
+        "preview": "data/sinlahekin/optical_smoke.webp",
+        "bounds": [
+          -120.234375,
+          48.224673,
+          -119.179687,
+          49.15297
+        ],
+        "sourceIds": [
+          "hls"
+        ],
+        "status": "real",
+        "bytes": 582181,
+        "sha256": "f3a275b17024b9d1c02d4d811a49d0951a57c860db1702942ddcfbc5f0afb7d8"
+      },
+      {
+        "id": "optical_after",
+        "kind": "optical",
+        "label": "Optical, after the fire",
+        "date": "2026-09-18/2026-10-23",
+        "cog": "data/sinlahekin/optical_after.tif",
+        "render": {
+          "type": "rgba"
+        },
+        "preview": "data/sinlahekin/optical_after.webp",
+        "bounds": [
+          -120.234375,
+          48.224673,
+          -119.179687,
+          49.15297
+        ],
+        "sourceIds": [
+          "hls"
+        ],
+        "status": "real",
+        "bytes": 749085,
+        "sha256": "07d9a3bfaef1092e493bd5c161ea7096f110113fdb79a1440374d8fe669c4783"
+      },
+      {
+        "id": "sar_before",
+        "kind": "sar-composite",
+        "label": "Radar composite, before the fire",
+        "date": "2026-06-19/2026-07-25",
+        "cog": "data/sinlahekin/sar_before.tif",
+        "render": {
+          "type": "rgba"
+        },
+        "stretch": {
+          "HH": [
+            -20.0,
+            0.0
+          ],
+          "HV": [
+            -28.0,
+            -8.0
+          ],
+          "ratio": [
+            0.0,
+            15.0
+          ]
+        },
+        "preview": "data/sinlahekin/sar_before.webp",
+        "bounds": [
+          -120.234375,
+          48.224673,
+          -119.179687,
+          49.15297
+        ],
+        "sourceIds": [
+          "nisar-gcov"
+        ],
+        "status": "real",
+        "bytes": 877287,
+        "sha256": "0ad30a8f847046fc1311edc5e6a4cbdd71e69073b1682e4cf34cbc2926ba7dda"
+      },
+      {
+        "id": "sar_after",
+        "kind": "sar-composite",
+        "label": "Radar composite, after the fire",
+        "date": "2026-09-23/2026-10-17",
+        "cog": "data/sinlahekin/sar_after.tif",
+        "render": {
+          "type": "rgba"
+        },
+        "stretch": {
+          "HH": [
+            -20.0,
+            0.0
+          ],
+          "HV": [
+            -28.0,
+            -8.0
+          ],
+          "ratio": [
+            0.0,
+            15.0
+          ]
+        },
+        "preview": "data/sinlahekin/sar_after.webp",
+        "bounds": [
+          -120.234375,
+          48.224673,
+          -119.179687,
+          49.15297
+        ],
+        "sourceIds": [
+          "nisar-gcov"
+        ],
+        "status": "real",
+        "bytes": 901090,
+        "sha256": "19fa659e51d899c850afea0225864fc37369dc3a3ae0766e296e04be8cc4d092"
+      }
+    ],
+    "series": [
+      {
+        "id": "hv_burned",
+        "label": "HV inside the fire perimeter",
+        "unit": "dB",
+        "kind": "hv-backscatter",
+        "points": [
+          {
+            "t": "2026-06-19",
+            "v": -11.86
+          },
+          {
+            "t": "2026-07-01",
+            "v": -11.96
+          },
+          {
+            "t": "2026-07-13",
+            "v": -12.35
+          },
+          {
+            "t": "2026-07-25",
+            "v": -12.27
+          },
+          {
+            "t": "2026-08-18",
+            "v": -12.18
+          },
+          {
+            "t": "2026-08-30",
+            "v": -11.61
+          },
+          {
+            "t": "2026-09-11",
+            "v": -12.77
+          },
+          {
+            "t": "2026-09-23",
+            "v": -12.91
+          },
+          {
+            "t": "2026-10-05",
+            "v": -12.62
+          },
+          {
+            "t": "2026-10-17",
+            "v": -13.29
+          }
+        ],
+        "reference": {
+          "label": "Forest around it",
+          "points": [
+            {
+              "t": "2026-06-19",
+              "v": -12.81
+            },
+            {
+              "t": "2026-07-01",
+              "v": -12.93
+            },
+            {
+              "t": "2026-07-13",
+              "v": -13.67
+            },
+            {
+              "t": "2026-07-25",
+              "v": -13.61
+            },
+            {
+              "t": "2026-08-18",
+              "v": -12.96
+            },
+            {
+              "t": "2026-08-30",
+              "v": -12.07
+            },
+            {
+              "t": "2026-09-11",
+              "v": -13.22
+            },
+            {
+              "t": "2026-09-23",
+              "v": -13.14
+            },
+            {
+              "t": "2026-10-05",
+              "v": -12.85
+            },
+            {
+              "t": "2026-10-17",
+              "v": -13.15
+            }
+          ]
+        },
+        "sourceIds": [
+          "nisar-gcov"
+        ],
+        "status": "real"
+      }
+    ],
+    "stats": {
+      "burn_hv_drop_db": {
+        "value": 1.0,
+        "unit": "dB",
+        "decimals": 1,
+        "label": "HV drop inside the perimeter, relative to the forest around it",
+        "method": "NISAR NISAR_L2_GCOV_PROVISIONAL_V1. Median HV inside the Sinlahekin perimeter minus median HV of a ring of forest 0.5 to 2.4 km outside it, averaged over the 4 passes before 2026-07-26 and the 3 passes after 2026-09-19; the stat is the fall in that gap."
+      },
+      "placebo_sd_db": {
+        "value": 0.1,
+        "unit": "dB",
+        "decimals": 1,
+        "label": "Spread of the same measure where nothing burned",
+        "method": "Standard deviation over 300 squares of one sixth the perimeter's area moved onto unburned forest in the same scene; mean +0.01 dB, 0.0% as low as the fire."
+      },
+      "burned_ha": {
+        "value": 67181.0,
+        "unit": "ha",
+        "decimals": 0,
+        "label": "Area inside the mapped perimeter",
+        "method": "NIFC interagency perimeter of Sinlahekin, mapped 2026-09-19. Not a NISAR measurement."
+      },
+      "n_dates": {
+        "value": 10.0,
+        "unit": "count",
+        "decimals": 0,
+        "label": "Radar dates",
+        "method": "NISAR acquisition dates in the series."
+      },
+      "smoke_cloud_pct": {
+        "value": 58.0,
+        "unit": "%",
+        "decimals": 0,
+        "label": "Optical scene blocked by smoke or cloud",
+        "method": "Share of pixels Fmask flags as cloud, cloud edge, shadow or snow on the day of the optical scene."
+      },
+      "impact_buildings_near": {
+        "value": 2543,
+        "unit": "count",
+        "decimals": 0,
+        "label": "Buildings mapped within 1 km of the Sinlahekin fire perimeter",
+        "method": "Overture Maps building footprints intersecting a buffer around the footprint."
+      }
+    },
+    "flyover": {
+      "duration": 20,
+      "exaggeration": 1.5,
+      "waypoints": [
+        {
+          "t": 0,
+          "camera": {
+            "center": [
+              -119.685,
+              48.752
+            ],
+            "zoom": 9.6,
+            "pitch": 0,
+            "bearing": 0
+          }
+        },
+        {
+          "t": 7,
+          "camera": {
+            "center": [
+              -119.685,
+              48.752
+            ],
+            "zoom": 10.3,
+            "pitch": 45,
+            "bearing": 20
+          }
+        },
+        {
+          "t": 14,
+          "camera": {
+            "center": [
+              -119.685,
+              48.752
+            ],
+            "zoom": 10.9,
+            "pitch": 55,
+            "bearing": 5
+          }
+        },
+        {
+          "t": 20,
+          "camera": {
+            "center": [
+              -119.685,
+              48.752
+            ],
+            "zoom": 11.2,
+            "pitch": 52,
+            "bearing": 0
+          }
+        }
+      ]
+    },
+    "annotations": [
+      {
+        "id": "fire_perimeter",
+        "label": "Sinlahekin fire, mapped perimeter",
+        "kind": "area",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -119.87722,
+                48.953323
+              ],
+              [
+                -119.868487,
+                48.95265
+              ],
+              [
+                -119.856363,
+                48.946574
+              ],
+              [
+                -119.853808,
+                48.951228
+              ],
+              [
+                -119.852864,
+                48.948441
+              ],
+              [
+                -119.840964,
+                48.946359
+              ],
+              [
+                -119.831817,
+                48.948033
+              ],
+              [
+                -119.832397,
+                48.945749
+              ],
+              [
+                -119.828698,
+                48.944296
+              ],
+              [
+                -119.827354,
+                48.946939
+              ],
+              [
+                -119.834514,
+                48.932016
+              ],
+              [
+                -119.82461,
+                48.933154
+              ],
+              [
+                -119.81627,
+                48.939213
+              ],
+              [
+                -119.816414,
+                48.941435
+              ],
+              [
+                -119.815181,
+                48.939376
+              ],
+              [
+                -119.808004,
+                48.939091
+              ],
+              [
+                -119.809526,
+                48.933679
+              ],
+              [
+                -119.79627,
+                48.935506
+              ],
+              [
+                -119.793573,
+                48.927224
+              ],
+              [
+                -119.778181,
+                48.924811
+              ],
+              [
+                -119.773718,
+                48.911113
+              ],
+              [
+                -119.781202,
+                48.909955
+              ],
+              [
+                -119.778961,
+                48.905893
+              ],
+              [
+                -119.788478,
+                48.901214
+              ],
+              [
+                -119.790658,
+                48.894227
+              ],
+              [
+                -119.798051,
+                48.895827
+              ],
+              [
+                -119.793324,
+                48.889212
+              ],
+              [
+                -119.816679,
+                48.89305
+              ],
+              [
+                -119.809703,
+                48.887789
+              ],
+              [
+                -119.806631,
+                48.888558
+              ],
+              [
+                -119.804779,
+                48.887651
+              ],
+              [
+                -119.803321,
+                48.887875
+              ],
+              [
+                -119.802325,
+                48.88738
+              ],
+              [
+                -119.800384,
+                48.881263
+              ],
+              [
+                -119.77402,
+                48.872516
+              ],
+              [
+                -119.764168,
+                48.86255
+              ],
+              [
+                -119.763515,
+                48.867169
+              ],
+              [
+                -119.738117,
+                48.867271
+              ],
+              [
+                -119.743598,
+                48.881954
+              ],
+              [
+                -119.739247,
+                48.89008
+              ],
+              [
+                -119.731009,
+                48.884088
+              ],
+              [
+                -119.721885,
+                48.888638
+              ],
+              [
+                -119.700974,
+                48.884629
+              ],
+              [
+                -119.693268,
+                48.867302
+              ],
+              [
+                -119.675307,
+                48.869293
+              ],
+              [
+                -119.661352,
+                48.856689
+              ],
+              [
+                -119.660056,
+                48.838598
+              ],
+              [
+                -119.654049,
+                48.835533
+              ],
+              [
+                -119.658529,
+                48.829275
+              ],
+              [
+                -119.641551,
+                48.811683
+              ],
+              [
+                -119.652216,
+                48.795989
+              ],
+              [
+                -119.631297,
+                48.81652
+              ],
+              [
+                -119.605431,
+                48.815482
+              ],
+              [
+                -119.636328,
+                48.823528
+              ],
+              [
+                -119.633428,
+                48.826366
+              ],
+              [
+                -119.646887,
+                48.834906
+              ],
+              [
+                -119.643908,
+                48.849867
+              ],
+              [
+                -119.632698,
+                48.855182
+              ],
+              [
+                -119.601496,
+                48.849987
+              ],
+              [
+                -119.579502,
+                48.826177
+              ],
+              [
+                -119.561597,
+                48.825688
+              ],
+              [
+                -119.552071,
+                48.809209
+              ],
+              [
+                -119.571871,
+                48.815538
+              ],
+              [
+                -119.579852,
+                48.81439
+              ],
+              [
+                -119.555975,
+                48.804922
+              ],
+              [
+                -119.536586,
+                48.809882
+              ],
+              [
+                -119.531902,
+                48.800038
+              ],
+              [
+                -119.514394,
+                48.79495
+              ],
+              [
+                -119.496907,
+                48.777464
+              ],
+              [
+                -119.483921,
+                48.778773
+              ],
+              [
+                -119.483023,
+                48.774251
+              ],
+              [
+                -119.444658,
+                48.78231
+              ],
+              [
+                -119.438433,
+                48.765757
+              ],
+              [
+                -119.430955,
+                48.762818
+              ],
+              [
+                -119.43186,
+                48.736995
+              ],
+              [
+                -119.440201,
+                48.731767
+              ],
+              [
+                -119.455305,
+                48.701297
+              ],
+              [
+                -119.471127,
+                48.700975
+              ],
+              [
+                -119.493068,
+                48.686622
+              ],
+              [
+                -119.537408,
+                48.696708
+              ],
+              [
+                -119.51528,
+                48.673508
+              ],
+              [
+                -119.519834,
+                48.668681
+              ],
+              [
+                -119.516171,
+                48.659449
+              ],
+              [
+                -119.503607,
+                48.662975
+              ],
+              [
+                -119.48516,
+                48.658099
+              ],
+              [
+                -119.488272,
+                48.654692
+              ],
+              [
+                -119.480519,
+                48.648957
+              ],
+              [
+                -119.515739,
+                48.608177
+              ],
+              [
+                -119.520094,
+                48.59387
+              ],
+              [
+                -119.539244,
+                48.578479
+              ],
+              [
+                -119.541392,
+                48.58836
+              ],
+              [
+                -119.585987,
+                48.610392
+              ],
+              [
+                -119.580242,
+                48.626058
+              ],
+              [
+                -119.570063,
+                48.631237
+              ],
+              [
+                -119.558441,
+                48.627362
+              ],
+              [
+                -119.554019,
+                48.637094
+              ],
+              [
+                -119.532391,
+                48.648436
+              ],
+              [
+                -119.559917,
+                48.658261
+              ],
+              [
+                -119.614286,
+                48.659614
+              ],
+              [
+                -119.635403,
+                48.652544
+              ],
+              [
+                -119.643253,
+                48.636316
+              ],
+              [
+                -119.671833,
+                48.616973
+              ],
+              [
+                -119.684369,
+                48.611525
+              ],
+              [
+                -119.703248,
+                48.616425
+              ],
+              [
+                -119.706394,
+                48.62458
+              ],
+              [
+                -119.695819,
+                48.660955
+              ],
+              [
+                -119.683191,
+                48.678611
+              ],
+              [
+                -119.690509,
+                48.692093
+              ],
+              [
+                -119.717535,
+                48.667432
+              ],
+              [
+                -119.760532,
+                48.673719
+              ],
+              [
+                -119.77761,
+                48.669472
+              ],
+              [
+                -119.7645,
+                48.646972
+              ],
+              [
+                -119.774586,
+                48.641204
+              ],
+              [
+                -119.772302,
+                48.637015
+              ],
+              [
+                -119.795703,
+                48.634135
+              ],
+              [
+                -119.804478,
+                48.625018
+              ],
+              [
+                -119.817553,
+                48.631708
+              ],
+              [
+                -119.822907,
+                48.643392
+              ],
+              [
+                -119.857522,
+                48.659782
+              ],
+              [
+                -119.883124,
+                48.638003
+              ],
+              [
+                -119.89832,
+                48.645162
+              ],
+              [
+                -119.898828,
+                48.656586
+              ],
+              [
+                -119.908711,
+                48.656867
+              ],
+              [
+                -119.916194,
+                48.661508
+              ],
+              [
+                -119.904192,
+                48.661984
+              ],
+              [
+                -119.919123,
+                48.670644
+              ],
+              [
+                -119.904936,
+                48.676294
+              ],
+              [
+                -119.921391,
+                48.684371
+              ],
+              [
+                -119.904704,
+                48.695984
+              ],
+              [
+                -119.901087,
+                48.707334
+              ],
+              [
+                -119.912293,
+                48.72145
+              ],
+              [
+                -119.902366,
+                48.730432
+              ],
+              [
+                -119.881728,
+                48.728554
+              ],
+              [
+                -119.878956,
+                48.738845
+              ],
+              [
+                -119.854555,
+                48.730517
+              ],
+              [
+                -119.852331,
+                48.741034
+              ],
+              [
+                -119.843765,
+                48.739625
+              ],
+              [
+                -119.850219,
+                48.747222
+              ],
+              [
+                -119.839809,
+                48.748056
+              ],
+              [
+                -119.842419,
+                48.755739
+              ],
+              [
+                -119.833336,
+                48.754079
+              ],
+              [
+                -119.839047,
+                48.765092
+              ],
+              [
+                -119.831312,
+                48.769116
+              ],
+              [
+                -119.801448,
+                48.767231
+              ],
+              [
+                -119.777041,
+                48.745667
+              ],
+              [
+                -119.764972,
+                48.741301
+              ],
+              [
+                -119.746451,
+                48.746377
+              ],
+              [
+                -119.748084,
+                48.738254
+              ],
+              [
+                -119.739358,
+                48.735013
+              ],
+              [
+                -119.718234,
+                48.753343
+              ],
+              [
+                -119.69928,
+                48.751072
+              ],
+              [
+                -119.692044,
+                48.756156
+              ],
+              [
+                -119.696852,
+                48.749521
+              ],
+              [
+                -119.691837,
+                48.748216
+              ],
+              [
+                -119.678842,
+                48.759151
+              ],
+              [
+                -119.685167,
+                48.759424
+              ],
+              [
+                -119.683018,
+                48.767147
+              ],
+              [
+                -119.692327,
+                48.765867
+              ],
+              [
+                -119.70441,
+                48.777754
+              ],
+              [
+                -119.701324,
+                48.789405
+              ],
+              [
+                -119.717794,
+                48.788706
+              ],
+              [
+                -119.696831,
+                48.797666
+              ],
+              [
+                -119.716016,
+                48.796333
+              ],
+              [
+                -119.728187,
+                48.81347
+              ],
+              [
+                -119.735209,
+                48.806016
+              ],
+              [
+                -119.726339,
+                48.797511
+              ],
+              [
+                -119.73795,
+                48.79097
+              ],
+              [
+                -119.780855,
+                48.789937
+              ],
+              [
+                -119.798892,
+                48.795702
+              ],
+              [
+                -119.793666,
+                48.792538
+              ],
+              [
+                -119.808633,
+                48.790242
+              ],
+              [
+                -119.812675,
+                48.808313
+              ],
+              [
+                -119.80694,
+                48.812666
+              ],
+              [
+                -119.811685,
+                48.811906
+              ],
+              [
+                -119.811525,
+                48.817879
+              ],
+              [
+                -119.795745,
+                48.829223
+              ],
+              [
+                -119.822412,
+                48.842641
+              ],
+              [
+                -119.8337,
+                48.840654
+              ],
+              [
+                -119.851781,
+                48.848678
+              ],
+              [
+                -119.861879,
+                48.844527
+              ],
+              [
+                -119.879979,
+                48.851688
+              ],
+              [
+                -119.854931,
+                48.860659
+              ],
+              [
+                -119.835575,
+                48.860251
+              ],
+              [
+                -119.838044,
+                48.863813
+              ],
+              [
+                -119.827819,
+                48.858744
+              ],
+              [
+                -119.837139,
+                48.871959
+              ],
+              [
+                -119.856115,
+                48.877839
+              ],
+              [
+                -119.869288,
+                48.872276
+              ],
+              [
+                -119.882131,
+                48.884754
+              ],
+              [
+                -119.879458,
+                48.884733
+              ],
+              [
+                -119.878315,
+                48.887454
+              ],
+              [
+                -119.895524,
+                48.895501
+              ],
+              [
+                -119.894012,
+                48.898105
+              ],
+              [
+                -119.897225,
+                48.903051
+              ],
+              [
+                -119.888605,
+                48.899385
+              ],
+              [
+                -119.88937,
+                48.9116
+              ],
+              [
+                -119.893121,
+                48.911979
+              ],
+              [
+                -119.887228,
+                48.918082
+              ],
+              [
+                -119.889795,
+                48.91919
+              ],
+              [
+                -119.896814,
+                48.919898
+              ],
+              [
+                -119.901703,
+                48.919083
+              ],
+              [
+                -119.902997,
+                48.920736
+              ],
+              [
+                -119.900888,
+                48.921072
+              ],
+              [
+                -119.900026,
+                48.924499
+              ],
+              [
+                -119.906616,
+                48.925458
+              ],
+              [
+                -119.880823,
+                48.932787
+              ],
+              [
+                -119.879914,
+                48.936687
+              ],
+              [
+                -119.88346,
+                48.94005
+              ],
+              [
+                -119.880086,
+                48.946452
+              ],
+              [
+                -119.871283,
+                48.946994
+              ],
+              [
+                -119.87722,
+                48.953323
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "sources": [
+      {
+        "id": "nisar-gcov",
+        "mission": "NISAR",
+        "product": "L2 GCOV, geocoded polarimetric covariance (HH, HV)",
+        "collection": "NISAR_L2_GCOV_PROVISIONAL_V1",
+        "maturity": "provisional",
+        "granules": [
+          "NISAR_L2_PR_GCOV_023_071_D_064_4005_DHDH_A_20260619T030957_20260619T031032_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_024_071_D_064_4005_DHDH_A_20260701T030956_20260701T031031_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_025_071_D_064_4005_DHDH_A_20260713T030956_20260713T031031_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_026_071_D_064_4005_DHDH_A_20260725T030955_20260725T031030_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_028_071_D_064_4005_DHDH_A_20260818T030954_20260818T031029_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_029_071_D_064_4005_DHDH_A_20260830T030953_20260830T031029_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_030_071_D_064_4005_DHDH_A_20260911T030953_20260911T031028_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_031_071_D_064_4005_DHDH_A_20260923T030953_20260923T031028_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_032_071_D_064_4005_DHDH_A_20261005T030953_20261005T031029_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_033_071_D_064_4005_DHDH_A_20261017T030953_20261017T031029_P05023_N_F_J_001"
+        ],
+        "dates": [
+          "2026-06-19",
+          "2026-07-01",
+          "2026-07-13",
+          "2026-07-25",
+          "2026-08-18",
+          "2026-08-30",
+          "2026-09-11",
+          "2026-09-23",
+          "2026-10-05",
+          "2026-10-17"
+        ],
+        "provider": "NASA-ISRO, distributed by the ASF DAAC",
+        "license": "Open and free to use under NASA's Earth science data policy; cite NISAR and the ASF DAAC",
+        "url": "https://www.earthdata.nasa.gov/data/catalog/asf-nisar-l2-gcov-provisional-v1-1",
+        "nasa": true
+      },
+      {
+        "id": "wfigs",
+        "mission": "US Interagency Fire (WFIGS)",
+        "product": "Fire perimeter, Sinlahekin (67,180.8 ha)",
+        "collection": "WFIGS Interagency Fire Perimeters",
+        "maturity": "n/a",
+        "granules": [
+          "Sinlahekin"
+        ],
+        "dates": [
+          "2026-09-19"
+        ],
+        "provider": "NIFC, US Interagency Fire Program",
+        "license": "Public domain (US government data)",
+        "url": "https://data-nifc.opendata.arcgis.com/datasets/nifc::wfigs-interagency-fire-perimeters-year-to-date",
+        "nasa": false
+      },
+      {
+        "id": "hls",
+        "mission": "HLS",
+        "product": "Harmonized Landsat Sentinel-2 v2.0 (30 m)",
+        "collection": "HLSS30, HLSL30",
+        "maturity": "validated",
+        "granules": [
+          "HLS.L30.T10UGU.2025209T185507.v2.0",
+          "HLS.L30.T10UGU.2025210T184857.v2.0",
+          "HLS.L30.T10UGU.2025225T185519.v2.0",
+          "HLS.L30.T10UGU.2025234T184911.v2.0",
+          "HLS.L30.T10UGU.2026221T184853.v2.0",
+          "HLS.L30.T10UGU.2026261T184859.v2.0",
+          "HLS.L30.T10UGU.2026270T184253.v2.0",
+          "HLS.L30.T10UGU.2026276T185521.v2.0",
+          "HLS.L30.T10UGU.2026277T184906.v2.0",
+          "HLS.L30.T10UGV.2025210T184833.v2.0",
+          "HLS.L30.T10UGV.2025234T184847.v2.0",
+          "HLS.L30.T10UGV.2025235T184256.v2.0",
+          "HLS.L30.T10UGV.2026221T184829.v2.0",
+          "HLS.L30.T10UGV.2026277T184842.v2.0",
+          "HLS.L30.T10UGV.2026293T184841.v2.0",
+          "HLS.L30.T11ULP.2025210T184857.v2.0",
+          "HLS.L30.T11ULP.2025234T184911.v2.0",
+          "HLS.L30.T11ULP.2025242T184909.v2.0",
+          "HLS.L30.T11ULP.2026221T184853.v2.0",
+          "HLS.L30.T11ULP.2026261T184859.v2.0",
+          "HLS.L30.T11ULP.2026277T184906.v2.0",
+          "HLS.L30.T11ULQ.2025234T184847.v2.0",
+          "HLS.L30.T11ULQ.2025235T184232.v2.0",
+          "HLS.L30.T11ULQ.2025235T184256.v2.0",
+          "HLS.L30.T11ULQ.2026221T184829.v2.0",
+          "HLS.L30.T11ULQ.2026277T184842.v2.0",
+          "HLS.L30.T11ULQ.2026293T184841.v2.0",
+          "HLS.S30.T10UGU.2025188T184941.v2.0",
+          "HLS.S30.T10UGU.2025193T184919.v2.0",
+          "HLS.S30.T10UGU.2025210T185831.v2.0",
+          "HLS.S30.T10UGU.2025223T184919.v2.0",
+          "HLS.S30.T10UGU.2026221T185919.v2.0",
+          "HLS.S30.T10UGU.2026261T185949.v2.0",
+          "HLS.S30.T10UGU.2026263T185051.v2.0",
+          "HLS.S30.T10UGU.2026271T190059.v2.0",
+          "HLS.S30.T10UGU.2026293T185421.v2.0",
+          "HLS.S30.T10UGU.2026296T190441.v2.0",
+          "HLS.S30.T10UGV.2025210T185831.v2.0",
+          "HLS.S30.T10UGV.2025223T184919.v2.0",
+          "HLS.S30.T10UGV.2026221T185919.v2.0",
+          "HLS.S30.T10UGV.2026261T185949.v2.0",
+          "HLS.S30.T10UGV.2026271T190059.v2.0",
+          "HLS.S30.T10UGV.2026293T185421.v2.0",
+          "HLS.S30.T11ULP.2025193T184919.v2.0",
+          "HLS.S30.T11ULP.2025193T190831.v2.0",
+          "HLS.S30.T11ULP.2025210T185831.v2.0",
+          "HLS.S30.T11ULP.2025223T184919.v2.0",
+          "HLS.S30.T11ULP.2026261T185949.v2.0",
+          "HLS.S30.T11ULP.2026263T185051.v2.0",
+          "HLS.S30.T11ULP.2026296T190441.v2.0",
+          "HLS.S30.T11ULQ.2025223T184919.v2.0",
+          "HLS.S30.T11ULQ.2026221T185919.v2.0",
+          "HLS.S30.T11ULQ.2026261T185949.v2.0",
+          "HLS.S30.T11ULQ.2026293T185421.v2.0",
+          "HLS.S30.T11ULQ.2026296T190441.v2.0"
+        ],
+        "dates": [
+          "2025-07-07",
+          "2025-07-12",
+          "2025-07-28",
+          "2025-07-29",
+          "2025-08-11",
+          "2025-08-13",
+          "2025-08-22",
+          "2025-08-23",
+          "2025-08-30",
+          "2026-08-09",
+          "2026-09-18",
+          "2026-09-20",
+          "2026-09-27",
+          "2026-09-28",
+          "2026-10-03",
+          "2026-10-04",
+          "2026-10-20",
+          "2026-10-23"
+        ],
+        "provider": "NASA and USGS, through Microsoft Planetary Computer",
+        "license": "Open and free to use under NASA's Earth science data policy",
+        "url": "https://www.earthdata.nasa.gov/data/projects/hls",
+        "nasa": true
+      },
+      {
+        "id": "copernicus-dem",
+        "mission": "Copernicus DEM",
+        "product": "Copernicus DEM GLO-30 (30 m), resampled to 1,600 px on the longest side",
+        "collection": "cop-dem-glo-30",
+        "maturity": "n/a",
+        "granules": [
+          "Copernicus_DSM_COG_10_N48_00_W120_00_DEM",
+          "Copernicus_DSM_COG_10_N48_00_W121_00_DEM",
+          "Copernicus_DSM_COG_10_N49_00_W120_00_DEM",
+          "Copernicus_DSM_COG_10_N49_00_W121_00_DEM"
+        ],
+        "dates": [],
+        "provider": "European Space Agency and Airbus, via Microsoft Planetary Computer",
+        "license": "Copernicus DEM licence: free use with attribution. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA",
+        "url": "https://planetarycomputer.microsoft.com/dataset/cop-dem-glo-30",
+        "nasa": false
+      },
+      {
+        "id": "overture",
+        "mission": "Overture Maps",
+        "product": "Overture Maps buildings and transportation themes",
+        "collection": "overturemaps-us-west-2",
+        "maturity": "n/a",
+        "granules": [],
+        "dates": [],
+        "provider": "Overture Maps Foundation",
+        "license": "ODbL (buildings and roads include OpenStreetMap data, (c) OpenStreetMap contributors)",
+        "url": "https://overturemaps.org/",
+        "nasa": false
+      }
+    ],
+    "footprint": {
+      "kind": "shape",
+      "label": "Sinlahekin fire perimeter",
+      "areaHa": 67180.8,
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                -119.812898,
+                48.80787
+              ],
+              [
+                -119.812916,
+                48.807826
+              ],
+              [
+                -119.812963,
+                48.807837
+              ],
+              [
+                -119.812898,
+                48.80787
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.797894,
+                48.935961
+              ],
+              [
+                -119.797867,
+                48.935875
+              ],
+              [
+                -119.797955,
+                48.935927
+              ],
+              [
+                -119.797894,
+                48.935961
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.846032,
+                48.966663
+              ],
+              [
+                -119.845956,
+                48.966589
+              ],
+              [
+                -119.846084,
+                48.966605
+              ],
+              [
+                -119.846032,
+                48.966663
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.815862,
+                48.941092
+              ],
+              [
+                -119.815889,
+                48.941009
+              ],
+              [
+                -119.815987,
+                48.94105
+              ],
+              [
+                -119.815862,
+                48.941092
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.905981,
+                48.924404
+              ],
+              [
+                -119.905933,
+                48.924252
+              ],
+              [
+                -119.906095,
+                48.924366
+              ],
+              [
+                -119.905981,
+                48.924404
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.886491,
+                48.890706
+              ],
+              [
+                -119.886576,
+                48.89061
+              ],
+              [
+                -119.886588,
+                48.890699
+              ],
+              [
+                -119.886491,
+                48.890706
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.813118,
+                48.807612
+              ],
+              [
+                -119.81295,
+                48.80768
+              ],
+              [
+                -119.812937,
+                48.807622
+              ],
+              [
+                -119.813118,
+                48.807612
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.814059,
+                48.941989
+              ],
+              [
+                -119.81402,
+                48.941859
+              ],
+              [
+                -119.814101,
+                48.941941
+              ],
+              [
+                -119.814059,
+                48.941989
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.889851,
+                48.91868
+              ],
+              [
+                -119.889905,
+                48.918589
+              ],
+              [
+                -119.889981,
+                48.918669
+              ],
+              [
+                -119.889851,
+                48.91868
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.88985,
+                48.911413
+              ],
+              [
+                -119.89001,
+                48.911362
+              ],
+              [
+                -119.889998,
+                48.911438
+              ],
+              [
+                -119.88985,
+                48.911413
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.844823,
+                48.965415
+              ],
+              [
+                -119.844933,
+                48.965291
+              ],
+              [
+                -119.844952,
+                48.965444
+              ],
+              [
+                -119.844823,
+                48.965415
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.90033,
+                48.923312
+              ],
+              [
+                -119.900411,
+                48.923206
+              ],
+              [
+                -119.900476,
+                48.923305
+              ],
+              [
+                -119.90033,
+                48.923312
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.852211,
+                48.954979
+              ],
+              [
+                -119.852347,
+                48.954838
+              ],
+              [
+                -119.852326,
+                48.954975
+              ],
+              [
+                -119.852211,
+                48.954979
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.880575,
+                48.936815
+              ],
+              [
+                -119.880745,
+                48.936739
+              ],
+              [
+                -119.880786,
+                48.936806
+              ],
+              [
+                -119.880575,
+                48.936815
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.852288,
+                48.955401
+              ],
+              [
+                -119.852155,
+                48.955188
+              ],
+              [
+                -119.852241,
+                48.955192
+              ],
+              [
+                -119.852288,
+                48.955401
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.896398,
+                48.899923
+              ],
+              [
+                -119.896483,
+                48.899742
+              ],
+              [
+                -119.896512,
+                48.899885
+              ],
+              [
+                -119.896398,
+                48.899923
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.906894,
+                48.925136
+              ],
+              [
+                -119.906799,
+                48.924936
+              ],
+              [
+                -119.907017,
+                48.924974
+              ],
+              [
+                -119.906894,
+                48.925136
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.806686,
+                48.93847
+              ],
+              [
+                -119.806686,
+                48.938301
+              ],
+              [
+                -119.806862,
+                48.938489
+              ],
+              [
+                -119.806686,
+                48.93847
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.813253,
+                48.940591
+              ],
+              [
+                -119.813206,
+                48.940493
+              ],
+              [
+                -119.813382,
+                48.940621
+              ],
+              [
+                -119.813253,
+                48.940591
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.900866,
+                48.928502
+              ],
+              [
+                -119.900819,
+                48.928302
+              ],
+              [
+                -119.901047,
+                48.928359
+              ],
+              [
+                -119.900866,
+                48.928502
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.906447,
+                48.924575
+              ],
+              [
+                -119.906447,
+                48.924337
+              ],
+              [
+                -119.906637,
+                48.924461
+              ],
+              [
+                -119.906447,
+                48.924575
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.823789,
+                48.934759
+              ],
+              [
+                -119.823961,
+                48.934602
+              ],
+              [
+                -119.823908,
+                48.934759
+              ],
+              [
+                -119.823789,
+                48.934759
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.90157,
+                48.923139
+              ],
+              [
+                -119.901817,
+                48.92312
+              ],
+              [
+                -119.901674,
+                48.92332
+              ],
+              [
+                -119.90157,
+                48.923139
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.827332,
+                48.944744
+              ],
+              [
+                -119.827355,
+                48.944601
+              ],
+              [
+                -119.827423,
+                48.944656
+              ],
+              [
+                -119.827332,
+                48.944744
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.842696,
+                48.956256
+              ],
+              [
+                -119.842768,
+                48.956114
+              ],
+              [
+                -119.84284,
+                48.956237
+              ],
+              [
+                -119.842696,
+                48.956256
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.889667,
+                48.910042
+              ],
+              [
+                -119.889779,
+                48.909907
+              ],
+              [
+                -119.889825,
+                48.909952
+              ],
+              [
+                -119.889667,
+                48.910042
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.793188,
+                48.931206
+              ],
+              [
+                -119.793364,
+                48.931079
+              ],
+              [
+                -119.793384,
+                48.931226
+              ],
+              [
+                -119.793188,
+                48.931206
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.858099,
+                48.970682
+              ],
+              [
+                -119.858207,
+                48.970509
+              ],
+              [
+                -119.858304,
+                48.970662
+              ],
+              [
+                -119.858099,
+                48.970682
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.840691,
+                48.949108
+              ],
+              [
+                -119.840803,
+                48.948914
+              ],
+              [
+                -119.840863,
+                48.949108
+              ],
+              [
+                -119.840691,
+                48.949108
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.88959,
+                48.909088
+              ],
+              [
+                -119.889814,
+                48.909097
+              ],
+              [
+                -119.889646,
+                48.909205
+              ],
+              [
+                -119.88959,
+                48.909088
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.799792,
+                48.886276
+              ],
+              [
+                -119.799823,
+                48.886128
+              ],
+              [
+                -119.79991,
+                48.886196
+              ],
+              [
+                -119.799792,
+                48.886276
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.838219,
+                48.952777
+              ],
+              [
+                -119.83836,
+                48.952577
+              ],
+              [
+                -119.838373,
+                48.952764
+              ],
+              [
+                -119.838219,
+                48.952777
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.510411,
+                48.666377
+              ],
+              [
+                -119.510425,
+                48.666259
+              ],
+              [
+                -119.510551,
+                48.666331
+              ],
+              [
+                -119.510411,
+                48.666377
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.851809,
+                48.955057
+              ],
+              [
+                -119.851562,
+                48.954922
+              ],
+              [
+                -119.851766,
+                48.954882
+              ],
+              [
+                -119.851809,
+                48.955057
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.89093,
+                48.915351
+              ],
+              [
+                -119.891113,
+                48.915418
+              ],
+              [
+                -119.890836,
+                48.915507
+              ],
+              [
+                -119.89093,
+                48.915351
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.853559,
+                48.955001
+              ],
+              [
+                -119.853813,
+                48.954841
+              ],
+              [
+                -119.853813,
+                48.955021
+              ],
+              [
+                -119.853559,
+                48.955001
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.804192,
+                48.937358
+              ],
+              [
+                -119.804355,
+                48.937151
+              ],
+              [
+                -119.804431,
+                48.93739
+              ],
+              [
+                -119.804192,
+                48.937358
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.870174,
+                48.73664
+              ],
+              [
+                -119.870347,
+                48.736406
+              ],
+              [
+                -119.870355,
+                48.736622
+              ],
+              [
+                -119.870174,
+                48.73664
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.83107,
+                48.932998
+              ],
+              [
+                -119.831206,
+                48.932781
+              ],
+              [
+                -119.831242,
+                48.933089
+              ],
+              [
+                -119.83107,
+                48.932998
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.837291,
+                48.952403
+              ],
+              [
+                -119.837478,
+                48.95219
+              ],
+              [
+                -119.837585,
+                48.952383
+              ],
+              [
+                -119.837291,
+                48.952403
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.863132,
+                48.969305
+              ],
+              [
+                -119.863319,
+                48.96904
+              ],
+              [
+                -119.863358,
+                48.969325
+              ],
+              [
+                -119.863132,
+                48.969305
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.86467,
+                48.95238
+              ],
+              [
+                -119.864865,
+                48.952123
+              ],
+              [
+                -119.864871,
+                48.952399
+              ],
+              [
+                -119.86467,
+                48.95238
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.840139,
+                48.957769
+              ],
+              [
+                -119.840424,
+                48.957527
+              ],
+              [
+                -119.84011,
+                48.957926
+              ],
+              [
+                -119.840139,
+                48.957769
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.896022,
+                48.899948
+              ],
+              [
+                -119.896217,
+                48.89964
+              ],
+              [
+                -119.896217,
+                48.899888
+              ],
+              [
+                -119.896022,
+                48.899948
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.864634,
+                48.970955
+              ],
+              [
+                -119.864831,
+                48.970719
+              ],
+              [
+                -119.864841,
+                48.970984
+              ],
+              [
+                -119.864634,
+                48.970955
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.856954,
+                48.954295
+              ],
+              [
+                -119.857101,
+                48.954013
+              ],
+              [
+                -119.857184,
+                48.954274
+              ],
+              [
+                -119.856954,
+                48.954295
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.837056,
+                48.950758
+              ],
+              [
+                -119.837285,
+                48.950486
+              ],
+              [
+                -119.837223,
+                48.950789
+              ],
+              [
+                -119.837056,
+                48.950758
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.888465,
+                48.932415
+              ],
+              [
+                -119.888783,
+                48.932332
+              ],
+              [
+                -119.888771,
+                48.932458
+              ],
+              [
+                -119.888465,
+                48.932415
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.859912,
+                48.971297
+              ],
+              [
+                -119.859812,
+                48.970975
+              ],
+              [
+                -119.860025,
+                48.971056
+              ],
+              [
+                -119.859912,
+                48.971297
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.807302,
+                48.937471
+              ],
+              [
+                -119.807044,
+                48.937239
+              ],
+              [
+                -119.807239,
+                48.937207
+              ],
+              [
+                -119.807302,
+                48.937471
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.889952,
+                48.931848
+              ],
+              [
+                -119.889629,
+                48.931713
+              ],
+              [
+                -119.889958,
+                48.93171
+              ],
+              [
+                -119.889952,
+                48.931848
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.845806,
+                48.961687
+              ],
+              [
+                -119.846061,
+                48.961383
+              ],
+              [
+                -119.846041,
+                48.961697
+              ],
+              [
+                -119.845806,
+                48.961687
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.779781,
+                48.898537
+              ],
+              [
+                -119.779827,
+                48.898212
+              ],
+              [
+                -119.78008,
+                48.898528
+              ],
+              [
+                -119.779781,
+                48.898537
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.806732,
+                48.942272
+              ],
+              [
+                -119.806333,
+                48.942369
+              ],
+              [
+                -119.806224,
+                48.942274
+              ],
+              [
+                -119.806732,
+                48.942272
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.827894,
+                48.942335
+              ],
+              [
+                -119.827492,
+                48.942128
+              ],
+              [
+                -119.827912,
+                48.942244
+              ],
+              [
+                -119.827894,
+                48.942335
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.783436,
+                48.902636
+              ],
+              [
+                -119.783617,
+                48.90231
+              ],
+              [
+                -119.783726,
+                48.902627
+              ],
+              [
+                -119.783436,
+                48.902636
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.895925,
+                48.89922
+              ],
+              [
+                -119.895692,
+                48.898988
+              ],
+              [
+                -119.896036,
+                48.898972
+              ],
+              [
+                -119.895925,
+                48.89922
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.889727,
+                48.911259
+              ],
+              [
+                -119.890006,
+                48.911008
+              ],
+              [
+                -119.89005,
+                48.911111
+              ],
+              [
+                -119.889727,
+                48.911259
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.855727,
+                48.971483
+              ],
+              [
+                -119.855503,
+                48.971141
+              ],
+              [
+                -119.855859,
+                48.971156
+              ],
+              [
+                -119.855727,
+                48.971483
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.890033,
+                48.910925
+              ],
+              [
+                -119.890153,
+                48.910553
+              ],
+              [
+                -119.890193,
+                48.910957
+              ],
+              [
+                -119.890033,
+                48.910925
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.907391,
+                48.929604
+              ],
+              [
+                -119.907606,
+                48.929267
+              ],
+              [
+                -119.907652,
+                48.92965
+              ],
+              [
+                -119.907391,
+                48.929604
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.882788,
+                48.88503
+              ],
+              [
+                -119.882926,
+                48.884616
+              ],
+              [
+                -119.883048,
+                48.885014
+              ],
+              [
+                -119.882788,
+                48.88503
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.811348,
+                48.941626
+              ],
+              [
+                -119.810938,
+                48.941559
+              ],
+              [
+                -119.81121,
+                48.941419
+              ],
+              [
+                -119.811348,
+                48.941626
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.791674,
+                48.931611
+              ],
+              [
+                -119.791351,
+                48.931395
+              ],
+              [
+                -119.791931,
+                48.931381
+              ],
+              [
+                -119.791674,
+                48.931611
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.82582,
+                48.934244
+              ],
+              [
+                -119.82564,
+                48.933881
+              ],
+              [
+                -119.826066,
+                48.934244
+              ],
+              [
+                -119.82582,
+                48.934244
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.852269,
+                48.95201
+              ],
+              [
+                -119.852447,
+                48.951624
+              ],
+              [
+                -119.852551,
+                48.952031
+              ],
+              [
+                -119.852269,
+                48.95201
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.829382,
+                48.942696
+              ],
+              [
+                -119.828921,
+                48.942908
+              ],
+              [
+                -119.82896,
+                48.942711
+              ],
+              [
+                -119.829382,
+                48.942696
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.858981,
+                48.971325
+              ],
+              [
+                -119.858975,
+                48.970911
+              ],
+              [
+                -119.859293,
+                48.970995
+              ],
+              [
+                -119.858981,
+                48.971325
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.788486,
+                48.790608
+              ],
+              [
+                -119.789154,
+                48.790141
+              ],
+              [
+                -119.788937,
+                48.790623
+              ],
+              [
+                -119.788486,
+                48.790608
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.888757,
+                48.938104
+              ],
+              [
+                -119.889042,
+                48.937816
+              ],
+              [
+                -119.889141,
+                48.938
+              ],
+              [
+                -119.888757,
+                48.938104
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.824998,
+                48.93402
+              ],
+              [
+                -119.825181,
+                48.933405
+              ],
+              [
+                -119.82523,
+                48.933998
+              ],
+              [
+                -119.824998,
+                48.93402
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.775241,
+                48.909898
+              ],
+              [
+                -119.775667,
+                48.909773
+              ],
+              [
+                -119.775675,
+                48.909906
+              ],
+              [
+                -119.775241,
+                48.909898
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.904891,
+                48.929067
+              ],
+              [
+                -119.904569,
+                48.928715
+              ],
+              [
+                -119.904983,
+                48.928715
+              ],
+              [
+                -119.904891,
+                48.929067
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.848753,
+                48.951238
+              ],
+              [
+                -119.849014,
+                48.950758
+              ],
+              [
+                -119.849076,
+                48.951269
+              ],
+              [
+                -119.848753,
+                48.951238
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.89864,
+                48.908602
+              ],
+              [
+                -119.898347,
+                48.908262
+              ],
+              [
+                -119.898913,
+                48.908407
+              ],
+              [
+                -119.89864,
+                48.908602
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.70481,
+                48.892976
+              ],
+              [
+                -119.7047,
+                48.892571
+              ],
+              [
+                -119.705033,
+                48.892738
+              ],
+              [
+                -119.70481,
+                48.892976
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.69403,
+                48.871891
+              ],
+              [
+                -119.694117,
+                48.871526
+              ],
+              [
+                -119.694354,
+                48.871649
+              ],
+              [
+                -119.69403,
+                48.871891
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.844988,
+                48.966568
+              ],
+              [
+                -119.844403,
+                48.966397
+              ],
+              [
+                -119.844986,
+                48.966265
+              ],
+              [
+                -119.844988,
+                48.966568
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.902529,
+                48.923361
+              ],
+              [
+                -119.902099,
+                48.922901
+              ],
+              [
+                -119.902406,
+                48.922962
+              ],
+              [
+                -119.902529,
+                48.923361
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.742835,
+                48.868854
+              ],
+              [
+                -119.742388,
+                48.868785
+              ],
+              [
+                -119.743381,
+                48.868554
+              ],
+              [
+                -119.742835,
+                48.868854
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.902713,
+                48.922502
+              ],
+              [
+                -119.902973,
+                48.921981
+              ],
+              [
+                -119.903004,
+                48.922594
+              ],
+              [
+                -119.902713,
+                48.922502
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.806983,
+                48.890797
+              ],
+              [
+                -119.807305,
+                48.890337
+              ],
+              [
+                -119.807367,
+                48.890766
+              ],
+              [
+                -119.806983,
+                48.890797
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.831405,
+                48.948297
+              ],
+              [
+                -119.830964,
+                48.947906
+              ],
+              [
+                -119.831463,
+                48.948062
+              ],
+              [
+                -119.831405,
+                48.948297
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.800789,
+                48.883378
+              ],
+              [
+                -119.800296,
+                48.883552
+              ],
+              [
+                -119.800536,
+                48.883037
+              ],
+              [
+                -119.800789,
+                48.883378
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.853626,
+                48.954055
+              ],
+              [
+                -119.853039,
+                48.953865
+              ],
+              [
+                -119.853709,
+                48.953836
+              ],
+              [
+                -119.853626,
+                48.954055
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.865838,
+                48.955496
+              ],
+              [
+                -119.866283,
+                48.954867
+              ],
+              [
+                -119.86616,
+                48.955511
+              ],
+              [
+                -119.865838,
+                48.955496
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.768423,
+                48.917093
+              ],
+              [
+                -119.767824,
+                48.916662
+              ],
+              [
+                -119.768256,
+                48.916662
+              ],
+              [
+                -119.768423,
+                48.917093
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.829821,
+                48.945782
+              ],
+              [
+                -119.829448,
+                48.945129
+              ],
+              [
+                -119.83002,
+                48.945538
+              ],
+              [
+                -119.829821,
+                48.945782
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.718704,
+                48.789546
+              ],
+              [
+                -119.718264,
+                48.789008
+              ],
+              [
+                -119.718623,
+                48.789008
+              ],
+              [
+                -119.718704,
+                48.789546
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.7736,
+                48.919898
+              ],
+              [
+                -119.773816,
+                48.919274
+              ],
+              [
+                -119.774056,
+                48.91985
+              ],
+              [
+                -119.7736,
+                48.919898
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.78889,
+                48.895565
+              ],
+              [
+                -119.7882,
+                48.895797
+              ],
+              [
+                -119.788119,
+                48.895392
+              ],
+              [
+                -119.78889,
+                48.895565
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.801985,
+                48.886745
+              ],
+              [
+                -119.801183,
+                48.887052
+              ],
+              [
+                -119.800646,
+                48.886931
+              ],
+              [
+                -119.801985,
+                48.886745
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.852934,
+                48.950319
+              ],
+              [
+                -119.853219,
+                48.949683
+              ],
+              [
+                -119.853302,
+                48.949881
+              ],
+              [
+                -119.852934,
+                48.950319
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.792952,
+                48.934185
+              ],
+              [
+                -119.792738,
+                48.933595
+              ],
+              [
+                -119.793593,
+                48.933965
+              ],
+              [
+                -119.792952,
+                48.934185
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.806098,
+                48.936621
+              ],
+              [
+                -119.806391,
+                48.935907
+              ],
+              [
+                -119.806994,
+                48.936259
+              ],
+              [
+                -119.806098,
+                48.936621
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.829102,
+                48.953368
+              ],
+              [
+                -119.830119,
+                48.952718
+              ],
+              [
+                -119.830275,
+                48.952752
+              ],
+              [
+                -119.829102,
+                48.953368
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.850986,
+                48.951718
+              ],
+              [
+                -119.850407,
+                48.95225
+              ],
+              [
+                -119.850278,
+                48.951751
+              ],
+              [
+                -119.850986,
+                48.951718
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.827231,
+                48.942642
+              ],
+              [
+                -119.826387,
+                48.942401
+              ],
+              [
+                -119.826709,
+                48.941983
+              ],
+              [
+                -119.827231,
+                48.942642
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.851045,
+                48.95364
+              ],
+              [
+                -119.851308,
+                48.95285
+              ],
+              [
+                -119.851436,
+                48.953574
+              ],
+              [
+                -119.851045,
+                48.95364
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.82789,
+                48.941921
+              ],
+              [
+                -119.827507,
+                48.941139
+              ],
+              [
+                -119.82835,
+                48.941768
+              ],
+              [
+                -119.82789,
+                48.941921
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.82012,
+                48.9366
+              ],
+              [
+                -119.82047,
+                48.936285
+              ],
+              [
+                -119.821356,
+                48.936691
+              ],
+              [
+                -119.82012,
+                48.9366
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.863826,
+                48.842415
+              ],
+              [
+                -119.863134,
+                48.841513
+              ],
+              [
+                -119.863676,
+                48.841513
+              ],
+              [
+                -119.863826,
+                48.842415
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.812164,
+                48.81706
+              ],
+              [
+                -119.813083,
+                48.816609
+              ],
+              [
+                -119.81287,
+                48.817023
+              ],
+              [
+                -119.812164,
+                48.81706
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.83003,
+                48.947031
+              ],
+              [
+                -119.828636,
+                48.947217
+              ],
+              [
+                -119.828731,
+                48.946906
+              ],
+              [
+                -119.83003,
+                48.947031
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.82611,
+                48.948013
+              ],
+              [
+                -119.825536,
+                48.947231
+              ],
+              [
+                -119.826225,
+                48.947346
+              ],
+              [
+                -119.82611,
+                48.948013
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.880931,
+                48.887522
+              ],
+              [
+                -119.879107,
+                48.886464
+              ],
+              [
+                -119.880462,
+                48.886715
+              ],
+              [
+                -119.880931,
+                48.887522
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.692152,
+                48.87884
+              ],
+              [
+                -119.690481,
+                48.878308
+              ],
+              [
+                -119.692276,
+                48.878456
+              ],
+              [
+                -119.692152,
+                48.87884
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.914764,
+                48.664881
+              ],
+              [
+                -119.915463,
+                48.663686
+              ],
+              [
+                -119.915828,
+                48.664512
+              ],
+              [
+                -119.914764,
+                48.664881
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.8039,
+                48.826008
+              ],
+              [
+                -119.802974,
+                48.825064
+              ],
+              [
+                -119.80405,
+                48.825168
+              ],
+              [
+                -119.8039,
+                48.826008
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.78973,
+                48.892551
+              ],
+              [
+                -119.791552,
+                48.892192
+              ],
+              [
+                -119.790928,
+                48.893558
+              ],
+              [
+                -119.78973,
+                48.892551
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.848221,
+                48.979769
+              ],
+              [
+                -119.845117,
+                48.979219
+              ],
+              [
+                -119.846098,
+                48.977769
+              ],
+              [
+                -119.848221,
+                48.979769
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.83344,
+                48.955567
+              ],
+              [
+                -119.831182,
+                48.953885
+              ],
+              [
+                -119.832424,
+                48.951566
+              ],
+              [
+                -119.837667,
+                48.952747
+              ],
+              [
+                -119.83344,
+                48.955567
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.833049,
+                48.953542
+              ],
+              [
+                -119.832775,
+                48.953223
+              ],
+              [
+                -119.832745,
+                48.953487
+              ],
+              [
+                -119.833049,
+                48.953542
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.827747,
+                48.953743
+              ],
+              [
+                -119.824923,
+                48.950362
+              ],
+              [
+                -119.832177,
+                48.94958
+              ],
+              [
+                -119.827747,
+                48.953743
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.871782,
+                48.965856
+              ],
+              [
+                -119.846961,
+                48.967687
+              ],
+              [
+                -119.848471,
+                48.960471
+              ],
+              [
+                -119.837658,
+                48.950896
+              ],
+              [
+                -119.851394,
+                48.956732
+              ],
+              [
+                -119.858958,
+                48.954337
+              ],
+              [
+                -119.871782,
+                48.965856
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.87722,
+                48.953323
+              ],
+              [
+                -119.868487,
+                48.95265
+              ],
+              [
+                -119.856363,
+                48.946574
+              ],
+              [
+                -119.853808,
+                48.951228
+              ],
+              [
+                -119.852864,
+                48.948441
+              ],
+              [
+                -119.840964,
+                48.946359
+              ],
+              [
+                -119.831817,
+                48.948033
+              ],
+              [
+                -119.832397,
+                48.945749
+              ],
+              [
+                -119.828698,
+                48.944296
+              ],
+              [
+                -119.827354,
+                48.946939
+              ],
+              [
+                -119.834514,
+                48.932016
+              ],
+              [
+                -119.82461,
+                48.933154
+              ],
+              [
+                -119.81627,
+                48.939213
+              ],
+              [
+                -119.816414,
+                48.941435
+              ],
+              [
+                -119.815181,
+                48.939376
+              ],
+              [
+                -119.808004,
+                48.939091
+              ],
+              [
+                -119.809526,
+                48.933679
+              ],
+              [
+                -119.79627,
+                48.935506
+              ],
+              [
+                -119.793573,
+                48.927224
+              ],
+              [
+                -119.778181,
+                48.924811
+              ],
+              [
+                -119.773718,
+                48.911113
+              ],
+              [
+                -119.781202,
+                48.909955
+              ],
+              [
+                -119.778961,
+                48.905893
+              ],
+              [
+                -119.788478,
+                48.901214
+              ],
+              [
+                -119.790658,
+                48.894227
+              ],
+              [
+                -119.798051,
+                48.895827
+              ],
+              [
+                -119.793324,
+                48.889212
+              ],
+              [
+                -119.816679,
+                48.89305
+              ],
+              [
+                -119.809703,
+                48.887789
+              ],
+              [
+                -119.806631,
+                48.888558
+              ],
+              [
+                -119.804779,
+                48.887651
+              ],
+              [
+                -119.803321,
+                48.887875
+              ],
+              [
+                -119.802325,
+                48.88738
+              ],
+              [
+                -119.800384,
+                48.881263
+              ],
+              [
+                -119.77402,
+                48.872516
+              ],
+              [
+                -119.764168,
+                48.86255
+              ],
+              [
+                -119.763515,
+                48.867169
+              ],
+              [
+                -119.738117,
+                48.867271
+              ],
+              [
+                -119.743598,
+                48.881954
+              ],
+              [
+                -119.739247,
+                48.89008
+              ],
+              [
+                -119.731009,
+                48.884088
+              ],
+              [
+                -119.721885,
+                48.888638
+              ],
+              [
+                -119.700974,
+                48.884629
+              ],
+              [
+                -119.693268,
+                48.867302
+              ],
+              [
+                -119.675307,
+                48.869293
+              ],
+              [
+                -119.661352,
+                48.856689
+              ],
+              [
+                -119.660056,
+                48.838598
+              ],
+              [
+                -119.654049,
+                48.835533
+              ],
+              [
+                -119.658529,
+                48.829275
+              ],
+              [
+                -119.641551,
+                48.811683
+              ],
+              [
+                -119.652216,
+                48.795989
+              ],
+              [
+                -119.631297,
+                48.81652
+              ],
+              [
+                -119.605431,
+                48.815482
+              ],
+              [
+                -119.636328,
+                48.823528
+              ],
+              [
+                -119.633428,
+                48.826366
+              ],
+              [
+                -119.646887,
+                48.834906
+              ],
+              [
+                -119.643908,
+                48.849867
+              ],
+              [
+                -119.632698,
+                48.855182
+              ],
+              [
+                -119.601496,
+                48.849987
+              ],
+              [
+                -119.579502,
+                48.826177
+              ],
+              [
+                -119.561597,
+                48.825688
+              ],
+              [
+                -119.552071,
+                48.809209
+              ],
+              [
+                -119.571871,
+                48.815538
+              ],
+              [
+                -119.579852,
+                48.81439
+              ],
+              [
+                -119.555975,
+                48.804922
+              ],
+              [
+                -119.536586,
+                48.809882
+              ],
+              [
+                -119.531902,
+                48.800038
+              ],
+              [
+                -119.514394,
+                48.79495
+              ],
+              [
+                -119.496907,
+                48.777464
+              ],
+              [
+                -119.483921,
+                48.778773
+              ],
+              [
+                -119.483023,
+                48.774251
+              ],
+              [
+                -119.444658,
+                48.78231
+              ],
+              [
+                -119.438433,
+                48.765757
+              ],
+              [
+                -119.430955,
+                48.762818
+              ],
+              [
+                -119.43186,
+                48.736995
+              ],
+              [
+                -119.440201,
+                48.731767
+              ],
+              [
+                -119.455305,
+                48.701297
+              ],
+              [
+                -119.471127,
+                48.700975
+              ],
+              [
+                -119.493068,
+                48.686622
+              ],
+              [
+                -119.537408,
+                48.696708
+              ],
+              [
+                -119.51528,
+                48.673508
+              ],
+              [
+                -119.519834,
+                48.668681
+              ],
+              [
+                -119.516171,
+                48.659449
+              ],
+              [
+                -119.503607,
+                48.662975
+              ],
+              [
+                -119.48516,
+                48.658099
+              ],
+              [
+                -119.488272,
+                48.654692
+              ],
+              [
+                -119.480519,
+                48.648957
+              ],
+              [
+                -119.515739,
+                48.608177
+              ],
+              [
+                -119.520094,
+                48.59387
+              ],
+              [
+                -119.539244,
+                48.578479
+              ],
+              [
+                -119.541392,
+                48.58836
+              ],
+              [
+                -119.585987,
+                48.610392
+              ],
+              [
+                -119.580242,
+                48.626058
+              ],
+              [
+                -119.570063,
+                48.631237
+              ],
+              [
+                -119.558441,
+                48.627362
+              ],
+              [
+                -119.554019,
+                48.637094
+              ],
+              [
+                -119.532391,
+                48.648436
+              ],
+              [
+                -119.559917,
+                48.658261
+              ],
+              [
+                -119.614286,
+                48.659614
+              ],
+              [
+                -119.635403,
+                48.652544
+              ],
+              [
+                -119.643253,
+                48.636316
+              ],
+              [
+                -119.671833,
+                48.616973
+              ],
+              [
+                -119.684369,
+                48.611525
+              ],
+              [
+                -119.703248,
+                48.616425
+              ],
+              [
+                -119.706394,
+                48.62458
+              ],
+              [
+                -119.695819,
+                48.660955
+              ],
+              [
+                -119.683191,
+                48.678611
+              ],
+              [
+                -119.690509,
+                48.692093
+              ],
+              [
+                -119.717535,
+                48.667432
+              ],
+              [
+                -119.760532,
+                48.673719
+              ],
+              [
+                -119.77761,
+                48.669472
+              ],
+              [
+                -119.7645,
+                48.646972
+              ],
+              [
+                -119.774586,
+                48.641204
+              ],
+              [
+                -119.772302,
+                48.637015
+              ],
+              [
+                -119.795703,
+                48.634135
+              ],
+              [
+                -119.804478,
+                48.625018
+              ],
+              [
+                -119.817553,
+                48.631708
+              ],
+              [
+                -119.822907,
+                48.643392
+              ],
+              [
+                -119.857522,
+                48.659782
+              ],
+              [
+                -119.883124,
+                48.638003
+              ],
+              [
+                -119.89832,
+                48.645162
+              ],
+              [
+                -119.898828,
+                48.656586
+              ],
+              [
+                -119.908711,
+                48.656867
+              ],
+              [
+                -119.916194,
+                48.661508
+              ],
+              [
+                -119.904192,
+                48.661984
+              ],
+              [
+                -119.919123,
+                48.670644
+              ],
+              [
+                -119.904936,
+                48.676294
+              ],
+              [
+                -119.921391,
+                48.684371
+              ],
+              [
+                -119.904704,
+                48.695984
+              ],
+              [
+                -119.901087,
+                48.707334
+              ],
+              [
+                -119.912293,
+                48.72145
+              ],
+              [
+                -119.902366,
+                48.730432
+              ],
+              [
+                -119.881728,
+                48.728554
+              ],
+              [
+                -119.878956,
+                48.738845
+              ],
+              [
+                -119.854555,
+                48.730517
+              ],
+              [
+                -119.852331,
+                48.741034
+              ],
+              [
+                -119.843765,
+                48.739625
+              ],
+              [
+                -119.850219,
+                48.747222
+              ],
+              [
+                -119.839809,
+                48.748056
+              ],
+              [
+                -119.842419,
+                48.755739
+              ],
+              [
+                -119.833336,
+                48.754079
+              ],
+              [
+                -119.839047,
+                48.765092
+              ],
+              [
+                -119.831312,
+                48.769116
+              ],
+              [
+                -119.801448,
+                48.767231
+              ],
+              [
+                -119.777041,
+                48.745667
+              ],
+              [
+                -119.764972,
+                48.741301
+              ],
+              [
+                -119.746451,
+                48.746377
+              ],
+              [
+                -119.748084,
+                48.738254
+              ],
+              [
+                -119.739358,
+                48.735013
+              ],
+              [
+                -119.718234,
+                48.753343
+              ],
+              [
+                -119.69928,
+                48.751072
+              ],
+              [
+                -119.692044,
+                48.756156
+              ],
+              [
+                -119.696852,
+                48.749521
+              ],
+              [
+                -119.691837,
+                48.748216
+              ],
+              [
+                -119.678842,
+                48.759151
+              ],
+              [
+                -119.685167,
+                48.759424
+              ],
+              [
+                -119.683018,
+                48.767147
+              ],
+              [
+                -119.692327,
+                48.765867
+              ],
+              [
+                -119.70441,
+                48.777754
+              ],
+              [
+                -119.701324,
+                48.789405
+              ],
+              [
+                -119.717794,
+                48.788706
+              ],
+              [
+                -119.696831,
+                48.797666
+              ],
+              [
+                -119.716016,
+                48.796333
+              ],
+              [
+                -119.728187,
+                48.81347
+              ],
+              [
+                -119.735209,
+                48.806016
+              ],
+              [
+                -119.726339,
+                48.797511
+              ],
+              [
+                -119.73795,
+                48.79097
+              ],
+              [
+                -119.780855,
+                48.789937
+              ],
+              [
+                -119.798892,
+                48.795702
+              ],
+              [
+                -119.793666,
+                48.792538
+              ],
+              [
+                -119.808633,
+                48.790242
+              ],
+              [
+                -119.812675,
+                48.808313
+              ],
+              [
+                -119.80694,
+                48.812666
+              ],
+              [
+                -119.811685,
+                48.811906
+              ],
+              [
+                -119.811525,
+                48.817879
+              ],
+              [
+                -119.795745,
+                48.829223
+              ],
+              [
+                -119.822412,
+                48.842641
+              ],
+              [
+                -119.8337,
+                48.840654
+              ],
+              [
+                -119.851781,
+                48.848678
+              ],
+              [
+                -119.861879,
+                48.844527
+              ],
+              [
+                -119.879979,
+                48.851688
+              ],
+              [
+                -119.854931,
+                48.860659
+              ],
+              [
+                -119.835575,
+                48.860251
+              ],
+              [
+                -119.838044,
+                48.863813
+              ],
+              [
+                -119.827819,
+                48.858744
+              ],
+              [
+                -119.837139,
+                48.871959
+              ],
+              [
+                -119.856115,
+                48.877839
+              ],
+              [
+                -119.869288,
+                48.872276
+              ],
+              [
+                -119.882131,
+                48.884754
+              ],
+              [
+                -119.879458,
+                48.884733
+              ],
+              [
+                -119.878315,
+                48.887454
+              ],
+              [
+                -119.895524,
+                48.895501
+              ],
+              [
+                -119.894012,
+                48.898105
+              ],
+              [
+                -119.897225,
+                48.903051
+              ],
+              [
+                -119.888605,
+                48.899385
+              ],
+              [
+                -119.88937,
+                48.9116
+              ],
+              [
+                -119.893121,
+                48.911979
+              ],
+              [
+                -119.887228,
+                48.918082
+              ],
+              [
+                -119.889795,
+                48.91919
+              ],
+              [
+                -119.896814,
+                48.919898
+              ],
+              [
+                -119.901703,
+                48.919083
+              ],
+              [
+                -119.902997,
+                48.920736
+              ],
+              [
+                -119.900888,
+                48.921072
+              ],
+              [
+                -119.900026,
+                48.924499
+              ],
+              [
+                -119.906616,
+                48.925458
+              ],
+              [
+                -119.880823,
+                48.932787
+              ],
+              [
+                -119.879914,
+                48.936687
+              ],
+              [
+                -119.88346,
+                48.94005
+              ],
+              [
+                -119.880086,
+                48.946452
+              ],
+              [
+                -119.871283,
+                48.946994
+              ],
+              [
+                -119.87722,
+                48.953323
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.802942,
+                48.887682
+              ],
+              [
+                -119.802884,
+                48.887636
+              ],
+              [
+                -119.802888,
+                48.88764
+              ],
+              [
+                -119.802942,
+                48.887682
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.710893,
+                48.883407
+              ],
+              [
+                -119.709705,
+                48.883237
+              ],
+              [
+                -119.709848,
+                48.88349
+              ],
+              [
+                -119.710893,
+                48.883407
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.641824,
+                48.653566
+              ],
+              [
+                -119.639479,
+                48.651577
+              ],
+              [
+                -119.641334,
+                48.653842
+              ],
+              [
+                -119.641824,
+                48.653566
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.835313,
+                48.944217
+              ],
+              [
+                -119.83869,
+                48.944074
+              ],
+              [
+                -119.835389,
+                48.940911
+              ],
+              [
+                -119.835313,
+                48.944217
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.634386,
+                48.719673
+              ],
+              [
+                -119.63464,
+                48.726923
+              ],
+              [
+                -119.642889,
+                48.720642
+              ],
+              [
+                -119.634386,
+                48.719673
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -119.623512,
+                48.743534
+              ],
+              [
+                -119.626894,
+                48.735749
+              ],
+              [
+                -119.624884,
+                48.724674
+              ],
+              [
+                -119.609917,
+                48.735413
+              ],
+              [
+                -119.623512,
+                48.743534
+              ]
+            ]
+          ]
+        ]
+      },
+      "sourceIds": [
+        "wfigs"
+      ],
+      "status": "fallback"
+    },
+    "dem": {
+      "cog": "data/sinlahekin/dem.tif",
+      "bounds": [
+        -120.2955,
+        48.236,
+        -119.0545,
+        49.324
+      ],
+      "sourceIds": [
+        "copernicus-dem"
+      ],
+      "bytes": 5337672,
+      "sha256": "33dfbeb181edb9d79dbcae446893c0ea8c9c46a4f56506fce361afbb5ab6568d"
+    },
+    "impact": {
+      "geojson": "data/sinlahekin/impact.geojson",
+      "bytes": 319907,
+      "sha256": "2b47a2cc119504ece6f6e14f4302b2cf2ceddcf4c43381196fff6f265b6e37c1",
+      "counts": {
+        "buildings": 6285,
+        "buildings_near": 2543
+      },
+      "sourceIds": [
+        "overture"
+      ]
+    },
+    "landmarkReadings": {
+      "inside_perimeter": [
+        {
+          "label": "Burn minus forest, before",
+          "value": 1.1,
+          "unit": "dB",
+          "decimals": 1,
+          "layerId": "sar_before"
+        },
+        {
+          "label": "Burn minus forest, after",
+          "value": 0.1,
+          "unit": "dB",
+          "decimals": 1,
+          "layerId": "sar_after"
+        }
+      ]
+    }
+  }
+}

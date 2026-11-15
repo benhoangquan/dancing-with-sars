@@ -23,3 +23,75 @@ stretch_ratio = [0.0, 15.0]
 
 [discover]
 min_coverage = 0.9  # share of the study area a granule footprint must cover
+
+[perimeter]   # measured inside a mapped fire perimeter (nisar/perimeter.py), not per pixel
+provider = "wfigs"
+agency = "NIFC interagency"
+fire_name = "Sinlahekin"
+source_id = "wfigs"
+started = "2026-07-26"          # discovery date in WFIGS
+mapped = "2026-09-19"           # date of the perimeter polygon in WFIGS
+url = "https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Interagency_Perimeters_YearToDate/FeatureServer/0"
+catalog_url = "https://data-nifc.opendata.arcgis.com/datasets/nifc::wfigs-interagency-fire-perimeters-year-to-date"
+min_acres = 50000
+
+[[optical]]
+id = "optical_baseline"
+label = "Optical, summer 2025"
+mode = "median"
+window = ["2025-07-01", "2025-08-31"]
+
+[[optical]]
+id = "optical_smoke"
+label = "Optical, during the fire"
+mode = "scene"
+date = "2026-08-09"
+
+[[optical]]
+id = "optical_after"
+label = "Optical, after the fire"
+mode = "median"
+window = ["2026-09-15", "2026-10-31"]
+
+[impact]   # Layer 1: buildings near the perimeter (sar overture)
+area = [-119.92, 48.58, -119.43, 48.98]
+buildings = true
+building_points = true
+near_only = true   # draw only buildings near the perimeter; counts cover the whole area
+near_m = 1000
+
+[soundscape]   # Layer 5 (sar audio): forest, then wind and fire (synthesized: Commons had no free fire recording)
+before = { commons = "File:20090610 0 ambience.ogg", start_s = 20, label = "Forest birds" }
+after = { synth = "fire", label = "Wind and fire" }
+
+[flyover]
+duration = 20  # Act I; the last waypoint is the chapter's openingCamera (pitch 52)
+exaggeration = 1.5
+
+[[flyover.waypoints]]
+t = 0
+center = [-119.685, 48.752]
+zoom = 9.6
+pitch = 0
+bearing = 0
+
+[[flyover.waypoints]]
+t = 7
+center = [-119.685, 48.752]
+zoom = 10.3
+pitch = 45
+bearing = 20
+
+[[flyover.waypoints]]
+t = 14
+center = [-119.685, 48.752]
+zoom = 10.9
+pitch = 55
+bearing = 5
+
+[[flyover.waypoints]]
+t = 20
+center = [-119.685, 48.752]
+zoom = 11.2
+pitch = 52
+bearing = 0

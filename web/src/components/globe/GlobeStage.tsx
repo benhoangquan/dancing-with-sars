@@ -108,6 +108,23 @@ export default function GlobeStage({ chapters, watched, reduced }: Props) {
       ];
       markers.forEach((m) => m.addTo(map));
 
+      // Where pins crowd together at the current zoom, only the first keeps its label; the rest show it on hover.
+      const declutter = () => {
+        const kept: { x: number; y: number }[] = [];
+        for (const m of [...markers].sort((a, b) => b.getLngLat().lat - a.getLngLat().lat)) {
+          const p = map.project(m.getLngLat());
+          const el = m.getElement();
+          const crowded = kept.some((k) => Math.abs(k.x - p.x) < 150 && Math.abs(k.y - p.y) < 34);
+          if (crowded) el.dataset.crowded = "true";
+          else {
+            delete el.dataset.crowded;
+            kept.push(p);
+          }
+        }
+      };
+      map.on("move", declutter);
+      declutter();
+
       // Hero: the globe follows scroll progress and turns slowly until it settles.
       let spin = 0;
       let raf = 0;

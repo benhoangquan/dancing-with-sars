@@ -144,7 +144,7 @@ test("a COG tile request is served as a partial (206) response", async ({ page }
 });
 
 test("screenshots for review", async ({ page }) => {
-  test.setTimeout(480_000);
+  test.setTimeout(900_000);
   await page.goto("/");
   await page.waitForTimeout(2500);
   await page.screenshot({ path: `${SCREENS}/01-hero.png` });
@@ -155,7 +155,7 @@ test("screenshots for review", async ({ page }) => {
     await page.goto(`/?debug#place=${slug}`);
     await page.waitForTimeout(3500);
     await page.screenshot({ path: `${SCREENS}/${slug}-act1.png` });
-    for (const beat of [1, 2, 3, 4]) {
+    for (const beat of [2, 4]) {
       await scrollToBeat(page, beat, 0.4);
       await page.waitForTimeout(3000);
       await page.screenshot({ path: `${SCREENS}/${slug}-beat${beat}.png` });

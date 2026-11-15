@@ -1,6 +1,6 @@
 # Dancing with the SARs
 
-An interactive scrollytelling site for the 2026 NASA Space Apps Challenge. It turns NASA-ISRO NISAR L-band radar data into four short stories, each ending in a way to act.
+An interactive scrollytelling site for the 2026 NASA Space Apps Challenge. It turns NASA-ISRO NISAR L-band radar data into six short stories, each ending in a way to act.
 
 The reader starts on a white canvas with the Earth (NASA Blue Marble), scrolls into orbit, and picks a red pin on the hotspot globe. Each place has three acts: a 20-second terrain flyover, a radar stage with a before/after swipe, landmarks, roads and buildings, and an action sheet with vetted organizations and a "your city scale" comparison. Grey pins mark places NISAR data was checked for but gave no change we could defend.
 
@@ -9,6 +9,8 @@ The reader starts on a white canvas with the Earth (NASA Blue Marble), scrolls i
 | Forest | Rondônia, Brazil | HV backscatter falls where new clearings open (374 ha, 6.0 dB) | measured with NISAR |
 | Water | Demak, Indonesia | Water dark, walls bright: villages standing in tidal water | NISAR imagery; subsidence and land-loss figures cited from Deltares (2021) |
 | Fire | Okanagan, British Columbia | Inside the Quilpituk Creek fire perimeter, HV fell 0.8 dB relative to the forest around it | measured with NISAR, perimeter from BC Wildfire Service |
+| Fire | Sinlahekin fire, Washington | Inside the 67,181 ha perimeter, HV fell 1.0 dB relative to the land around it; 2,543 mapped buildings within 1 km | measured with NISAR, perimeter from NIFC WFIGS |
+| Fire | Little Giant fire, Washington | Inside the 69,975 ha perimeter, HV fell 1.0 dB and kept falling into October; 345 mapped buildings within 2 km | measured with NISAR, perimeter from NIFC WFIGS |
 | Fire | Crosswhite fire, Oregon | Inside the 143,690 ha perimeter, HV fell 1.0 dB relative to the land around it; 850 mapped buildings within 2 km | measured with NISAR, perimeter from NIFC WFIGS |
 
 ## Layout

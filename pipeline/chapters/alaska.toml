@@ -1,0 +1,63 @@
+slug = "alaska"
+collections = ["NISAR_L2_GCOV_V1", "NISAR_L2_GCOV_PROVISIONAL_V1", "NISAR_L2_GCOV_BETA_V1"]  # best maturity first
+product = "GCOV"
+bbox = [-164.8, 60.8, -163.2, 61.6]   # study area [west, south, east, north]; the chapter manifest takes over once one exists
+
+[windows]
+before = ["2026-06-17", "2026-07-11"]
+after = ["2026-09-09", "2026-10-03"]
+
+[series]
+start = "2026-06-17"
+count = 10
+
+[processing]
+max_dates = 8
+drop_threshold_db = 3.0   # HV before minus after, dB
+min_before_db = -15.0     # pixel must start as vegetation
+mmu_ha = 1.0
+stretch_hh = [-20.0, 0.0]
+stretch_hv = [-28.0, -8.0]
+stretch_ratio = [0.0, 15.0]
+
+[discover]
+min_coverage = 0.9  # share of the study area a granule footprint must cover
+
+[flyover]
+duration = 36
+exaggeration = 1.5
+
+[[flyover.waypoints]]
+t = 0
+center = [-164.000, 61.200]
+zoom = 8.4
+pitch = 0
+bearing = 0
+
+[[flyover.waypoints]]
+t = 8
+center = [-164.000, 61.200]
+zoom = 9.4
+pitch = 58
+bearing = -28
+
+[[flyover.waypoints]]
+t = 16
+center = [-164.000, 61.200]
+zoom = 10.3
+pitch = 55
+bearing = 10
+
+[[flyover.waypoints]]
+t = 26
+center = [-164.000, 61.200]
+zoom = 11.1
+pitch = 40
+bearing = 20
+
+[[flyover.waypoints]]
+t = 36
+center = [-164.000, 61.200]
+zoom = 9.2
+pitch = 0
+bearing = 0

@@ -26,6 +26,7 @@ export function layerRank(kind: Layer["kind"]): number {
     case "coherence":
       return 2;
     case "displacement":
+    case "speed":
       return 3;
     case "change":
       return 4;

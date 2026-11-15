@@ -74,3 +74,17 @@ Interface freeze: `schema/chapter.schema.json` changes are additive only (new op
 - **Legend colors come from the real composites** (forest `#B0D853`, pasture `#646E7A`, water `#3E457E`), not the fixture's.
 - **Tests no longer depend on which data the repo holds.** Negative tests start from a freshly built illustrative manifest (pipeline) or a frozen one (`web/tests/fixtures/rondonia.illustrative.json`). Both real builds run end to end offline on synthetic caches with only the optical step stubbed.
 - **`maturity_of`, drawer provenance.** Real chapters state "Measured from NISAR data", with a provisional-release caveat. Illustrative and fallback chapters keep their warnings.
+
+## 2026-11-14: milestone 3, the other catalog locations
+
+The user asked for the remaining catalog locations to be processed, with `okanagan` and `san-joaquin` kept illustrative. Each location was fetched and analyzed with the same rule as before: a "measured" claim needs compact patches, persistence across dates, a flat stable reference, and a position that fits the geography on the map. Results so far (every analysis ran on `NISAR_L2_*_PROVISIONAL_V1`):
+
+- **Madre de Dios (GCOV): no chapter.** The loss mask is 119 scattered patches of 8 ha or less, the size of speckle, not mining pits or clearings. Nothing coherent to aim a camera at.
+- **Demak (GCOV): no chapter.** The loss patches are inland rice paddies: median distance to the sea 14 km, none within 3 km of the coast. The area series stays high after the first drop and the stable reference is flat, so the signal is the crop cycle. The catalog story (mangrove and coastal land loss) is not in this data.
+- **Greenland (GOFF, track 131_A_037, 9 sequential pairs, 2026-06-23 to 2026-10-21): no chapter.** The reader, analysis and `SarSpeedDark` ramp are built and tested (`goff.py`, `goff_analysis.py`). The result does not reproduce:
+  - Two consecutive 12-day pairs differ by a median 37 to 54 percent per pixel over the ice at the product's SNR cutoff of 6. At SNR 20 or more they differ by 11 to 24 percent, but only about 7 percent of pixels qualify.
+  - The median map of five pairs against the median of the other four differs by a median 17 to 30 percent (90th percentile 45 to 90 percent), at every SNR cutoff tried (6, 10, 15).
+  - Offsets saturate at about 590 m (the search window): 49 m/day in a 12-day pair and 24.5 m/day in the 24-day pair, so the fast core is cut off and the series of the fastest point alternates between 18 and 45 m/day.
+  - Layer 2 gives the same saturation. Layer 3 (smoothed) agrees between pairs (median 9 percent difference where speed exceeds 5 m/day) but peaks at 8.9 m/day, several times below the speed of the outlet glaciers in this area.
+  - The maps show speckle across the trunk of the glacier in most pairs, with a coherent patch near the front only in some. A speed map from this would look like data without being data.
+  - The schema additions for it stay (`count`, `cm/month`, `m/day` units, `speed` layer and series kinds); they are additive and used by tests. The cache stays in `pipeline/cache/greenland`.

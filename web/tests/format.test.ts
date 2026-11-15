@@ -22,6 +22,7 @@ describe("format", () => {
     expect(formatStat(stat(5.5, "dB", 1))).toBe("5.5 dB");
     expect(formatStat(stat(55, "%", 0))).toBe("55%");
     expect(formatStat(stat(3.4, "cm/month", 1))).toBe("3.4 cm/month");
+    expect(formatStat(stat(38.5, "m/day", 1))).toBe("38.5 m/day");
     expect(formatStat(stat(10, "count", 0))).toBe("10");
     expect(unitSuffix("ratio")).toBe("");
   });

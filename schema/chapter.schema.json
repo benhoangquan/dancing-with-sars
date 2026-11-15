@@ -61,7 +61,7 @@
     "HttpsUrl": { "type": "string", "pattern": "^https://[^\\s]+$" },
     "Color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
     "Id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
-    "Unit": { "enum": ["dB", "cm", "ha", "m", "ratio", "%", "count", "cm/month"] },
+    "Unit": { "enum": ["dB", "cm", "ha", "m", "ratio", "%", "count", "cm/month", "m/day"] },
     "StageMode": { "enum": ["flyover", "radar", "split"] },
     "DataStatus": { "enum": ["real", "fallback", "illustrative"] },
     "Camera": {
@@ -195,7 +195,7 @@
       "required": ["id", "kind", "label", "date", "cog", "render", "preview", "bounds", "sourceIds", "status", "bytes", "sha256"],
       "properties": {
         "id": { "$ref": "#/$defs/Id" },
-        "kind": { "enum": ["sar-composite", "sar-db", "optical", "change", "displacement", "coherence"] },
+        "kind": { "enum": ["sar-composite", "sar-db", "optical", "change", "displacement", "coherence", "speed"] },
         "label": { "type": "string", "minLength": 1 },
         "date": { "$ref": "#/$defs/DateOrRange" },
         "cog": { "$ref": "#/$defs/AssetPath" },
@@ -222,7 +222,7 @@
         "id": { "$ref": "#/$defs/Id" },
         "label": { "type": "string", "minLength": 1 },
         "unit": { "$ref": "#/$defs/Unit" },
-        "kind": { "enum": ["hv-backscatter", "displacement", "affected-area"] },
+        "kind": { "enum": ["hv-backscatter", "displacement", "affected-area", "speed"] },
         "points": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/SeriesPoint" } },
         "reference": {
           "type": "object", "additionalProperties": false, "required": ["label", "points"],

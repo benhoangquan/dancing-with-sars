@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 
 const SCREENS = "e2e/__screens__";
@@ -18,13 +18,14 @@ async function scrollToBeat(page: Page, chapter: number, beat: number, fraction 
 
 const mode = (page: Page, name: string) => page.getByRole("radio", { name });
 
-test("loads with no console errors and shows the three chapters", async ({ page }) => {
+test("loads with no console errors and shows every chapter", async ({ page }) => {
   const problems: string[] = [];
   page.on("console", (m) => m.type() === "error" && problems.push(m.text()));
   page.on("pageerror", (e) => problems.push(String(e)));
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1, name: "Dancing with the SARs" })).toBeVisible();
-  await expect(page.locator('[data-section="header"] h2')).toHaveCount(3);
+  const chapters = readdirSync("public/chapters").filter((f) => f.endsWith(".json")).length;
+  await expect(page.locator('[data-section="header"] h2')).toHaveCount(chapters);
   await expect(page.locator(".maplibregl-canvas").first()).toBeVisible();
   await page.waitForLoadState("networkidle");
   expect(problems).toEqual([]);

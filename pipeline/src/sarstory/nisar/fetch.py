@@ -18,6 +18,7 @@ import numpy as np
 from ..config import CACHE_DIR, load_config
 from .discover import Report, discover
 from .gcov import Tile, read_tile
+from .goff import OffsetPair, read_offsets
 from .gunw import Pair, read_pair
 from .hdf5 import Fetch
 from .search import Acquisition, ChainChoice, Granule, StackChoice, acquisitions
@@ -130,6 +131,8 @@ def run(slug: str, *, report: Report | None = None, log=print) -> Path:
     report = report or discover(slug)
     if report.product == "GUNW":
         return run_gunw(slug, report, log)
+    if report.product == "GOFF":
+        return run_goff(slug, report, log)
     acqs = series_acquisitions(report, slug)
     fs, session = _session_tools()
     todo = [g for a in acqs for g in a.granules if not tile_path(slug, g.name).exists()]
@@ -197,6 +200,61 @@ def run_gunw(slug: str, report: Report, log=print) -> Path:
         save_pair(tile_path(slug, g.name), pair)
         usable = float(np.isfinite(pair.phase).mean())
         shape, secs = pair.phase.shape, time.time() - t
+        log(f"  [{i}/{len(todo)}] {g.start} to {g.end}: {shape}, {usable:.0%} usable, {secs:.0f}s")
+    index = {
+        "slug": slug,
+        "collection": sel.short_name,
+        "maturity": sel.maturity,
+        "stack": sel.choice.stack,
+        "pairs": [
+            {
+                "name": g.name,
+                "reference": g.start.isoformat(),
+                "secondary": g.end.isoformat(),
+                "size_mb": g.size_mb,
+            }
+            for g in pairs
+        ],
+    }
+    path = cache_dir(slug) / "pairs.json"
+    path.write_text(json.dumps(index, indent=1) + "\n", encoding="utf-8")
+    return cache_dir(slug)
+
+
+def save_offsets(path: Path, pair: OffsetPair) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    geo = np.array([pair.x0, pair.y0, pair.res, pair.epsg, pair.incidence_deg])
+    np.savez_compressed(path, along=pair.along_m, range=pair.range_m, snr=pair.snr, geo=geo)
+
+
+def load_offsets(path: Path) -> OffsetPair:
+    with np.load(path) as z:
+        x0, y0, res, epsg, inc = z["geo"]
+        return OffsetPair(
+            z["along"], z["range"], z["snr"], float(x0), float(y0), float(res), int(epsg), float(inc)
+        )
+
+
+def run_goff(slug: str, report: Report, log=print) -> Path:
+    """Fetch the sequential pixel-offset pairs of the chosen stack and write `pairs.json`."""
+    sel = report.selected
+    if not sel or not isinstance(sel.choice, ChainChoice):
+        raise RuntimeError(f"{slug}: discovery found no GOFF chain; step down the data ladder")
+    pairs = sel.choice.pairs
+    fs, session = _session_tools()
+    todo = [g for g in pairs if not tile_path(slug, g.name).exists()]
+    log(f"{slug}: {len(pairs)} offset pairs, {len(todo)} to fetch")
+    for i, g in enumerate(todo, 1):
+        t = time.time()
+        with (
+            fs.open(g.url, mode="rb", block_size=4 * 1024**2, cache_type="blockcache") as fobj,
+            h5py.File(fobj, "r") as h5,
+        ):
+            pair = read_offsets(h5, report.bbox, make_fetch(session, g.url))
+        if pair is None:
+            raise RuntimeError(f"{g.name}: the granule does not reach the study area")
+        save_offsets(tile_path(slug, g.name), pair)
+        usable, shape, secs = float(np.isfinite(pair.along_m).mean()), pair.along_m.shape, time.time() - t
         log(f"  [{i}/{len(todo)}] {g.start} to {g.end}: {shape}, {usable:.0%} usable, {secs:.0f}s")
     index = {
         "slug": slug,

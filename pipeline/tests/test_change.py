@@ -107,3 +107,19 @@ def test_dark_diverging_ramp_has_a_dark_neutral_middle_and_matches_the_web_stops
     ts = (Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "ramps.ts").read_text()
     block = re.search(r"SAR_DIVERGING_DARK[^\[]*\[(.*?)\]", ts, re.S).group(1)
     assert re.findall(r"#[0-9a-fA-F]{6}", block) == stops, "web and pipeline ramps must match"
+
+
+def test_speed_ramp_is_dark_for_still_ground_bright_for_fast_ice_and_matches_the_web_stops():
+    import re
+    from pathlib import Path
+
+    from sarstory.palettes import BREWER
+
+    stops = BREWER["SarSpeedDark"]
+    out = ramp_rgba(np.array([[0.0, 40.0, np.nan]]), "SarSpeedDark", (0, 40))
+    assert out[:3, 0, 0].tolist() == list(hex_to_rgb(stops[0])) and max(out[:3, 0, 0]) < 60
+    assert out[:3, 0, 1].tolist() == list(hex_to_rgb(stops[-1])) and min(out[:3, 0, 1]) > 200
+    assert out[3, 0].tolist() == [255, 255, 0]
+    ts = (Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "ramps.ts").read_text()
+    block = re.search(r"SAR_SPEED_DARK[^\[]*\[(.*?)\]", ts, re.S).group(1)
+    assert re.findall(r"#[0-9a-fA-F]{6}", block) == stops

@@ -78,7 +78,8 @@ def series_window(cfg: dict) -> tuple[str, str]:
 def discover(slug: str, *, search_fn: SearchFn = search, today: date | None = None) -> Report:
     """Search every configured collection, best maturity first, and choose a stack in each."""
     cfg = load_config(slug)
-    bbox = tuple(read_manifest(slug)["aoi"]["bbox"])
+    # A location still being assessed has no manifest yet; its box then lives in its config.
+    bbox = tuple(cfg["bbox"]) if "bbox" in cfg else tuple(read_manifest(slug)["aoi"]["bbox"])
     min_cov = cfg.get("discover", {}).get("min_coverage", 0.9)
     if cfg["product"] == "GCOV":
         win = {"before": tuple(cfg["windows"]["before"]), "after": tuple(cfg["windows"]["after"])}

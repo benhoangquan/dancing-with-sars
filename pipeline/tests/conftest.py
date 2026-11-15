@@ -5,11 +5,16 @@ import shutil
 import pytest
 
 from sarstory import fixture
-from sarstory.config import CHAPTERS_DIR
+from sarstory.config import CHAPTERS_DIR, load_config
 
 
 def manifest_slugs() -> list[str]:
     return sorted(p.stem for p in CHAPTERS_DIR.glob("*.json"))
+
+
+def fixture_slugs() -> list[str]:
+    """Chapters that define illustrative data. Chapters added later with real data only have no fixture."""
+    return [s for s in manifest_slugs() if "fixture" in load_config(s)]
 
 
 @pytest.fixture(scope="session")
@@ -26,7 +31,7 @@ def fixture_manifests(tmp_path_factory) -> dict[str, dict]:
     chapters = root / "public" / "chapters"
     chapters.mkdir(parents=True)
     out = {}
-    for slug in manifest_slugs():
+    for slug in fixture_slugs():
         shutil.copy(CHAPTERS_DIR / f"{slug}.json", chapters / f"{slug}.json")
         path = fixture.build_fixture(
             slug, data_dir=root / "public" / "data", chapters_dir=chapters, force=True

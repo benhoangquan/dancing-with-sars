@@ -21,6 +21,7 @@ const SUFFIX: Record<Unit, string> = {
   "%": "%",
   count: "",
   "cm/month": " cm/month",
+  "m/day": " m/day",
 };
 
 export const unitSuffix = (unit: Unit) => SUFFIX[unit];

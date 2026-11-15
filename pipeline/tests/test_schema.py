@@ -12,8 +12,8 @@ def test_schema_is_valid_2020_12():
     assert schema()["$schema"].endswith("2020-12/schema")
 
 
-def test_three_manifests_exist():
-    assert manifest_slugs() == ["okanagan", "rondonia", "san-joaquin"]
+def test_the_original_chapters_exist():
+    assert {"okanagan", "rondonia", "san-joaquin"} <= set(manifest_slugs())
 
 
 @pytest.mark.parametrize("slug", manifest_slugs())

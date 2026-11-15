@@ -49,6 +49,7 @@ BREWER = {
 # Diverging ramp for dark stages: a dark neutral at zero, warm for negative values, cool for positive
 # ones, brighter with magnitude. Keep in step with SAR_DIVERGING_DARK in web/src/lib/ramps.ts (a test
 # compares them).
+BREWER["SarSpeedDark"] = ["#0b1d33", "#17508a", "#2e9bd0", "#8fe0ef", "#f4feff"]  # keep in step with ramps.ts
 BREWER["SarDivergingDark"] = ["#ff7a59", "#b34a38", "#2c2c2e", "#3a6ea8", "#64b5ff"]
 
 

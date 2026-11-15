@@ -2,7 +2,7 @@ import json
 import shutil
 
 import pytest
-from conftest import manifest_slugs
+from conftest import fixture_slugs
 
 from sarstory import fixture
 from sarstory.config import CHAPTERS_DIR
@@ -16,13 +16,13 @@ def built(tmp_path_factory):
     root = tmp_path_factory.mktemp("fx")
     chapters = root / "public" / "chapters"
     chapters.mkdir(parents=True)
-    for s in manifest_slugs():
+    for s in fixture_slugs():
         shutil.copy(CHAPTERS_DIR / f"{s}.json", chapters / f"{s}.json")
         fixture.build_fixture(s, data_dir=root / "public" / "data", chapters_dir=chapters, force=True)
     return root
 
 
-@pytest.mark.parametrize("slug", manifest_slugs())
+@pytest.mark.parametrize("slug", fixture_slugs())
 def test_built_manifest_is_valid_and_assets_match(built, slug):
     obj = read_manifest(slug, built / "public" / "chapters")
     assert validate(obj) == []

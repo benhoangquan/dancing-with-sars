@@ -14,7 +14,7 @@ const illustrative: Manifest = JSON.parse(readFileSync(new URL("./fixtures/rondo
 const clone = (): Manifest => structuredClone(illustrative);
 
 describe("repo manifests", () => {
-  it("are the three chapters", () => expect(slugs).toEqual(["okanagan", "rondonia", "san-joaquin"]));
+  it("include the original chapters", () => expect(slugs).toEqual(expect.arrayContaining(["okanagan", "rondonia", "san-joaquin"])));
   for (const slug of slugs) {
     it(`${slug} passes schema, invariants and asset checks with no warnings`, () => {
       const { errors, warnings } = validateChapter(load(slug), publicDir);

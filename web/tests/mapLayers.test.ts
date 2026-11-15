@@ -25,6 +25,7 @@ describe("layer order", () => {
     expect(ranks).toEqual([...ranks].sort((a, b) => a - b));
     expect(new Set(ranks).size).toBe(5);
     expect(layerRank("sar-db")).toBe(layerRank("sar-composite"));
+    expect(layerRank("speed")).toBe(layerRank("displacement"));
   });
   it("inserts under the first layer of a higher rank, else under the hillshade", () => {
     const existing = [

@@ -9,7 +9,11 @@ export type Rgba = [number, number, number, number];
  *  magnitude. Stops are equally spaced over the layer's domain. Keep in step with palettes.py (a test compares). */
 export const SAR_DIVERGING_DARK = ["#ff7a59", "#b34a38", "#2c2c2e", "#3a6ea8", "#64b5ff"] as const;
 
-const CUSTOM: Record<string, readonly string[]> = { SarDivergingDark: SAR_DIVERGING_DARK };
+/** Sequential ramp for speed on a dark stage: near-black for still ground, bright for fast ice. Equally spaced stops.
+ *  Keep in step with palettes.py (a test compares). */
+export const SAR_SPEED_DARK = ["#0b1d33", "#17508a", "#2e9bd0", "#8fe0ef", "#f4feff"] as const;
+
+const CUSTOM: Record<string, readonly string[]> = { SarDivergingDark: SAR_DIVERGING_DARK, SarSpeedDark: SAR_SPEED_DARK };
 
 export const isCustomRamp = (render: Render) => render.type === "ramp" && render.scheme in CUSTOM;
 

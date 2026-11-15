@@ -38,7 +38,7 @@ export function StoryViewport({ chapters }: { chapters: Chapter[] }) {
       <Stage chapters={chapters} />
       <Hud chapter={chapter} beatIdx={beatIdx} beat={beat} mode={mode} visibleLayerIds={visibleLayerIds} />
       <main id="top" ref={root} data-story-root className="pointer-events-none relative z-20">
-        <Hero />
+        <Hero chapters={chapters.length} />
         {chapters.map((c, ci) => (
           <Fragment key={c.slug}>
             <ChapterHeader chapter={c} chapterIdx={ci} total={chapters.length} />

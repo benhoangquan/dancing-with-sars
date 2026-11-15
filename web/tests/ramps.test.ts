@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { colorFragment } from "@/lib/mapLayers";
-import { SAR_DIVERGING_DARK, customColorFunction, isCustomRamp, rampColor } from "@/lib/ramps";
+import { SAR_DIVERGING_DARK, SAR_SPEED_DARK, customColorFunction, isCustomRamp, rampColor } from "@/lib/ramps";
 import type { Layer } from "@/types/chapter";
 
 const render = (scheme: string): Layer["render"] => ({ type: "ramp", scheme, domain: [-15, 15], unit: "cm" });
@@ -39,5 +39,22 @@ describe("custom dark diverging ramp", () => {
     expect(isCustomRamp(render("SarDivergingDark"))).toBe(true);
     expect(colorFragment(render("SarDivergingDark"))).toBe("");
     expect(colorFragment(render("BrewerRdBu11"))).toBe("#color:BrewerRdBu11,-15,15,c");
+  });
+});
+
+describe("custom dark speed ramp", () => {
+  const domain: [number, number] = [0, 40];
+  it("is near-black for still ground and brightest for the fastest ice, and brightens steadily", () => {
+    const lum = (v: number) => rampColor(SAR_SPEED_DARK, domain, v).slice(0, 3).reduce((a, b) => a + b, 0);
+    expect(rampColor(SAR_SPEED_DARK, domain, 0)).toEqual([11, 29, 51, 255]);
+    expect(rampColor(SAR_SPEED_DARK, domain, 40)).toEqual([244, 254, 255, 255]);
+    for (const [a, b] of [[0, 10], [10, 20], [20, 30], [30, 40]]) expect(lum(b)).toBeGreaterThan(lum(a));
+    expect(rampColor(SAR_SPEED_DARK, domain, 400)).toEqual([244, 254, 255, 255]);
+  });
+  it("is registered as a project ramp", () => {
+    const render: Layer["render"] = { type: "ramp", scheme: "SarSpeedDark", domain, unit: "m/day" };
+    expect(isCustomRamp(render)).toBe(true);
+    expect(colorFragment(render)).toBe("");
+    expect(customColorFunction(render)).toBeDefined();
   });
 });

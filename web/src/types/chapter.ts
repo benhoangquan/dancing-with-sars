@@ -53,7 +53,7 @@ export type NumberPair = [number, number];
  * This interface was referenced by `Chapter`'s JSON-Schema
  * via the `definition` "Unit".
  */
-export type Unit = "dB" | "cm" | "ha" | "m" | "ratio" | "%" | "count" | "cm/month";
+export type Unit = "dB" | "cm" | "ha" | "m" | "ratio" | "%" | "count" | "cm/month" | "m/day";
 /**
  * This interface was referenced by `Chapter`'s JSON-Schema
  * via the `definition` "StageMode".
@@ -326,7 +326,7 @@ export interface Generated {
  */
 export interface Layer {
   id: Id;
-  kind: "sar-composite" | "sar-db" | "optical" | "change" | "displacement" | "coherence";
+  kind: "sar-composite" | "sar-db" | "optical" | "change" | "displacement" | "coherence" | "speed";
   label: string;
   date: DateOrRange;
   cog: AssetPath;
@@ -354,7 +354,7 @@ export interface Series {
   id: Id;
   label: string;
   unit: Unit;
-  kind: "hv-backscatter" | "displacement" | "affected-area";
+  kind: "hv-backscatter" | "displacement" | "affected-area" | "speed";
   /**
    * @minItems 2
    */

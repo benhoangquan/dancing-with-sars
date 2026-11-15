@@ -22,6 +22,11 @@ Provider, collection, maturity and use of every dataset the pipeline reads. NASA
 | `rondonia` | `NISAR_L2_GCOV_PROVISIONAL_V1` | `161_A`, frames 172 and 173 mosaicked | 2 before, 2 after | 14.9 GB (8 granules) |
 | `okanagan` | `NISAR_L2_GCOV_PROVISIONAL_V1` | `071_D`, frame 063 | 2 before, 2 after | 28.5 GB (4 granules of 7.1 GB, 40 MHz mode) |
 | `san-joaquin` | `NISAR_L2_GUNW_PROVISIONAL_V1` | `114_D_070` | 9 sequential interferograms, one with a 36-day baseline | 20.5 GB |
+| `madre-de-dios` | `NISAR_L2_GCOV_PROVISIONAL_V1` | `025_D` | see `pipeline/reports/madre-de-dios-availability.md` | |
+| `demak` | `NISAR_L2_GCOV_PROVISIONAL_V1` | `154_A` | see `pipeline/reports/demak-availability.md` | |
+| `sundarbans` | `NISAR_L2_GCOV_PROVISIONAL_V1` | `170_A`, frames 012 and 013 mosaicked | 8 dates, 16 granules | 62 GB |
+| `alaska` | `NISAR_L2_GCOV_PROVISIONAL_V1` | `064_A`, frames 032 and 033 mosaicked | 8 dates, 16 granules | 62 GB |
+| `greenland` | `NISAR_L2_GOFF_PROVISIONAL_V1` | `131_A_037` | 9 sequential offset pairs, 2026-06-23 to 2026-10-21 | 8.0 GB |
 
 Granules are full frames of 1.6 to 7.1 GB, so the pipeline reads only the study-area window from each HDF5 file rather than downloading them. Provisional products are calibrated but not final; the site labels every layer built from them with its maturity.
 
@@ -34,6 +39,11 @@ NISAR public L-band data covers acquisitions from 2026-06-17 onward (ASF DAAC no
 | `rondonia` | NISAR GCOV provisional, measured | HLS, real | **real** |
 | `okanagan` | fetched, no burn scar inside this box | not built | illustrative (see `docs/decisions.md`) |
 | `san-joaquin` | fetched, corrected, not yet reliable | not built | illustrative (see `docs/decisions.md`) |
+| `madre-de-dios` | fetched, only speckle-sized patches | not built | no chapter (see `docs/decisions.md`) |
+| `demak` | fetched, change is the rice crop cycle | not built | no chapter (see `docs/decisions.md`) |
+| `sundarbans` | fetched, the only drop is one acquisition's edge | not built | no chapter (see `docs/decisions.md`) |
+| `alaska` | fetched, scattered 3 ha patches, no feature | not built | no chapter (see `docs/decisions.md`) |
+| `greenland` | GOFF offsets fetched, pairs do not reproduce | not built | no chapter (see `docs/decisions.md`) |
 
 ## Licenses
 

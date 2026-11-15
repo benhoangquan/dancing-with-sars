@@ -1,0 +1,622 @@
+{
+  "schemaVersion": "1",
+  "slug": "demak",
+  "order": 2,
+  "theme": "water",
+  "accent": "#64D2FF",
+  "kicker": "Demak, Indonesia",
+  "title": "Where the sea moved in",
+  "dek": "On Java's north coast the ground is sinking faster than the sea is rising. Fishponds, rice fields and whole villages in Demak now stand in tidal water. NISAR's radar shows where land ends and water begins, through the cloud of the monsoon.",
+  "aoi": {
+    "bbox": [
+      110.4,
+      -7.05,
+      110.75,
+      -6.75
+    ],
+    "placeName": "Demak, Central Java",
+    "countryCode": "ID",
+    "iso3": "IDN"
+  },
+  "globe": {
+    "pin": [
+      110.575,
+      -6.9
+    ]
+  },
+  "openingCamera": {
+    "center": [
+      110.5,
+      -6.925
+    ],
+    "zoom": 11.9,
+    "pitch": 52,
+    "bearing": 15
+  },
+  "radar": {
+    "product": "GCOV",
+    "band": "L",
+    "mechanism": "specular-reflection",
+    "polarizations": [
+      "HH",
+      "HV"
+    ],
+    "explainer": "Calm water acts like a mirror for NISAR's L-band radar and reflects the signal away, so it shows dark. Walls and houses standing in water bounce it straight back and shine. That contrast maps where land ends and water begins, by day or night and through cloud."
+  },
+  "legend": [
+    {
+      "id": "sar_water",
+      "layerIds": [
+        "sar_2026"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#1E2D71"
+      },
+      "label": "Dark indigo",
+      "meaning": "Open water: the sea and flooded ponds reflect the radar away."
+    },
+    {
+      "id": "sar_fields",
+      "layerIds": [
+        "sar_2026"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#7B7A86"
+      },
+      "label": "Grey-violet",
+      "meaning": "Fields and pond banks: a medium echo from soil and low crops."
+    },
+    {
+      "id": "sar_villages",
+      "layerIds": [
+        "sar_2026"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#C3DF60"
+      },
+      "label": "Bright yellow-green",
+      "meaning": "Villages, trees and mangroves: buildings and trunks bounce the signal back strongly."
+    },
+    {
+      "id": "optical_land",
+      "layerIds": [
+        "optical_baseline",
+        "optical_2026"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#998D71"
+      },
+      "label": "Tan and green",
+      "meaning": "Land in natural colour: rice, gardens and villages."
+    },
+    {
+      "id": "optical_water",
+      "layerIds": [
+        "optical_baseline",
+        "optical_2026"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#1B5146"
+      },
+      "label": "Green-blue",
+      "meaning": "Sea and fishponds in natural colour."
+    }
+  ],
+  "beats": [
+    {
+      "id": "coast",
+      "eyebrow": "Demak, Central Java",
+      "headline": "A coast of ponds and villages",
+      "body": "East of Semarang, the coast of Demak is a patchwork of fishponds, rice fields and villages built only just above the sea.",
+      "stage": {
+        "mode": "flyover",
+        "flyover": {
+          "from": 0,
+          "to": 20,
+          "playback": "play-hold"
+        },
+        "left": "optical_2026",
+        "right": "sar_2026",
+        "swipe": 0.5
+      }
+    },
+    {
+      "id": "what_radar_sees",
+      "eyebrow": "How it works",
+      "headline": "Water goes dark, walls shine",
+      "body": "Drag the divider between the optical view and NISAR's radar. Calm water reflects the radar away and goes dark. Houses and trees bounce it back and shine, even where they stand in the sea.",
+      "stage": {
+        "mode": "radar",
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
+        "left": "optical_2026",
+        "right": "sar_2026",
+        "swipe": 0.5
+      }
+    },
+    {
+      "id": "then_now",
+      "eyebrow": "Then and now",
+      "headline": "Land the sea took",
+      "body": "On the left, the coast in the dry season of 2017. On the right, NISAR in 2026. Since 1984, about {fact:land_lost_ha} of Semarang and Demak has been lost to the sea.",
+      "stage": {
+        "mode": "radar",
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
+        "left": "optical_baseline",
+        "right": "sar_2026",
+        "swipe": 0.5
+      }
+    },
+    {
+      "id": "sinking",
+      "eyebrow": "Why",
+      "headline": "The ground is sinking",
+      "body": "Pumping groundwater compacts the soft delta soil. In Sayung district the ground sank by up to {fact:subsidence_max_cmyr} in surveys, far faster than the sea rises. NISAR's interferograms will measure this as the record grows; these figures come from published surveys.",
+      "stage": {
+        "mode": "radar",
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
+        "left": "optical_2026",
+        "right": "sar_2026",
+        "swipe": 0.5
+      }
+    },
+    {
+      "id": "act",
+      "eyebrow": "What helps",
+      "headline": "Let the mangroves come back",
+      "body": "Brushwood fences calm the waves and trap mud, so mangroves can take root again and hold the coast. Communities in Demak build them with the organizations on the next screen.",
+      "stage": {
+        "mode": "radar",
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
+        "left": "optical_2026",
+        "right": "sar_2026",
+        "swipe": 0.5
+      }
+    }
+  ],
+  "facts": [
+    {
+      "id": "land_lost_ha",
+      "value": 2534,
+      "unit": "ha",
+      "decimals": 0,
+      "label": "Land lost to the sea in Semarang and Demak since 1984",
+      "source": {
+        "name": "Deltares, Economic assessment of subsidence in Semarang and Demak, Indonesia (April 2021), for Building with Nature Indonesia",
+        "url": "https://www.ecoshape.org/app/uploads/sites/2/2017/08/Economic-assessment-of-subsidence-in-Semarang-and-Demak-Indonesia.pdf",
+        "accessed": "2026-11-15"
+      }
+    },
+    {
+      "id": "subsidence_max_cmyr",
+      "value": 13,
+      "unit": "cm/yr",
+      "decimals": 0,
+      "label": "Highest subsidence rate in Sayung district (2017)",
+      "source": {
+        "name": "Deltares, Economic assessment of subsidence in Semarang and Demak, Indonesia (April 2021), for Building with Nature Indonesia",
+        "url": "https://www.ecoshape.org/app/uploads/sites/2/2017/08/Economic-assessment-of-subsidence-in-Semarang-and-Demak-Indonesia.pdf",
+        "accessed": "2026-11-15"
+      }
+    },
+    {
+      "id": "subsidence_common_cmyr",
+      "value": 8,
+      "unit": "cm/yr",
+      "decimals": 0,
+      "label": "Subsidence exceeded in northern Semarang and Sayung",
+      "source": {
+        "name": "Deltares, Economic assessment of subsidence in Semarang and Demak, Indonesia (April 2021), for Building with Nature Indonesia",
+        "url": "https://www.ecoshape.org/app/uploads/sites/2/2017/08/Economic-assessment-of-subsidence-in-Semarang-and-Demak-Indonesia.pdf",
+        "accessed": "2026-11-15"
+      }
+    }
+  ],
+  "scaleAnchors": {
+    "land_lost_ha": "central-park",
+    "subsidence_max_cmyr": "per-decade"
+  },
+  "action": {
+    "headline": "Help the coast grow back",
+    "body": "About {fact:land_lost_ha} of this coast has been lost to the sea since 1984. These organizations restore mangroves with the communities who live there.",
+    "metrics": [
+      {
+        "label": "Land lost to the sea in Semarang and Demak since 1984",
+        "value": 2534,
+        "unit": "ha",
+        "source": {
+          "name": "Deltares, Economic assessment of subsidence in Semarang and Demak, Indonesia (April 2021), for Building with Nature Indonesia",
+          "url": "https://www.ecoshape.org/app/uploads/sites/2/2017/08/Economic-assessment-of-subsidence-in-Semarang-and-Demak-Indonesia.pdf",
+          "accessed": "2026-11-15"
+        }
+      },
+      {
+        "label": "Highest subsidence rate measured in Sayung (2017)",
+        "value": 13,
+        "unit": "cm/yr",
+        "source": {
+          "name": "Deltares, Economic assessment of subsidence in Semarang and Demak, Indonesia (April 2021), for Building with Nature Indonesia",
+          "url": "https://www.ecoshape.org/app/uploads/sites/2/2017/08/Economic-assessment-of-subsidence-in-Semarang-and-Demak-Indonesia.pdf",
+          "accessed": "2026-11-15"
+        }
+      }
+    ],
+    "organizations": [
+      {
+        "name": "Wetlands International",
+        "url": "https://www.wetlands.org/",
+        "focus": "Led Building with Nature Indonesia, which used brushwood fences and mangrove restoration on the Demak coast.",
+        "region": "Global, with an Indonesia office",
+        "cta": {
+          "label": "Donate to Wetlands International",
+          "url": "https://www.wetlands.org/donate-to-save-wetlands/"
+        },
+        "verified": {
+          "on": "2026-11-15",
+          "how": "HTTP 200 on homepage and donate page; Demak work confirmed on the EcoShape Building with Nature Indonesia page"
+        }
+      },
+      {
+        "name": "Blue Forests (Yayasan Hutan Biru)",
+        "url": "https://blue-forests.org/en/",
+        "focus": "Indonesian foundation for community mangrove restoration; worked in Demak through Building with Nature.",
+        "region": "Indonesia",
+        "cta": {
+          "label": "Visit Blue Forests",
+          "url": "https://blue-forests.org/en/"
+        },
+        "verified": {
+          "on": "2026-11-15",
+          "how": "HTTP 200 on homepage; Demak work stated on its site; no donate page, so the homepage is linked"
+        }
+      }
+    ],
+    "local": {
+      "headline": "Act where you live",
+      "body": "Sinking coasts are not only Demak's problem: many delta cities pump groundwater faster than it refills.",
+      "steps": [
+        "Find out where your tap water comes from, and whether its aquifer is being drawn down.",
+        "Support coastal wetlands and mangroves near you; they absorb waves and trap sediment.",
+        "Share this chapter: radar sees flooding through monsoon cloud."
+      ]
+    }
+  },
+  "generated": {
+    "pipelineVersion": "0.1.0+nisar-imagery",
+    "builtAt": "2026-11-15T08:18:01Z",
+    "layers": [
+      {
+        "id": "optical_baseline",
+        "kind": "optical",
+        "label": "Optical, dry season 2017",
+        "date": "2017-08-22/2017-11-10",
+        "cog": "data/demak/optical_baseline.tif",
+        "render": {
+          "type": "rgba"
+        },
+        "preview": "data/demak/optical_baseline.png",
+        "bounds": [
+          110.390625,
+          -7.362467,
+          111.09375,
+          -6.664608
+        ],
+        "sourceIds": [
+          "hls"
+        ],
+        "status": "real",
+        "bytes": 633311,
+        "sha256": "a283096f72d3142b3a91b68bf6fab272fe5fe115c02bfecf64d59f94722748f6"
+      },
+      {
+        "id": "optical_2026",
+        "kind": "optical",
+        "label": "Optical, dry season 2026",
+        "date": "2026-06-01/2026-10-11",
+        "cog": "data/demak/optical_2026.tif",
+        "render": {
+          "type": "rgba"
+        },
+        "preview": "data/demak/optical_2026.png",
+        "bounds": [
+          110.390625,
+          -7.362467,
+          111.09375,
+          -6.664608
+        ],
+        "sourceIds": [
+          "hls"
+        ],
+        "status": "real",
+        "bytes": 618928,
+        "sha256": "3687d54ac941086f3c07d25844029186b12e058ef47d4287f9c8b6d6791422d2"
+      },
+      {
+        "id": "sar_2026",
+        "kind": "sar-composite",
+        "label": "Radar composite, 2026",
+        "date": "2026-06-24/2026-09-28",
+        "cog": "data/demak/sar_2026.tif",
+        "render": {
+          "type": "rgba"
+        },
+        "stretch": {
+          "HH": [
+            -20.0,
+            0.0
+          ],
+          "HV": [
+            -28.0,
+            -8.0
+          ],
+          "ratio": [
+            0.0,
+            15.0
+          ]
+        },
+        "preview": "data/demak/sar_2026.png",
+        "bounds": [
+          110.390625,
+          -7.362467,
+          111.09375,
+          -6.664608
+        ],
+        "sourceIds": [
+          "nisar-gcov"
+        ],
+        "status": "real",
+        "bytes": 743478,
+        "sha256": "04cf529058b0449f865f6fc9aba71e5675edb8946550d685ae0bdbc59b3ccafc"
+      }
+    ],
+    "series": [],
+    "stats": {
+      "n_dates": {
+        "value": 8.0,
+        "unit": "count",
+        "decimals": 0,
+        "label": "Radar dates",
+        "method": "NISAR acquisition dates in the composite."
+      }
+    },
+    "flyover": {
+      "duration": 20,
+      "exaggeration": 1.5,
+      "waypoints": [
+        {
+          "t": 0,
+          "camera": {
+            "center": [
+              110.575,
+              -6.9
+            ],
+            "zoom": 9.6,
+            "pitch": 0,
+            "bearing": 0
+          }
+        },
+        {
+          "t": 7,
+          "camera": {
+            "center": [
+              110.54,
+              -6.91
+            ],
+            "zoom": 10.4,
+            "pitch": 45,
+            "bearing": 15
+          }
+        },
+        {
+          "t": 14,
+          "camera": {
+            "center": [
+              110.51,
+              -6.92
+            ],
+            "zoom": 11.2,
+            "pitch": 55,
+            "bearing": 20
+          }
+        },
+        {
+          "t": 20,
+          "camera": {
+            "center": [
+              110.5,
+              -6.925
+            ],
+            "zoom": 11.9,
+            "pitch": 52,
+            "bearing": 15
+          }
+        }
+      ]
+    },
+    "annotations": [],
+    "sources": [
+      {
+        "id": "nisar-gcov",
+        "mission": "NISAR",
+        "product": "L2 GCOV, geocoded polarimetric covariance (HH, HV)",
+        "collection": "NISAR_L2_GCOV_PROVISIONAL_V1",
+        "maturity": "provisional",
+        "granules": [
+          "NISAR_L2_PR_GCOV_023_154_A_174_4005_DHDH_A_20260624T222243_20260624T222317_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_024_154_A_174_4005_DHDH_A_20260706T222242_20260706T222317_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_025_154_A_174_4005_DHDH_A_20260718T222242_20260718T222316_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_027_154_A_174_4005_DHDH_A_20260811T222240_20260811T222315_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_028_154_A_174_4005_DHDH_A_20260823T222240_20260823T222314_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_029_154_A_174_4005_DHDH_A_20260904T222239_20260904T222314_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_030_154_A_174_4005_DHDH_A_20260916T222239_20260916T222314_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_031_154_A_174_4005_DHDH_A_20260928T222239_20260928T222314_P05023_N_F_J_001"
+        ],
+        "dates": [
+          "2026-06-24",
+          "2026-07-06",
+          "2026-07-18",
+          "2026-08-11",
+          "2026-08-23",
+          "2026-09-04",
+          "2026-09-16",
+          "2026-09-28"
+        ],
+        "provider": "NASA-ISRO, distributed by the ASF DAAC",
+        "license": "Open and free to use under NASA's Earth science data policy; cite NISAR and the ASF DAAC",
+        "url": "https://www.earthdata.nasa.gov/data/catalog/asf-nisar-l2-gcov-provisional-v1-1",
+        "nasa": true
+      },
+      {
+        "id": "hls",
+        "mission": "HLS",
+        "product": "Harmonized Landsat Sentinel-2 v2.0 (30 m)",
+        "collection": "HLSS30, HLSL30",
+        "maturity": "validated",
+        "granules": [
+          "HLS.L30.T49MDN.2017234T024748.v2.0",
+          "HLS.L30.T49MDN.2017250T024750.v2.0",
+          "HLS.L30.T49MDN.2017259T024139.v2.0",
+          "HLS.L30.T49MDN.2017266T024754.v2.0",
+          "HLS.L30.T49MDN.2017282T024800.v2.0",
+          "HLS.L30.T49MDN.2017291T024150.v2.0",
+          "HLS.L30.T49MDN.2017298T024801.v2.0",
+          "HLS.L30.T49MDN.2017307T024150.v2.0",
+          "HLS.L30.T49MDN.2017314T024759.v2.0",
+          "HLS.L30.T49MDN.2026179T024704.v2.0",
+          "HLS.L30.T49MDN.2026180T024102.v2.0",
+          "HLS.L30.T49MDN.2026195T024708.v2.0",
+          "HLS.L30.T49MDN.2026204T024104.v2.0",
+          "HLS.L30.T49MDN.2026259T024737.v2.0",
+          "HLS.L30.T49MDN.2026260T024130.v2.0",
+          "HLS.L30.T49MDN.2026267T024745.v2.0",
+          "HLS.L30.T49MDN.2026268T024131.v2.0",
+          "HLS.L30.T49MDN.2026275T024744.v2.0",
+          "HLS.L30.T49MDN.2026276T024139.v2.0",
+          "HLS.L30.T49MDN.2026284T024159.v2.0",
+          "HLS.S30.T49MDN.2026152T023531.v2.0",
+          "HLS.S30.T49MDN.2026160T024529.v2.0",
+          "HLS.S30.T49MDN.2026162T023531.v2.0",
+          "HLS.S30.T49MDN.2026170T024529.v2.0",
+          "HLS.S30.T49MDN.2026180T024529.v2.0",
+          "HLS.S30.T49MDN.2026202T023531.v2.0",
+          "HLS.S30.T49MDN.2026214T024151.v2.0",
+          "HLS.S30.T49MDN.2026220T024529.v2.0",
+          "HLS.S30.T49MDN.2026225T024521.v2.0",
+          "HLS.S30.T49MDN.2026227T025151.v2.0",
+          "HLS.S30.T49MDN.2026257T023529.v2.0",
+          "HLS.S30.T49MDN.2026272T023531.v2.0",
+          "HLS.S30.T49MDN.2026277T023529.v2.0"
+        ],
+        "dates": [
+          "2017-08-22",
+          "2017-09-07",
+          "2017-09-16",
+          "2017-09-23",
+          "2017-10-09",
+          "2017-10-18",
+          "2017-10-25",
+          "2017-11-03",
+          "2017-11-10",
+          "2026-06-01",
+          "2026-06-09",
+          "2026-06-11",
+          "2026-06-19",
+          "2026-06-28",
+          "2026-06-29",
+          "2026-07-14",
+          "2026-07-21",
+          "2026-07-23",
+          "2026-08-02",
+          "2026-08-08",
+          "2026-08-13",
+          "2026-08-15",
+          "2026-09-14",
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-29",
+          "2026-10-02",
+          "2026-10-03",
+          "2026-10-04",
+          "2026-10-11"
+        ],
+        "provider": "NASA and USGS, through Microsoft Planetary Computer",
+        "license": "Open and free to use under NASA's Earth science data policy",
+        "url": "https://www.earthdata.nasa.gov/data/projects/hls",
+        "nasa": true
+      },
+      {
+        "id": "cited",
+        "mission": "Published study",
+        "product": "Deltares, Economic assessment of subsidence in Semarang and Demak, Indonesia (April 2021), for Building with Nature Indonesia",
+        "collection": "n/a",
+        "maturity": "n/a",
+        "granules": [],
+        "dates": [
+          "2026-11-15"
+        ],
+        "provider": "Deltares, Economic assessment of subsidence in Semarang and Demak, Indonesia (April 2021), for Building with Nature Indonesia",
+        "license": "Cited, not redistributed",
+        "url": "https://www.ecoshape.org/app/uploads/sites/2/2017/08/Economic-assessment-of-subsidence-in-Semarang-and-Demak-Indonesia.pdf",
+        "nasa": false
+      }
+    ],
+    "footprint": {
+      "kind": "equal-area",
+      "label": "Land lost to the sea in Semarang and Demak since 1984",
+      "areaHa": 2534.0,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              110.552225,
+              -6.92261
+            ],
+            [
+              110.597775,
+              -6.92261
+            ],
+            [
+              110.597775,
+              -6.87739
+            ],
+            [
+              110.552225,
+              -6.87739
+            ],
+            [
+              110.552225,
+              -6.92261
+            ]
+          ]
+        ]
+      },
+      "sourceIds": [
+        "cited"
+      ],
+      "status": "fallback"
+    }
+  }
+}

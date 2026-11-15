@@ -13,6 +13,8 @@ from .nisar import discover as nisar_discover
 from .nisar import fetch as nisar_fetch
 from .nisar.build import build as nisar_build
 from .nisar.build_gunw import build as nisar_build_gunw
+from .nisar.build_imagery import build as nisar_build_imagery
+from .nisar.build_perimeter import build as nisar_build_perimeter
 
 
 def cmd_fixture(args: argparse.Namespace) -> int:
@@ -114,7 +116,13 @@ def cmd_build(args: argparse.Namespace) -> int:
     for slug in args.slugs:
         try:
             optical = "reuse" if args.reuse_optical else not args.no_optical
-            build_fn = nisar_build_gunw if load_config(slug)["product"] == "GUNW" else nisar_build
+            cfg = load_config(slug)
+            if "perimeter" in cfg:
+                build_fn = nisar_build_perimeter
+            elif cfg.get("real", {}).get("mode") == "imagery":
+                build_fn = nisar_build_imagery
+            else:
+                build_fn = nisar_build_gunw if cfg["product"] == "GUNW" else nisar_build
             path = build_fn(slug, optical=optical)
         except Exception as e:
             print(f"FAIL  {slug}: {type(e).__name__}: {e}", file=sys.stderr)

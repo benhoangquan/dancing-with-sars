@@ -23,10 +23,33 @@ stretch_ratio = [0.0, 15.0]
 [discover]
 min_coverage = 0.9  # share of the study area a granule footprint must cover
 
-[fixture]
-pattern = "burn"
-seed = 2202
-max_px = 640
+[perimeter]   # measured inside a mapped fire perimeter (nisar/perimeter.py), not per pixel
+fire_number = "K51402"
+fire_name = "Quilpituk Creek"
+started = "2026-08-02"          # BC Wildfire Service discovery date
+mapped = "2026-08-21"           # date of the final mapped perimeter
+wfs = "https://openmaps.gov.bc.ca/geo/pub/wfs"
+layer = "pub:WHSE_LAND_AND_NATURAL_RESOURCE.PROT_CURRENT_FIRE_POLYS_SP"
+incident_url = "https://wildfiresituation.nrs.gov.bc.ca/incidents?fireYear=2026&incidentNumber=K51402"
+catalog_url = "https://catalogue.data.gov.bc.ca/dataset/bc-wildfire-fire-perimeters-current"
+
+[[optical]]
+id = "optical_baseline"
+label = "Optical, summer 2025"
+mode = "median"
+window = ["2025-07-01", "2025-08-31"]
+
+[[optical]]
+id = "optical_smoke"
+label = "Optical, during the fire"
+mode = "scene"
+date = "2026-08-16"
+
+[[optical]]
+id = "optical_after"
+label = "Optical, after the fire"
+mode = "median"
+window = ["2026-09-01", "2026-10-15"]
 
 [flyover]
 duration = 20  # Act I; the last waypoint is the chapter's openingCamera (pitch 52)

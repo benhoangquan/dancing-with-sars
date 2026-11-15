@@ -43,25 +43,16 @@ def last(obj, series_id):
 
 def test_stats_are_physically_plausible_and_match_series_ends(built):
     chapters = built / "public" / "chapters"
-    ron, oka, sj = (read_manifest(s, chapters) for s in ("rondonia", "okanagan", "san-joaquin"))
+    ron, sj = (read_manifest(s, chapters) for s in ("rondonia", "san-joaquin"))
     assert 1_000 < stat(ron, "cleared_ha") < 50_000
     assert stat(ron, "hv_before_db") > stat(ron, "hv_after_db")
     assert stat(ron, "hv_drop_db") == pytest.approx(
         stat(ron, "hv_before_db") - stat(ron, "hv_after_db"), abs=0.11
     )
     assert last(ron, "hv_cleared") == pytest.approx(stat(ron, "hv_after_db"), abs=0.01)
-    assert 1_000 < stat(oka, "burned_ha") < 20_000
-    assert last(oka, "burned_area") == stat(oka, "burned_ha")
-    assert 0 < stat(oka, "smoke_cloud_pct") < 100
     assert 8 < stat(sj, "max_subsidence_cm") < 15
     assert last(sj, "displacement_hotspot") == pytest.approx(-stat(sj, "max_subsidence_cm"), abs=0.15)
     assert stat(sj, "n_pairs") == len(sj["generated"]["series"][0]["points"]) - 1
-
-
-def test_burned_area_series_is_cumulative(built):
-    oka = read_manifest("okanagan", built / "public" / "chapters")
-    values = [p["v"] for p in oka["generated"]["series"][0]["points"]]
-    assert values == sorted(values) and values[0] == 0
 
 
 def test_fixture_is_deterministic(built, tmp_path):

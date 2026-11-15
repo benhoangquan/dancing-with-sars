@@ -15,10 +15,9 @@ dependencies = [
     "planetary-computer>=1.0",
     "jsonschema>=4.23",
     "pillow>=11",
+    "shapely>=2.0",
+    "imageio-ffmpeg>=0.5",
 ]
-
-[project.optional-dependencies]
-flyover = ["pyvista>=0.44", "imageio-ffmpeg>=0.5"]
 
 [project.scripts]
 sar = "sarstory.cli:main"

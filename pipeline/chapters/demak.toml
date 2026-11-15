@@ -23,6 +23,22 @@ stretch_ratio = [0.0, 15.0]
 [discover]
 min_coverage = 0.9  # share of the study area a granule footprint must cover
 
+[real]
+mode = "imagery"                 # no defensible NISAR change here (rice cycle); numbers come from cited facts
+footprint_fact = "land_lost_ha"   # the city-scale square uses this cited area
+
+[[optical]]
+id = "optical_baseline"
+label = "Optical, dry season 2017"
+mode = "median"
+window = ["2017-08-01", "2017-11-15"]
+
+[[optical]]
+id = "optical_2026"
+label = "Optical, dry season 2026"
+mode = "median"
+window = ["2026-06-01", "2026-10-15"]
+
 [flyover]
 duration = 20  # Act I; the last waypoint is the chapter's openingCamera (pitch 52)
 exaggeration = 1.5

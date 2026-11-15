@@ -1,23 +1,34 @@
 {
   "schemaVersion": "1",
   "slug": "okanagan",
-  "order": 2,
+  "order": 3,
   "theme": "fire",
   "accent": "#FF9F0A",
   "kicker": "Okanagan, British Columbia",
   "title": "Seeing through the smoke",
-  "dek": "Smoke hides a burning hillside from optical satellites. L-band radar passes through it and measures how much canopy the fire took.",
+  "dek": "In August 2026 the Quilpituk Creek fire burned above Okanagan Lake while smoke hid the hills from optical satellites. L-band radar sees through smoke, and inside the fire's mapped perimeter it recorded the forest's echo falling.",
   "aoi": {
-    "bbox": [-119.85, 49.75, -119.15, 50.25],
+    "bbox": [
+      -119.85,
+      49.75,
+      -119.15,
+      50.25
+    ],
     "placeName": "Okanagan Valley",
     "countryCode": "CA",
     "iso3": "CAN"
   },
   "globe": {
-    "pin": [-119.5, 50.0]
+    "pin": [
+      -119.5,
+      50.0
+    ]
   },
   "openingCamera": {
-    "center": [-119.53, 50.08],
+    "center": [
+      -119.53,
+      50.08
+    ],
     "zoom": 11.6,
     "pitch": 52,
     "bearing": -20
@@ -26,169 +37,246 @@
     "product": "GCOV",
     "band": "L",
     "mechanism": "volume-scattering-loss",
-    "polarizations": ["HH", "HV"],
-    "explainer": "L-band radar passes through smoke and cloud. Standing forest scatters it back strongly in the HV channel. A burned stand keeps its trunks but loses needles, twigs and branches, so HV falls. Water acts like a mirror and returns almost nothing, so lakes look dark."
+    "polarizations": [
+      "HH",
+      "HV"
+    ],
+    "explainer": "NISAR's L-band radar (24 cm waves) passes through smoke and cloud. Its cross-polarized HV echo comes from branches and trunks, so when fire thins a canopy the HV echo weakens. Measured over a whole perimeter, that drop stands out from the noise of single pixels."
   },
   "legend": [
     {
       "id": "sar_forest",
-      "layerIds": ["sar_before", "sar_after"],
-      "swatch": { "kind": "solid", "color": "#A6C263" },
+      "layerIds": [
+        "sar_before",
+        "sar_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#C7E85B"
+      },
       "label": "Yellow-green",
-      "meaning": "Standing forest, strong HV return."
+      "meaning": "Forest: the radar signal scatters around inside the canopy and returns strong in HV."
     },
     {
-      "id": "sar_burn",
-      "layerIds": ["sar_before", "sar_after"],
-      "swatch": { "kind": "solid", "color": "#868091" },
-      "label": "Grey-violet",
-      "meaning": "Burned forest. The canopy that scattered the radar is gone, so HV falls."
+      "id": "sar_open",
+      "layerIds": [
+        "sar_before",
+        "sar_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#859574"
+      },
+      "label": "Grey-green",
+      "meaning": "Open slopes, grass and towns: less canopy, so a weaker HV echo."
     },
     {
       "id": "sar_water",
-      "layerIds": ["sar_before", "sar_after"],
-      "swatch": { "kind": "solid", "color": "#000D55" },
-      "label": "Dark navy",
-      "meaning": "Open water. It reflects the radar away from the satellite, so almost nothing returns."
-    },
-    {
-      "id": "optical_ground",
-      "layerIds": ["optical_before"],
-      "swatch": { "kind": "solid", "color": "#1E4824" },
-      "label": "Dark green",
-      "meaning": "Forest canopy in visible light."
+      "layerIds": [
+        "sar_before",
+        "sar_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#2C406D"
+      },
+      "label": "Indigo",
+      "meaning": "Okanagan Lake: calm water reflects the radar away, so almost nothing returns."
     },
     {
       "id": "optical_smoke",
-      "layerIds": ["optical_smoke"],
-      "swatch": { "kind": "solid", "color": "#C4BEB8" },
-      "label": "Grey haze",
-      "meaning": "Smoke between the satellite and the ground. Optical sensors cannot see through it."
-    },
-    {
-      "id": "optical_glow",
-      "layerIds": ["optical_smoke"],
-      "swatch": { "kind": "solid", "color": "#FF8C28" },
-      "label": "Orange glow",
-      "meaning": "Hot spots along the edge of the fire."
-    },
-    {
-      "id": "hv_drop",
-      "layerIds": ["hv_change"],
+      "layerIds": [
+        "optical_smoke"
+      ],
       "swatch": {
-        "kind": "ramp",
-        "stops": ["#ffffcc", "#fed976", "#fd8d3c", "#e31a1c", "#800026"],
-        "domain": [2, 10],
-        "unit": "dB"
+        "kind": "solid",
+        "color": "#FCFDFB"
       },
-      "label": "HV drop",
-      "meaning": "How many decibels the HV signal fell between the two windows. Only pixels with a clear drop from forest are drawn."
+      "label": "Grey-white haze",
+      "meaning": "Smoke and cloud on the day of the optical scene. The ground under it is hidden."
+    },
+    {
+      "id": "optical_scar",
+      "layerIds": [
+        "optical_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#625749"
+      },
+      "label": "Brown",
+      "meaning": "Burned slopes after the fire, visible once the smoke cleared."
+    },
+    {
+      "id": "optical_forest",
+      "layerIds": [
+        "optical_baseline",
+        "optical_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#5E674E"
+      },
+      "label": "Dark green",
+      "meaning": "Forest in natural colour."
     }
   ],
   "beats": [
     {
       "id": "valley",
       "eyebrow": "Okanagan, British Columbia",
-      "headline": "A valley in a dry summer",
-      "body": "In August 2026 wildfires burned in the Okanagan, in forest above the lakes. This view starts from the ground before the fires.",
+      "headline": "Forest above the lake",
+      "body": "The hills west of Okanagan Lake are dry pine and fir forest. This is the summer before the fire, in natural colour.",
       "stage": {
         "mode": "flyover",
-        "flyover": { "from": 0, "to": 20, "playback": "play-hold" },
-        "left": "optical_before",
+        "flyover": {
+          "from": 0,
+          "to": 20,
+          "playback": "play-hold"
+        },
+        "left": "optical_baseline",
         "right": "sar_before",
         "swipe": 0.5
       }
     },
     {
       "id": "smoke",
-      "eyebrow": "Optical meets smoke",
+      "eyebrow": "During the fire",
       "headline": "Smoke hides the ground",
-      "body": "About {stat:smoke_cloud_pct} of this optical scene sits under haze. Radar is not affected: it measures the ground through the smoke.",
+      "body": "Two weeks after the fire was reported, {stat:smoke_cloud_pct} of this optical scene is flagged as smoke or cloud. Drag the divider: the radar view of the same hills, through the haze.",
       "stage": {
         "mode": "radar",
-        "flyover": { "from": 20, "to": 20, "playback": "play-hold" },
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
         "left": "optical_smoke",
-        "right": "sar_after",
+        "right": "sar_before",
         "swipe": 0.5,
-        "annotations": ["water_dark"]
+        "annotations": [
+          "fire_perimeter"
+        ]
       }
     },
     {
       "id": "scar",
-      "eyebrow": "Between two radar passes",
-      "headline": "The scar in the signal",
-      "body": "The same hillsides, before and after. Where the canopy burned, HV fell by {stat:hv_drop_db} on average. Lakes stay dark in both: water reflects radar away.",
+      "eyebrow": "Between radar passes",
+      "headline": "The echo inside the perimeter",
+      "body": "Before and after, the same hills. Inside the perimeter BC Wildfire Service mapped, the HV echo fell by {stat:burn_hv_drop_db} relative to the forest around it.",
       "stage": {
         "mode": "radar",
-        "flyover": { "from": 20, "to": 20, "playback": "play-hold" },
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
         "left": "sar_before",
         "right": "sar_after",
         "swipe": 0.5,
-        "overlays": ["hv_change"],
-        "annotations": ["burn_scar", "water_dark"]
+        "annotations": [
+          "fire_perimeter"
+        ],
+        "camera": {
+          "center": [
+            -119.53,
+            50.08
+          ],
+          "zoom": 12.2,
+          "pitch": 40,
+          "bearing": -10
+        }
       },
-      "readout": { "seriesId": "burned_area", "statKey": "hv_drop_db" }
+      "readout": {
+        "seriesId": "hv_burned",
+        "statKey": "burn_hv_drop_db"
+      }
     },
     {
       "id": "measured",
       "eyebrow": "Measured",
-      "headline": "Counting what burned",
-      "body": "The burn scar covers {stat:burned_ha} of the study area. The series shows burned area growing radar date by radar date, across {stat:n_dates} dates.",
+      "headline": "Bigger than chance",
+      "body": "Copies of the same outline moved onto unburned forest in this scene change by about {stat:placebo_sd_db} either way. The fire's drop is far outside that spread. The perimeter itself covers {stat:burned_ha}.",
       "stage": {
         "mode": "radar",
-        "flyover": { "from": 20, "to": 20, "playback": "play-hold" },
-        "left": "optical_before",
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
+        "left": "optical_after",
         "right": "sar_after",
         "swipe": 0.5,
-        "overlays": ["hv_change"],
-        "annotations": ["burn_scar"]
+        "annotations": [
+          "fire_perimeter"
+        ],
+        "camera": {
+          "center": [
+            -119.53,
+            50.08
+          ],
+          "zoom": 12.2,
+          "pitch": 40,
+          "bearing": -10
+        }
       },
-      "readout": { "seriesId": "burned_area", "statKey": "burned_ha" }
+      "readout": {
+        "seriesId": "hv_burned",
+        "statKey": "burned_ha"
+      }
     },
     {
       "id": "act",
       "eyebrow": "What helps",
       "headline": "Help burned forest recover",
-      "body": "A burn scar is the start of recovery work: replanting, erosion control and forest management. Two organizations fund reforestation.",
+      "body": "After a fire, slopes need replanting and protection from erosion before the rains. Two organizations fund that work.",
       "stage": {
         "mode": "radar",
-        "flyover": { "from": 20, "to": 20, "playback": "play-hold" },
-        "left": "optical_before",
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
+        "left": "optical_after",
         "right": "sar_after",
         "swipe": 0.5
       }
     }
   ],
-  "scaleAnchors": { "burned_ha": "central-park", "hv_drop_db": "echo-power" },
+  "scaleAnchors": {
+    "burned_ha": "central-park",
+    "burn_hv_drop_db": "echo-power",
+    "placebo_sd_db": "echo-power"
+  },
   "action": {
     "headline": "Help burned forest recover",
-    "body": "This analysis mapped {stat:burned_ha} of burn scar in the study area. These organizations fund tree planting and forest restoration.",
+    "body": "The mapped perimeter of the Quilpituk Creek fire encloses {stat:burned_ha} above Okanagan Lake. These organizations fund replanting and forest restoration.",
     "metrics": [
       {
-        "label": "Burned area in the study area",
+        "label": "Area inside the mapped perimeter",
         "statKey": "burned_ha",
         "source": {
-          "name": "This project: NISAR L2 GCOV, HV drop mask",
-          "url": "https://nisar-docs.asf.alaska.edu/gcov/",
-          "accessed": "2026-11-14"
+          "name": "BC Wildfire Service fire perimeters",
+          "url": "https://catalogue.data.gov.bc.ca/dataset/bc-wildfire-fire-perimeters-current",
+          "accessed": "2026-11-15"
         }
       },
       {
-        "label": "Average HV drop in the burn scar",
-        "statKey": "hv_drop_db",
+        "label": "HV drop inside, relative to the forest around it",
+        "statKey": "burn_hv_drop_db",
         "source": {
-          "name": "This project: NISAR L2 GCOV, HV drop mask",
+          "name": "This project: NISAR L2 GCOV inside the BC Wildfire Service perimeter",
           "url": "https://nisar-docs.asf.alaska.edu/gcov/",
-          "accessed": "2026-11-14"
+          "accessed": "2026-11-15"
         }
       },
       {
-        "label": "Optical scene under smoke",
+        "label": "Optical scene under smoke or cloud",
         "statKey": "smoke_cloud_pct",
         "source": {
-          "name": "This project: HLS Fmask haze share",
-          "url": "https://nisar-docs.asf.alaska.edu/gcov/",
-          "accessed": "2026-11-14"
+          "name": "This project: HLS Fmask share, 2026-08-16",
+          "url": "https://hls.gsfc.nasa.gov/",
+          "accessed": "2026-11-15"
         }
       }
     ],
@@ -198,7 +286,10 @@
         "url": "https://onetreeplanted.org/",
         "focus": "Environmental nonprofit that plants trees around the world.",
         "region": "Worldwide, including the United States and Canada",
-        "cta": { "label": "Plant trees with One Tree Planted", "url": "https://onetreeplanted.org/" },
+        "cta": {
+          "label": "Plant trees with One Tree Planted",
+          "url": "https://onetreeplanted.org/"
+        },
         "verified": {
           "on": "2026-11-14",
           "how": "HTTP 200 on homepage; the guessed donate path returned 404, so the homepage is linked"
@@ -209,8 +300,14 @@
         "url": "https://www.americanforests.org/",
         "focus": "Oldest national nonprofit conservation organization in the United States, working for healthy forests.",
         "region": "United States",
-        "cta": { "label": "Support American Forests", "url": "https://www.americanforests.org/" },
-        "verified": { "on": "2026-11-14", "how": "HTTP 200 on homepage; region read from its About page" }
+        "cta": {
+          "label": "Support American Forests",
+          "url": "https://www.americanforests.org/"
+        },
+        "verified": {
+          "on": "2026-11-14",
+          "how": "HTTP 200 on homepage; region read from its About page"
+        }
       }
     ],
     "local": {
@@ -224,145 +321,271 @@
     }
   },
   "generated": {
-    "pipelineVersion": "0.1.0+fixture",
-    "builtAt": "2026-11-15T08:02:49Z",
+    "pipelineVersion": "0.1.0+nisar-perimeter",
+    "builtAt": "2026-11-15T08:13:08Z",
     "layers": [
       {
-        "id": "optical_before",
+        "id": "optical_baseline",
         "kind": "optical",
-        "label": "Optical, before",
-        "date": "2026-06-17/2026-07-11",
-        "cog": "data/okanagan/optical_before.tif",
-        "render": { "type": "rgba" },
-        "preview": "data/okanagan/optical_before.png",
-        "bounds": [-120.234375, 49.382373, -118.828125, 50.289339],
-        "sourceIds": ["synthetic"],
-        "status": "illustrative",
-        "bytes": 494255,
-        "sha256": "aa4d8ea0143ec726f0e512fc9b17d23f1ba78fa781a1484ee3629a6a7a90e708"
+        "label": "Optical, summer 2025",
+        "date": "2025-07-02/2025-08-26",
+        "cog": "data/okanagan/optical_baseline.tif",
+        "render": {
+          "type": "rgba"
+        },
+        "preview": "data/okanagan/optical_baseline.png",
+        "bounds": [
+          -119.882813,
+          49.61071,
+          -118.828125,
+          50.289339
+        ],
+        "sourceIds": [
+          "hls"
+        ],
+        "status": "real",
+        "bytes": 3279221,
+        "sha256": "d671a34a970040367e619aef6ce4b41586b2a65e3f1cd7efe7921340699644d7"
       },
       {
         "id": "optical_smoke",
         "kind": "optical",
-        "label": "Optical, smoke",
+        "label": "Optical, during the fire",
         "date": "2026-08-16",
         "cog": "data/okanagan/optical_smoke.tif",
-        "render": { "type": "rgba" },
+        "render": {
+          "type": "rgba"
+        },
         "preview": "data/okanagan/optical_smoke.png",
-        "bounds": [-120.234375, 49.382373, -118.828125, 50.289339],
-        "sourceIds": ["synthetic"],
-        "status": "illustrative",
-        "bytes": 418297,
-        "sha256": "e93ad6237bf93bbdc18a72a9961f0356ac6ee1a519993c939867cf6b5db54bbb"
+        "bounds": [
+          -119.882813,
+          49.61071,
+          -118.828125,
+          50.289339
+        ],
+        "sourceIds": [
+          "hls"
+        ],
+        "status": "real",
+        "bytes": 3378119,
+        "sha256": "ac21e571cdb3361b33357ff2fbdb99f3cfa4815403f993edc8009505cccd546a"
+      },
+      {
+        "id": "optical_after",
+        "kind": "optical",
+        "label": "Optical, after the fire",
+        "date": "2026-09-01/2026-10-11",
+        "cog": "data/okanagan/optical_after.tif",
+        "render": {
+          "type": "rgba"
+        },
+        "preview": "data/okanagan/optical_after.png",
+        "bounds": [
+          -119.882813,
+          49.61071,
+          -118.828125,
+          50.289339
+        ],
+        "sourceIds": [
+          "hls"
+        ],
+        "status": "real",
+        "bytes": 3324785,
+        "sha256": "034ad154ed9dbfa888872affd4aa17c48f7a1fa9f5e2446605e0f71c58668c1f"
       },
       {
         "id": "sar_before",
         "kind": "sar-composite",
-        "label": "Radar composite, before",
-        "date": "2026-06-17/2026-07-11",
+        "label": "Radar composite, before the fire",
+        "date": "2026-06-19/2026-07-25",
         "cog": "data/okanagan/sar_before.tif",
-        "render": { "type": "rgba" },
+        "render": {
+          "type": "rgba"
+        },
         "stretch": {
-          "HH": [-20.0, 0.0],
-          "HV": [-28.0, -8.0],
-          "ratio": [0.0, 15.0]
+          "HH": [
+            -20.0,
+            0.0
+          ],
+          "HV": [
+            -28.0,
+            -8.0
+          ],
+          "ratio": [
+            0.0,
+            15.0
+          ]
         },
         "preview": "data/okanagan/sar_before.png",
-        "bounds": [-120.234375, 49.382373, -118.828125, 50.289339],
-        "sourceIds": ["synthetic"],
-        "status": "illustrative",
-        "bytes": 731633,
-        "sha256": "65eeaa3ab88b3b7a5a2cc47297f6b410cb3a21a1c7e4b45957298da8d02180e3"
+        "bounds": [
+          -119.882813,
+          49.61071,
+          -118.828125,
+          50.289339
+        ],
+        "sourceIds": [
+          "nisar-gcov"
+        ],
+        "status": "real",
+        "bytes": 3880198,
+        "sha256": "5813b3c79748f8c048031174e2aac18422045880ba2e38731476b4e603f902b3"
       },
       {
         "id": "sar_after",
         "kind": "sar-composite",
-        "label": "Radar composite, after",
-        "date": "2026-09-09/2026-10-03",
+        "label": "Radar composite, after the fire",
+        "date": "2026-08-30/2026-09-23",
         "cog": "data/okanagan/sar_after.tif",
-        "render": { "type": "rgba" },
+        "render": {
+          "type": "rgba"
+        },
         "stretch": {
-          "HH": [-20.0, 0.0],
-          "HV": [-28.0, -8.0],
-          "ratio": [0.0, 15.0]
+          "HH": [
+            -20.0,
+            0.0
+          ],
+          "HV": [
+            -28.0,
+            -8.0
+          ],
+          "ratio": [
+            0.0,
+            15.0
+          ]
         },
         "preview": "data/okanagan/sar_after.png",
-        "bounds": [-120.234375, 49.382373, -118.828125, 50.289339],
-        "sourceIds": ["synthetic"],
-        "status": "illustrative",
-        "bytes": 733863,
-        "sha256": "895e95f959d1eceb3db60e2acb1dcc5d493c6f9c29df4bf58435ef5fd87fe5ff"
-      },
-      {
-        "id": "hv_change",
-        "kind": "change",
-        "label": "Radar HV drop",
-        "date": "2026-06-17/2026-10-03",
-        "cog": "data/okanagan/hv_change.tif",
-        "render": {
-          "type": "ramp",
-          "scheme": "BrewerYlOrRd9",
-          "domain": [2, 10],
-          "unit": "dB"
-        },
-        "preview": "data/okanagan/hv_change.png",
-        "bounds": [-120.234375, 49.382373, -118.828125, 50.289339],
-        "sourceIds": ["synthetic"],
-        "status": "illustrative",
-        "bytes": 59561,
-        "sha256": "dc8d1c90b3572492d21edb345307cbe9398fffed77299f2b7716dff9a6859dc4"
+        "bounds": [
+          -119.882813,
+          49.61071,
+          -118.828125,
+          50.289339
+        ],
+        "sourceIds": [
+          "nisar-gcov"
+        ],
+        "status": "real",
+        "bytes": 3945547,
+        "sha256": "65a13f14a84f4034ee1567f378b72111d0e5b3dedaae56bc3ab767fcc355aa0c"
       }
     ],
     "series": [
       {
-        "id": "burned_area",
-        "label": "Burned area, cumulative",
-        "unit": "ha",
-        "kind": "affected-area",
+        "id": "hv_burned",
+        "label": "HV inside the fire perimeter",
+        "unit": "dB",
+        "kind": "hv-backscatter",
         "points": [
-          { "t": "2026-06-17", "v": 0.0 },
-          { "t": "2026-06-29", "v": 0.0 },
-          { "t": "2026-07-11", "v": 0.0 },
-          { "t": "2026-07-23", "v": 0.0 },
-          { "t": "2026-08-04", "v": 820.0 },
-          { "t": "2026-08-16", "v": 3692.0 },
-          { "t": "2026-08-28", "v": 6053.0 },
-          { "t": "2026-09-09", "v": 6732.0 },
-          { "t": "2026-09-21", "v": 6734.0 },
-          { "t": "2026-10-03", "v": 6734.0 }
+          {
+            "t": "2026-06-19",
+            "v": -12.12
+          },
+          {
+            "t": "2026-07-01",
+            "v": -12.42
+          },
+          {
+            "t": "2026-07-13",
+            "v": -12.59
+          },
+          {
+            "t": "2026-07-25",
+            "v": -12.57
+          },
+          {
+            "t": "2026-08-18",
+            "v": -12.56
+          },
+          {
+            "t": "2026-08-30",
+            "v": -10.74
+          },
+          {
+            "t": "2026-09-11",
+            "v": -12.98
+          },
+          {
+            "t": "2026-09-23",
+            "v": -12.99
+          }
         ],
-        "sourceIds": ["synthetic"],
-        "status": "illustrative"
+        "reference": {
+          "label": "Forest around it",
+          "points": [
+            {
+              "t": "2026-06-19",
+              "v": -13.67
+            },
+            {
+              "t": "2026-07-01",
+              "v": -13.88
+            },
+            {
+              "t": "2026-07-13",
+              "v": -14.42
+            },
+            {
+              "t": "2026-07-25",
+              "v": -14.41
+            },
+            {
+              "t": "2026-08-18",
+              "v": -14.05
+            },
+            {
+              "t": "2026-08-30",
+              "v": -11.77
+            },
+            {
+              "t": "2026-09-11",
+              "v": -13.8
+            },
+            {
+              "t": "2026-09-23",
+              "v": -13.81
+            }
+          ]
+        },
+        "sourceIds": [
+          "nisar-gcov"
+        ],
+        "status": "real"
       }
     ],
     "stats": {
-      "burned_ha": {
-        "value": 6734.0,
-        "unit": "ha",
-        "decimals": 0,
-        "label": "Burned area",
-        "method": "Area of pixels whose HV fell by more than the threshold. Synthetic pattern, not a measurement."
-      },
-      "hv_drop_db": {
-        "value": 5.0,
+      "burn_hv_drop_db": {
+        "value": 0.8,
         "unit": "dB",
         "decimals": 1,
-        "label": "HV drop in the burn scar",
-        "method": "Mean HV before minus after inside the mask. Synthetic pattern, not a measurement."
+        "label": "HV drop inside the perimeter, relative to the forest around it",
+        "method": "NISAR NISAR_L2_GCOV_PROVISIONAL_V1. Median HV inside the Quilpituk Creek perimeter minus median HV of a ring of forest 0.5 to 2.4 km outside it, averaged over the 4 passes before 2026-08-02 and the 3 passes after 2026-08-21; the stat is the fall in that gap."
       },
-      "smoke_cloud_pct": {
-        "value": 55.0,
-        "unit": "%",
+      "placebo_sd_db": {
+        "value": 0.2,
+        "unit": "dB",
+        "decimals": 1,
+        "label": "Spread of the same measure where nothing burned",
+        "method": "Standard deviation over 300 copies of the perimeter moved onto unburned forest in the same scene; mean -0.01 dB, 0.0% as low as the fire."
+      },
+      "burned_ha": {
+        "value": 1278.0,
+        "unit": "ha",
         "decimals": 0,
-        "label": "Optical scene under smoke",
-        "method": "Share of pixels with haze above one half. Synthetic pattern, not a measurement."
+        "label": "Area inside the mapped perimeter",
+        "method": "BC Wildfire Service perimeter K51402, mapped 2026-08-21. Not a NISAR measurement."
       },
       "n_dates": {
-        "value": 10.0,
+        "value": 8.0,
         "unit": "count",
         "decimals": 0,
         "label": "Radar dates",
-        "method": "Acquisition dates in the series. Synthetic pattern, not a measurement."
+        "method": "NISAR acquisition dates in the series."
+      },
+      "smoke_cloud_pct": {
+        "value": 74.0,
+        "unit": "%",
+        "decimals": 0,
+        "label": "Optical scene blocked by smoke or cloud",
+        "method": "Share of pixels Fmask flags as cloud, cloud edge, shadow or snow on the day of the optical scene."
       }
     },
     "flyover": {
@@ -372,7 +595,10 @@
         {
           "t": 0,
           "camera": {
-            "center": [-119.5, 50.0],
+            "center": [
+              -119.5,
+              50.0
+            ],
             "zoom": 9.0,
             "pitch": 0,
             "bearing": 0
@@ -381,7 +607,10 @@
         {
           "t": 7,
           "camera": {
-            "center": [-119.52, 50.03],
+            "center": [
+              -119.52,
+              50.03
+            ],
             "zoom": 9.9,
             "pitch": 45,
             "bearing": -15
@@ -390,7 +619,10 @@
         {
           "t": 14,
           "camera": {
-            "center": [-119.53, 50.06],
+            "center": [
+              -119.53,
+              50.06
+            ],
             "zoom": 10.8,
             "pitch": 55,
             "bearing": -25
@@ -399,7 +631,10 @@
         {
           "t": 20,
           "camera": {
-            "center": [-119.53, 50.08],
+            "center": [
+              -119.53,
+              50.08
+            ],
             "zoom": 11.6,
             "pitch": 52,
             "bearing": -20
@@ -409,27 +644,781 @@
     },
     "annotations": [
       {
-        "id": "water_dark",
-        "label": "Water: dark in radar",
-        "kind": "pin",
-        "geometry": {
-          "type": "Point",
-          "coordinates": [-119.639397, 49.999609]
-        }
-      },
-      {
-        "id": "burn_scar",
-        "label": "Burn scar",
+        "id": "fire_perimeter",
+        "label": "Quilpituk Creek fire, mapped perimeter",
         "kind": "area",
         "geometry": {
           "type": "Polygon",
           "coordinates": [
             [
-              [-119.455345, 50.119531],
-              [-119.36, 50.119531],
-              [-119.36, 49.932812],
-              [-119.455345, 49.932812],
-              [-119.455345, 50.119531]
+              [
+                -119.519018,
+                50.06499
+              ],
+              [
+                -119.518574,
+                50.064941
+              ],
+              [
+                -119.518537,
+                50.064193
+              ],
+              [
+                -119.518772,
+                50.063531
+              ],
+              [
+                -119.519505,
+                50.062242
+              ],
+              [
+                -119.520521,
+                50.061821
+              ],
+              [
+                -119.521272,
+                50.061633
+              ],
+              [
+                -119.521484,
+                50.061719
+              ],
+              [
+                -119.521556,
+                50.061083
+              ],
+              [
+                -119.522238,
+                50.060161
+              ],
+              [
+                -119.521639,
+                50.059669
+              ],
+              [
+                -119.520939,
+                50.059322
+              ],
+              [
+                -119.519834,
+                50.059105
+              ],
+              [
+                -119.519434,
+                50.058828
+              ],
+              [
+                -119.518961,
+                50.058885
+              ],
+              [
+                -119.518728,
+                50.059163
+              ],
+              [
+                -119.518755,
+                50.059455
+              ],
+              [
+                -119.518525,
+                50.059551
+              ],
+              [
+                -119.517757,
+                50.059142
+              ],
+              [
+                -119.517544,
+                50.05876
+              ],
+              [
+                -119.517474,
+                50.058114
+              ],
+              [
+                -119.517681,
+                50.057899
+              ],
+              [
+                -119.517552,
+                50.057707
+              ],
+              [
+                -119.517714,
+                50.057296
+              ],
+              [
+                -119.517598,
+                50.057193
+              ],
+              [
+                -119.516122,
+                50.056954
+              ],
+              [
+                -119.515599,
+                50.057071
+              ],
+              [
+                -119.514612,
+                50.056678
+              ],
+              [
+                -119.513951,
+                50.056847
+              ],
+              [
+                -119.513466,
+                50.056707
+              ],
+              [
+                -119.512756,
+                50.057727
+              ],
+              [
+                -119.512114,
+                50.057515
+              ],
+              [
+                -119.511831,
+                50.057649
+              ],
+              [
+                -119.511095,
+                50.058346
+              ],
+              [
+                -119.510876,
+                50.058798
+              ],
+              [
+                -119.510248,
+                50.058979
+              ],
+              [
+                -119.510402,
+                50.059214
+              ],
+              [
+                -119.51034,
+                50.059558
+              ],
+              [
+                -119.509306,
+                50.060024
+              ],
+              [
+                -119.50903,
+                50.060398
+              ],
+              [
+                -119.509316,
+                50.061231
+              ],
+              [
+                -119.509068,
+                50.061722
+              ],
+              [
+                -119.507106,
+                50.063805
+              ],
+              [
+                -119.506933,
+                50.06445
+              ],
+              [
+                -119.50584,
+                50.065285
+              ],
+              [
+                -119.505957,
+                50.065523
+              ],
+              [
+                -119.50577,
+                50.065955
+              ],
+              [
+                -119.505012,
+                50.066604
+              ],
+              [
+                -119.504673,
+                50.067296
+              ],
+              [
+                -119.504425,
+                50.068093
+              ],
+              [
+                -119.504445,
+                50.0691
+              ],
+              [
+                -119.50385,
+                50.071714
+              ],
+              [
+                -119.503192,
+                50.072833
+              ],
+              [
+                -119.502355,
+                50.073348
+              ],
+              [
+                -119.501753,
+                50.078355
+              ],
+              [
+                -119.501538,
+                50.079148
+              ],
+              [
+                -119.499959,
+                50.082089
+              ],
+              [
+                -119.499506,
+                50.083828
+              ],
+              [
+                -119.499312,
+                50.084799
+              ],
+              [
+                -119.499607,
+                50.085587
+              ],
+              [
+                -119.500932,
+                50.086921
+              ],
+              [
+                -119.502406,
+                50.088824
+              ],
+              [
+                -119.505695,
+                50.094851
+              ],
+              [
+                -119.506395,
+                50.096861
+              ],
+              [
+                -119.507246,
+                50.096755
+              ],
+              [
+                -119.508408,
+                50.097162
+              ],
+              [
+                -119.509082,
+                50.097627
+              ],
+              [
+                -119.511346,
+                50.100218
+              ],
+              [
+                -119.512532,
+                50.100079
+              ],
+              [
+                -119.513415,
+                50.100172
+              ],
+              [
+                -119.516785,
+                50.101338
+              ],
+              [
+                -119.520629,
+                50.101298
+              ],
+              [
+                -119.522598,
+                50.101014
+              ],
+              [
+                -119.523351,
+                50.100098
+              ],
+              [
+                -119.52437,
+                50.099231
+              ],
+              [
+                -119.525308,
+                50.099539
+              ],
+              [
+                -119.526196,
+                50.09937
+              ],
+              [
+                -119.526725,
+                50.099501
+              ],
+              [
+                -119.527903,
+                50.099209
+              ],
+              [
+                -119.528879,
+                50.099473
+              ],
+              [
+                -119.530932,
+                50.099442
+              ],
+              [
+                -119.530589,
+                50.098312
+              ],
+              [
+                -119.531208,
+                50.098492
+              ],
+              [
+                -119.532694,
+                50.09815
+              ],
+              [
+                -119.534418,
+                50.098901
+              ],
+              [
+                -119.535106,
+                50.098648
+              ],
+              [
+                -119.535808,
+                50.099229
+              ],
+              [
+                -119.536289,
+                50.09935
+              ],
+              [
+                -119.53988,
+                50.098673
+              ],
+              [
+                -119.542403,
+                50.097189
+              ],
+              [
+                -119.546872,
+                50.097552
+              ],
+              [
+                -119.549455,
+                50.098032
+              ],
+              [
+                -119.551852,
+                50.095535
+              ],
+              [
+                -119.555584,
+                50.093746
+              ],
+              [
+                -119.556387,
+                50.092487
+              ],
+              [
+                -119.55779,
+                50.091564
+              ],
+              [
+                -119.558524,
+                50.090051
+              ],
+              [
+                -119.559687,
+                50.089515
+              ],
+              [
+                -119.559468,
+                50.089085
+              ],
+              [
+                -119.559495,
+                50.088048
+              ],
+              [
+                -119.560078,
+                50.087598
+              ],
+              [
+                -119.56022,
+                50.087309
+              ],
+              [
+                -119.559683,
+                50.086261
+              ],
+              [
+                -119.558613,
+                50.08501
+              ],
+              [
+                -119.557424,
+                50.084189
+              ],
+              [
+                -119.556733,
+                50.082978
+              ],
+              [
+                -119.556168,
+                50.082514
+              ],
+              [
+                -119.555984,
+                50.082241
+              ],
+              [
+                -119.556187,
+                50.081071
+              ],
+              [
+                -119.555346,
+                50.08
+              ],
+              [
+                -119.554999,
+                50.078654
+              ],
+              [
+                -119.554513,
+                50.077981
+              ],
+              [
+                -119.553336,
+                50.076968
+              ],
+              [
+                -119.552751,
+                50.075947
+              ],
+              [
+                -119.552407,
+                50.07565
+              ],
+              [
+                -119.551876,
+                50.075551
+              ],
+              [
+                -119.55148,
+                50.075189
+              ],
+              [
+                -119.550444,
+                50.075169
+              ],
+              [
+                -119.550178,
+                50.074322
+              ],
+              [
+                -119.549567,
+                50.074293
+              ],
+              [
+                -119.548682,
+                50.074767
+              ],
+              [
+                -119.547577,
+                50.074881
+              ],
+              [
+                -119.547358,
+                50.074771
+              ],
+              [
+                -119.547388,
+                50.074303
+              ],
+              [
+                -119.546301,
+                50.074365
+              ],
+              [
+                -119.545794,
+                50.074774
+              ],
+              [
+                -119.545576,
+                50.075326
+              ],
+              [
+                -119.545028,
+                50.075794
+              ],
+              [
+                -119.543366,
+                50.076123
+              ],
+              [
+                -119.543167,
+                50.076734
+              ],
+              [
+                -119.542722,
+                50.076931
+              ],
+              [
+                -119.541996,
+                50.077095
+              ],
+              [
+                -119.539975,
+                50.076827
+              ],
+              [
+                -119.539486,
+                50.075752
+              ],
+              [
+                -119.539667,
+                50.075126
+              ],
+              [
+                -119.540676,
+                50.075311
+              ],
+              [
+                -119.541285,
+                50.075152
+              ],
+              [
+                -119.541689,
+                50.07442
+              ],
+              [
+                -119.542455,
+                50.07375
+              ],
+              [
+                -119.541812,
+                50.073177
+              ],
+              [
+                -119.541195,
+                50.072886
+              ],
+              [
+                -119.540539,
+                50.072893
+              ],
+              [
+                -119.540256,
+                50.072496
+              ],
+              [
+                -119.539236,
+                50.072371
+              ],
+              [
+                -119.538697,
+                50.072484
+              ],
+              [
+                -119.538942,
+                50.072778
+              ],
+              [
+                -119.538362,
+                50.072837
+              ],
+              [
+                -119.538556,
+                50.0735
+              ],
+              [
+                -119.538357,
+                50.07368
+              ],
+              [
+                -119.537825,
+                50.073698
+              ],
+              [
+                -119.537139,
+                50.073967
+              ],
+              [
+                -119.537697,
+                50.0745
+              ],
+              [
+                -119.537727,
+                50.075249
+              ],
+              [
+                -119.537368,
+                50.075868
+              ],
+              [
+                -119.537838,
+                50.076163
+              ],
+              [
+                -119.537618,
+                50.076926
+              ],
+              [
+                -119.536122,
+                50.07717
+              ],
+              [
+                -119.533847,
+                50.077162
+              ],
+              [
+                -119.533287,
+                50.077595
+              ],
+              [
+                -119.531876,
+                50.077046
+              ],
+              [
+                -119.531707,
+                50.076356
+              ],
+              [
+                -119.530983,
+                50.07643
+              ],
+              [
+                -119.530566,
+                50.075849
+              ],
+              [
+                -119.529457,
+                50.075682
+              ],
+              [
+                -119.529327,
+                50.075501
+              ],
+              [
+                -119.530048,
+                50.075311
+              ],
+              [
+                -119.529779,
+                50.074734
+              ],
+              [
+                -119.529011,
+                50.074364
+              ],
+              [
+                -119.528767,
+                50.07399
+              ],
+              [
+                -119.528838,
+                50.073376
+              ],
+              [
+                -119.529781,
+                50.073209
+              ],
+              [
+                -119.530587,
+                50.073288
+              ],
+              [
+                -119.531655,
+                50.072972
+              ],
+              [
+                -119.531993,
+                50.072493
+              ],
+              [
+                -119.532158,
+                50.07118
+              ],
+              [
+                -119.531723,
+                50.0704
+              ],
+              [
+                -119.530122,
+                50.069937
+              ],
+              [
+                -119.528812,
+                50.067483
+              ],
+              [
+                -119.527842,
+                50.066655
+              ],
+              [
+                -119.528368,
+                50.063069
+              ],
+              [
+                -119.527448,
+                50.062982
+              ],
+              [
+                -119.526873,
+                50.063875
+              ],
+              [
+                -119.525632,
+                50.064776
+              ],
+              [
+                -119.523432,
+                50.065644
+              ],
+              [
+                -119.52178,
+                50.065143
+              ],
+              [
+                -119.521888,
+                50.065347
+              ],
+              [
+                -119.521778,
+                50.065495
+              ],
+              [
+                -119.521307,
+                50.065497
+              ],
+              [
+                -119.521175,
+                50.065305
+              ],
+              [
+                -119.520049,
+                50.064813
+              ],
+              [
+                -119.520061,
+                50.064349
+              ],
+              [
+                -119.519018,
+                50.06499
+              ]
             ]
           ]
         }
@@ -437,18 +1426,930 @@
     ],
     "sources": [
       {
-        "id": "synthetic",
-        "mission": "Synthetic",
-        "product": "Synthetic pattern (illustrative)",
-        "collection": "none",
+        "id": "nisar-gcov",
+        "mission": "NISAR",
+        "product": "L2 GCOV, geocoded polarimetric covariance (HH, HV)",
+        "collection": "NISAR_L2_GCOV_PROVISIONAL_V1",
+        "maturity": "provisional",
+        "granules": [
+          "NISAR_L2_PR_GCOV_023_071_D_063_4005_DHDH_A_20260619T030923_20260619T030958_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_024_071_D_063_4005_DHDH_A_20260701T030922_20260701T030957_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_025_071_D_063_4005_DHDH_A_20260713T030921_20260713T030957_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_026_071_D_063_4005_DHDH_A_20260725T030921_20260725T030956_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_028_071_D_063_4005_DHDH_A_20260818T030919_20260818T030955_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_029_071_D_063_4005_DHDH_A_20260830T030919_20260830T030954_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_030_071_D_063_4005_DHDH_A_20260911T030919_20260911T030954_P05023_N_F_J_001",
+          "NISAR_L2_PR_GCOV_031_071_D_063_4005_DHDH_A_20260923T030919_20260923T030954_P05023_N_F_J_001"
+        ],
+        "dates": [
+          "2026-06-19",
+          "2026-07-01",
+          "2026-07-13",
+          "2026-07-25",
+          "2026-08-18",
+          "2026-08-30",
+          "2026-09-11",
+          "2026-09-23"
+        ],
+        "provider": "NASA-ISRO, distributed by the ASF DAAC",
+        "license": "Open and free to use under NASA's Earth science data policy; cite NISAR and the ASF DAAC",
+        "url": "https://www.earthdata.nasa.gov/data/catalog/asf-nisar-l2-gcov-provisional-v1-1",
+        "nasa": true
+      },
+      {
+        "id": "bcws",
+        "mission": "BC Wildfire Service",
+        "product": "Fire perimeter K51402 (Quilpituk Creek), 1,278.3 ha",
+        "collection": "WHSE_LAND_AND_NATURAL_RESOURCE.PROT_CURRENT_FIRE_POLYS_SP",
         "maturity": "n/a",
-        "granules": [],
-        "dates": [],
-        "provider": "this project",
-        "license": "CC0-1.0",
-        "url": "https://nisar-docs.asf.alaska.edu/gcov/",
+        "granules": [
+          "K51402"
+        ],
+        "dates": [
+          "2026-08-21"
+        ],
+        "provider": "BC Wildfire Service, Government of British Columbia",
+        "license": "Open Government Licence - British Columbia",
+        "url": "https://catalogue.data.gov.bc.ca/dataset/bc-wildfire-fire-perimeters-current",
         "nasa": false
+      },
+      {
+        "id": "hls",
+        "mission": "HLS",
+        "product": "Harmonized Landsat Sentinel-2 v2.0 (30 m)",
+        "collection": "HLSS30, HLSL30",
+        "maturity": "validated",
+        "granules": [
+          "HLS.L30.T10UGA.2025185T185437.v2.0",
+          "HLS.L30.T10UGA.2025194T184828.v2.0",
+          "HLS.L30.T10UGA.2025209T185444.v2.0",
+          "HLS.L30.T10UGA.2025210T184833.v2.0",
+          "HLS.L30.T10UGA.2025234T184847.v2.0",
+          "HLS.L30.T10UGA.2026228T185440.v2.0",
+          "HLS.L30.T10UGA.2026244T185446.v2.0",
+          "HLS.L30.T10UGA.2026260T185449.v2.0",
+          "HLS.L30.T10UGA.2026261T184835.v2.0",
+          "HLS.L30.T10UGA.2026262T184229.v2.0",
+          "HLS.L30.T10UGA.2026277T184842.v2.0",
+          "HLS.L30.T10UGA.2026284T185454.v2.0",
+          "HLS.L30.T11ULR.2025185T185437.v2.0",
+          "HLS.L30.T11ULR.2025194T184828.v2.0",
+          "HLS.L30.T11ULR.2025209T185444.v2.0",
+          "HLS.L30.T11ULR.2025210T184833.v2.0",
+          "HLS.L30.T11ULR.2025234T184847.v2.0",
+          "HLS.L30.T11ULR.2026228T185440.v2.0",
+          "HLS.L30.T11ULR.2026244T185446.v2.0",
+          "HLS.L30.T11ULR.2026260T185449.v2.0",
+          "HLS.L30.T11ULR.2026261T184835.v2.0",
+          "HLS.L30.T11ULR.2026262T184229.v2.0",
+          "HLS.L30.T11ULR.2026277T184842.v2.0",
+          "HLS.L30.T11ULR.2026284T185454.v2.0",
+          "HLS.S30.T10UGA.2025183T184919.v2.0",
+          "HLS.S30.T10UGA.2025188T184941.v2.0",
+          "HLS.S30.T10UGA.2025196T185919.v2.0",
+          "HLS.S30.T10UGA.2025210T185831.v2.0",
+          "HLS.S30.T10UGA.2025211T185941.v2.0",
+          "HLS.S30.T10UGA.2025223T184919.v2.0",
+          "HLS.S30.T10UGA.2025238T184941.v2.0",
+          "HLS.S30.T10UGA.2026228T184919.v2.0",
+          "HLS.S30.T10UGA.2026228T190831.v2.0",
+          "HLS.S30.T10UGA.2026251T185919.v2.0",
+          "HLS.S30.T10UGA.2026255T185831.v2.0",
+          "HLS.S30.T10UGA.2026261T185949.v2.0",
+          "HLS.S30.T10UGA.2026263T185051.v2.0",
+          "HLS.S30.T10UGA.2026271T190059.v2.0",
+          "HLS.S30.T10UGA.2026273T185201.v2.0",
+          "HLS.S30.T11ULR.2025183T184919.v2.0",
+          "HLS.S30.T11ULR.2025188T184941.v2.0",
+          "HLS.S30.T11ULR.2025196T185919.v2.0",
+          "HLS.S30.T11ULR.2025210T185831.v2.0",
+          "HLS.S30.T11ULR.2025211T185941.v2.0",
+          "HLS.S30.T11ULR.2025223T184919.v2.0",
+          "HLS.S30.T11ULR.2025238T184941.v2.0",
+          "HLS.S30.T11ULR.2026228T184919.v2.0",
+          "HLS.S30.T11ULR.2026228T190831.v2.0",
+          "HLS.S30.T11ULR.2026251T185919.v2.0",
+          "HLS.S30.T11ULR.2026255T185831.v2.0",
+          "HLS.S30.T11ULR.2026261T185949.v2.0",
+          "HLS.S30.T11ULR.2026263T185051.v2.0",
+          "HLS.S30.T11ULR.2026271T190059.v2.0",
+          "HLS.S30.T11ULR.2026281T190259.v2.0"
+        ],
+        "dates": [
+          "2025-07-02",
+          "2025-07-04",
+          "2025-07-07",
+          "2025-07-13",
+          "2025-07-15",
+          "2025-07-28",
+          "2025-07-29",
+          "2025-07-30",
+          "2025-08-11",
+          "2025-08-22",
+          "2025-08-26",
+          "2026-08-16",
+          "2026-09-01",
+          "2026-09-08",
+          "2026-09-12",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-19",
+          "2026-09-20",
+          "2026-09-28",
+          "2026-09-30",
+          "2026-10-04",
+          "2026-10-08",
+          "2026-10-11"
+        ],
+        "provider": "NASA and USGS, through Microsoft Planetary Computer",
+        "license": "Open and free to use under NASA's Earth science data policy",
+        "url": "https://www.earthdata.nasa.gov/data/projects/hls",
+        "nasa": true
       }
-    ]
+    ],
+    "footprint": {
+      "kind": "shape",
+      "label": "Quilpituk Creek fire perimeter",
+      "areaHa": 1278.3,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -119.519018,
+              50.06499
+            ],
+            [
+              -119.518574,
+              50.064941
+            ],
+            [
+              -119.518537,
+              50.064193
+            ],
+            [
+              -119.518772,
+              50.063531
+            ],
+            [
+              -119.519505,
+              50.062242
+            ],
+            [
+              -119.520521,
+              50.061821
+            ],
+            [
+              -119.521272,
+              50.061633
+            ],
+            [
+              -119.521484,
+              50.061719
+            ],
+            [
+              -119.521556,
+              50.061083
+            ],
+            [
+              -119.522238,
+              50.060161
+            ],
+            [
+              -119.521639,
+              50.059669
+            ],
+            [
+              -119.520939,
+              50.059322
+            ],
+            [
+              -119.519834,
+              50.059105
+            ],
+            [
+              -119.519434,
+              50.058828
+            ],
+            [
+              -119.518961,
+              50.058885
+            ],
+            [
+              -119.518728,
+              50.059163
+            ],
+            [
+              -119.518755,
+              50.059455
+            ],
+            [
+              -119.518525,
+              50.059551
+            ],
+            [
+              -119.517757,
+              50.059142
+            ],
+            [
+              -119.517544,
+              50.05876
+            ],
+            [
+              -119.517474,
+              50.058114
+            ],
+            [
+              -119.517681,
+              50.057899
+            ],
+            [
+              -119.517552,
+              50.057707
+            ],
+            [
+              -119.517714,
+              50.057296
+            ],
+            [
+              -119.517598,
+              50.057193
+            ],
+            [
+              -119.516122,
+              50.056954
+            ],
+            [
+              -119.515599,
+              50.057071
+            ],
+            [
+              -119.514612,
+              50.056678
+            ],
+            [
+              -119.513951,
+              50.056847
+            ],
+            [
+              -119.513466,
+              50.056707
+            ],
+            [
+              -119.512756,
+              50.057727
+            ],
+            [
+              -119.512114,
+              50.057515
+            ],
+            [
+              -119.511831,
+              50.057649
+            ],
+            [
+              -119.511095,
+              50.058346
+            ],
+            [
+              -119.510876,
+              50.058798
+            ],
+            [
+              -119.510248,
+              50.058979
+            ],
+            [
+              -119.510402,
+              50.059214
+            ],
+            [
+              -119.51034,
+              50.059558
+            ],
+            [
+              -119.509306,
+              50.060024
+            ],
+            [
+              -119.50903,
+              50.060398
+            ],
+            [
+              -119.509316,
+              50.061231
+            ],
+            [
+              -119.509068,
+              50.061722
+            ],
+            [
+              -119.507106,
+              50.063805
+            ],
+            [
+              -119.506933,
+              50.06445
+            ],
+            [
+              -119.50584,
+              50.065285
+            ],
+            [
+              -119.505957,
+              50.065523
+            ],
+            [
+              -119.50577,
+              50.065955
+            ],
+            [
+              -119.505012,
+              50.066604
+            ],
+            [
+              -119.504673,
+              50.067296
+            ],
+            [
+              -119.504425,
+              50.068093
+            ],
+            [
+              -119.504445,
+              50.0691
+            ],
+            [
+              -119.50385,
+              50.071714
+            ],
+            [
+              -119.503192,
+              50.072833
+            ],
+            [
+              -119.502355,
+              50.073348
+            ],
+            [
+              -119.501753,
+              50.078355
+            ],
+            [
+              -119.501538,
+              50.079148
+            ],
+            [
+              -119.499959,
+              50.082089
+            ],
+            [
+              -119.499506,
+              50.083828
+            ],
+            [
+              -119.499312,
+              50.084799
+            ],
+            [
+              -119.499607,
+              50.085587
+            ],
+            [
+              -119.500932,
+              50.086921
+            ],
+            [
+              -119.502406,
+              50.088824
+            ],
+            [
+              -119.505695,
+              50.094851
+            ],
+            [
+              -119.506395,
+              50.096861
+            ],
+            [
+              -119.507246,
+              50.096755
+            ],
+            [
+              -119.508408,
+              50.097162
+            ],
+            [
+              -119.509082,
+              50.097627
+            ],
+            [
+              -119.511346,
+              50.100218
+            ],
+            [
+              -119.512532,
+              50.100079
+            ],
+            [
+              -119.513415,
+              50.100172
+            ],
+            [
+              -119.516785,
+              50.101338
+            ],
+            [
+              -119.520629,
+              50.101298
+            ],
+            [
+              -119.522598,
+              50.101014
+            ],
+            [
+              -119.523351,
+              50.100098
+            ],
+            [
+              -119.52437,
+              50.099231
+            ],
+            [
+              -119.525308,
+              50.099539
+            ],
+            [
+              -119.526196,
+              50.09937
+            ],
+            [
+              -119.526725,
+              50.099501
+            ],
+            [
+              -119.527903,
+              50.099209
+            ],
+            [
+              -119.528879,
+              50.099473
+            ],
+            [
+              -119.530932,
+              50.099442
+            ],
+            [
+              -119.530589,
+              50.098312
+            ],
+            [
+              -119.531208,
+              50.098492
+            ],
+            [
+              -119.532694,
+              50.09815
+            ],
+            [
+              -119.534418,
+              50.098901
+            ],
+            [
+              -119.535106,
+              50.098648
+            ],
+            [
+              -119.535808,
+              50.099229
+            ],
+            [
+              -119.536289,
+              50.09935
+            ],
+            [
+              -119.53988,
+              50.098673
+            ],
+            [
+              -119.542403,
+              50.097189
+            ],
+            [
+              -119.546872,
+              50.097552
+            ],
+            [
+              -119.549455,
+              50.098032
+            ],
+            [
+              -119.551852,
+              50.095535
+            ],
+            [
+              -119.555584,
+              50.093746
+            ],
+            [
+              -119.556387,
+              50.092487
+            ],
+            [
+              -119.55779,
+              50.091564
+            ],
+            [
+              -119.558524,
+              50.090051
+            ],
+            [
+              -119.559687,
+              50.089515
+            ],
+            [
+              -119.559468,
+              50.089085
+            ],
+            [
+              -119.559495,
+              50.088048
+            ],
+            [
+              -119.560078,
+              50.087598
+            ],
+            [
+              -119.56022,
+              50.087309
+            ],
+            [
+              -119.559683,
+              50.086261
+            ],
+            [
+              -119.558613,
+              50.08501
+            ],
+            [
+              -119.557424,
+              50.084189
+            ],
+            [
+              -119.556733,
+              50.082978
+            ],
+            [
+              -119.556168,
+              50.082514
+            ],
+            [
+              -119.555984,
+              50.082241
+            ],
+            [
+              -119.556187,
+              50.081071
+            ],
+            [
+              -119.555346,
+              50.08
+            ],
+            [
+              -119.554999,
+              50.078654
+            ],
+            [
+              -119.554513,
+              50.077981
+            ],
+            [
+              -119.553336,
+              50.076968
+            ],
+            [
+              -119.552751,
+              50.075947
+            ],
+            [
+              -119.552407,
+              50.07565
+            ],
+            [
+              -119.551876,
+              50.075551
+            ],
+            [
+              -119.55148,
+              50.075189
+            ],
+            [
+              -119.550444,
+              50.075169
+            ],
+            [
+              -119.550178,
+              50.074322
+            ],
+            [
+              -119.549567,
+              50.074293
+            ],
+            [
+              -119.548682,
+              50.074767
+            ],
+            [
+              -119.547577,
+              50.074881
+            ],
+            [
+              -119.547358,
+              50.074771
+            ],
+            [
+              -119.547388,
+              50.074303
+            ],
+            [
+              -119.546301,
+              50.074365
+            ],
+            [
+              -119.545794,
+              50.074774
+            ],
+            [
+              -119.545576,
+              50.075326
+            ],
+            [
+              -119.545028,
+              50.075794
+            ],
+            [
+              -119.543366,
+              50.076123
+            ],
+            [
+              -119.543167,
+              50.076734
+            ],
+            [
+              -119.542722,
+              50.076931
+            ],
+            [
+              -119.541996,
+              50.077095
+            ],
+            [
+              -119.539975,
+              50.076827
+            ],
+            [
+              -119.539486,
+              50.075752
+            ],
+            [
+              -119.539667,
+              50.075126
+            ],
+            [
+              -119.540676,
+              50.075311
+            ],
+            [
+              -119.541285,
+              50.075152
+            ],
+            [
+              -119.541689,
+              50.07442
+            ],
+            [
+              -119.542455,
+              50.07375
+            ],
+            [
+              -119.541812,
+              50.073177
+            ],
+            [
+              -119.541195,
+              50.072886
+            ],
+            [
+              -119.540539,
+              50.072893
+            ],
+            [
+              -119.540256,
+              50.072496
+            ],
+            [
+              -119.539236,
+              50.072371
+            ],
+            [
+              -119.538697,
+              50.072484
+            ],
+            [
+              -119.538942,
+              50.072778
+            ],
+            [
+              -119.538362,
+              50.072837
+            ],
+            [
+              -119.538556,
+              50.0735
+            ],
+            [
+              -119.538357,
+              50.07368
+            ],
+            [
+              -119.537825,
+              50.073698
+            ],
+            [
+              -119.537139,
+              50.073967
+            ],
+            [
+              -119.537697,
+              50.0745
+            ],
+            [
+              -119.537727,
+              50.075249
+            ],
+            [
+              -119.537368,
+              50.075868
+            ],
+            [
+              -119.537838,
+              50.076163
+            ],
+            [
+              -119.537618,
+              50.076926
+            ],
+            [
+              -119.536122,
+              50.07717
+            ],
+            [
+              -119.533847,
+              50.077162
+            ],
+            [
+              -119.533287,
+              50.077595
+            ],
+            [
+              -119.531876,
+              50.077046
+            ],
+            [
+              -119.531707,
+              50.076356
+            ],
+            [
+              -119.530983,
+              50.07643
+            ],
+            [
+              -119.530566,
+              50.075849
+            ],
+            [
+              -119.529457,
+              50.075682
+            ],
+            [
+              -119.529327,
+              50.075501
+            ],
+            [
+              -119.530048,
+              50.075311
+            ],
+            [
+              -119.529779,
+              50.074734
+            ],
+            [
+              -119.529011,
+              50.074364
+            ],
+            [
+              -119.528767,
+              50.07399
+            ],
+            [
+              -119.528838,
+              50.073376
+            ],
+            [
+              -119.529781,
+              50.073209
+            ],
+            [
+              -119.530587,
+              50.073288
+            ],
+            [
+              -119.531655,
+              50.072972
+            ],
+            [
+              -119.531993,
+              50.072493
+            ],
+            [
+              -119.532158,
+              50.07118
+            ],
+            [
+              -119.531723,
+              50.0704
+            ],
+            [
+              -119.530122,
+              50.069937
+            ],
+            [
+              -119.528812,
+              50.067483
+            ],
+            [
+              -119.527842,
+              50.066655
+            ],
+            [
+              -119.528368,
+              50.063069
+            ],
+            [
+              -119.527448,
+              50.062982
+            ],
+            [
+              -119.526873,
+              50.063875
+            ],
+            [
+              -119.525632,
+              50.064776
+            ],
+            [
+              -119.523432,
+              50.065644
+            ],
+            [
+              -119.52178,
+              50.065143
+            ],
+            [
+              -119.521888,
+              50.065347
+            ],
+            [
+              -119.521778,
+              50.065495
+            ],
+            [
+              -119.521307,
+              50.065497
+            ],
+            [
+              -119.521175,
+              50.065305
+            ],
+            [
+              -119.520049,
+              50.064813
+            ],
+            [
+              -119.520061,
+              50.064349
+            ],
+            [
+              -119.519018,
+              50.06499
+            ]
+          ]
+        ]
+      },
+      "sourceIds": [
+        "bcws"
+      ],
+      "status": "fallback"
+    }
   }
 }

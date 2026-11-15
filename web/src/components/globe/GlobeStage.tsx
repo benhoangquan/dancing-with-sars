@@ -25,6 +25,7 @@ function pinElement(label: string, active: boolean, onClick: () => void): HTMLEl
   const btn = document.createElement("button");
   btn.type = "button";
   btn.className = `globe-pin ${active ? "globe-pin-active" : "globe-pin-watched"}`;
+  btn.style.zIndex = active ? "3" : "1"; // a story pin always sits above a nearby grey pin
   btn.setAttribute("aria-label", active ? `Open ${label}` : `${label}: checked, no chapter yet`);
   btn.innerHTML = `<span class="globe-pin-dot" aria-hidden="true"></span><span class="globe-pin-label tabular"></span>`;
   (btn.querySelector(".globe-pin-label") as HTMLElement).textContent = label;

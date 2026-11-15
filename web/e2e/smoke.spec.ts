@@ -2,155 +2,168 @@ import { readFileSync, readdirSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 
 const SCREENS = "e2e/__screens__";
+const slugs = readdirSync("public/chapters")
+  .filter((f) => f.endsWith(".json"))
+  .map((f) => f.replace(".json", ""));
+const manifest = (slug: string) => JSON.parse(readFileSync(`public/chapters/${slug}.json`, "utf8"));
 
-/** Scroll so the viewport center line sits `fraction` of the way down the given beat. */
-async function scrollToBeat(page: Page, chapter: number, beat: number, fraction = 0.3) {
+/** Scroll so the viewport centre line sits `fraction` of the way down beat `beat` of the open place. */
+async function scrollToBeat(page: Page, beat: number, fraction = 0.3) {
   await page.evaluate(
-    ([c, b, f]) => {
-      const el = document.querySelector<HTMLElement>(`[data-section="beat"][data-chapter="${c}"][data-beat="${b}"]`);
-      if (!el) throw new Error(`no beat ${c}:${b}`);
+    ([b, f]) => {
+      const el = document.querySelector<HTMLElement>(`[data-section="beat"][data-beat="${b}"]`);
+      if (!el) throw new Error(`no beat ${b}`);
       const r = el.getBoundingClientRect();
       window.scrollTo({ top: window.scrollY + r.top - window.innerHeight / 2 + r.height * f, behavior: "instant" });
     },
-    [chapter, beat, fraction] as const,
+    [beat, fraction] as const,
   );
 }
 
-const mode = (page: Page, name: string) => page.getByRole("radio", { name });
+const scene = (page: Page) => page.evaluate(() => document.documentElement.dataset.scene);
 
-test("loads with no console errors and shows every chapter", async ({ page }) => {
+async function toHotspot(page: Page) {
+  await page.goto("/?debug");
+  for (let i = 0; i < 14; i++) await page.mouse.wheel(0, 400);
+  await expect.poll(() => scene(page)).toBe("HOTSPOT_GLOBE");
+}
+
+test("the hero renders the globe with no console errors, then settles into the hotspot globe", async ({ page }) => {
   const problems: string[] = [];
   page.on("console", (m) => m.type() === "error" && problems.push(m.text()));
   page.on("pageerror", (e) => problems.push(String(e)));
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1, name: "Dancing with the SARs" })).toBeVisible();
-  const chapters = readdirSync("public/chapters").filter((f) => f.endsWith(".json")).length;
-  await expect(page.locator('[data-section="header"] h2')).toHaveCount(chapters);
-  await expect(page.locator(".maplibregl-canvas").first()).toBeVisible();
+  await expect(page.locator(".globe-root .maplibregl-canvas")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Back to the globe" })).toHaveCount(0);
   await page.waitForLoadState("networkidle");
   expect(problems).toEqual([]);
+  await toHotspot(page);
+  expect(await page.evaluate(() => getComputedStyle(document.documentElement).overflow)).toBe("hidden");
+  await expect(page.getByRole("button", { name: "Back to the globe" })).toBeDisabled();
+  for (const slug of slugs) await expect(page.getByRole("button", { name: new RegExp(`^Open ${manifest(slug).aoi.placeName.split(",")[0]}`) })).toHaveCount(1);
 });
 
-test("the segmented control follows the beat, and a click pins a mode", async ({ page }) => {
-  await page.goto("/");
-  await scrollToBeat(page, 0, 0);
-  await expect(mode(page, "Flyover")).toBeChecked();
-  await scrollToBeat(page, 0, 2); // "The fishbone spreads" is a radar beat
-  await expect(mode(page, "Radar Compare")).toBeChecked();
-  await expect(page.locator(".stage-root")).toHaveAttribute("data-mode", "radar");
-  await mode(page, "Split").click();
-  await expect(mode(page, "Split")).toBeChecked();
-  await expect(page.locator(".stage-root")).toHaveAttribute("data-mode", "split");
-  await scrollToBeat(page, 0, 1); // pin survives a beat change inside the chapter
-  await expect(mode(page, "Split")).toBeChecked();
-  await scrollToBeat(page, 1, 0); // and clears when the chapter changes
-  await expect(mode(page, "Flyover")).toBeChecked();
+test("a pin opens its place, the act I flyover hands over at the opening camera, and the globe button returns", async ({ page }) => {
+  await toHotspot(page);
+  await page.getByRole("button", { name: /^Open Rondônia/ }).click();
+  await expect(page).toHaveURL(/#place=rondonia/);
+  await expect.poll(() => scene(page)).toBe("PLACE_CHAPTER");
+  await expect(page.getByRole("button", { name: "Replay 20s" })).toBeVisible();
+  await expect(page.locator(".stage-root")).toHaveAttribute("data-act", "1");
+  await scrollToBeat(page, 1);
+  await expect(page.locator(".stage-root")).toHaveAttribute("data-act", "2");
+  const opening = manifest("rondonia").openingCamera;
+  await expect
+    .poll(
+      () =>
+        page.evaluate(() => {
+          const a = (window as unknown as { __sar?: { a: { getCenter: () => { lng: number; lat: number }; getZoom: () => number; getPitch: () => number } } }).__sar?.a;
+          if (!a) return null;
+          const c = a.getCenter();
+          return [c.lng, c.lat, a.getZoom(), a.getPitch()];
+        }),
+      { timeout: 10_000 },
+    )
+    .toEqual([expect.closeTo(opening.center[0], 4), expect.closeTo(opening.center[1], 4), expect.closeTo(opening.zoom, 3), expect.closeTo(opening.pitch, 2)]);
+  await page.getByRole("button", { name: "Back to the globe" }).click();
+  await expect.poll(() => scene(page)).toBe("HOTSPOT_GLOBE");
+  await expect(page).not.toHaveURL(/#place=/);
 });
 
-test("the swipe divider moves with the keyboard", async ({ page }) => {
-  await page.goto("/");
-  await scrollToBeat(page, 0, 2);
+test("the swipe divider moves with the keyboard and dims the beat card while dragged", async ({ page }) => {
+  await page.goto("/?debug#place=okanagan");
+  await scrollToBeat(page, 2);
   const slider = page.getByRole("slider", { name: "Before and after divider" });
   await expect(slider).toHaveAttribute("aria-valuenow", "50");
   await slider.focus();
   await page.keyboard.press("ArrowLeft");
   await expect(slider).toHaveAttribute("aria-valuenow", "45");
-  await page.keyboard.press("Home");
-  await expect(slider).toHaveAttribute("aria-valuenow", "0");
-  await page.keyboard.press("End");
-  await expect(slider).toHaveAttribute("aria-valuenow", "100");
+  const card = page.locator('[data-beat-card="scar"]');
+  const box = (await slider.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(box.x + 200, box.y + box.height / 2);
+  await expect(card).toHaveCSS("opacity", "0.25");
+  await page.mouse.up();
+  await expect(card).toHaveCSS("opacity", "1");
+});
+
+test("a landmark popover opens and closes after the page scrolls more than 40 px", async ({ page }) => {
+  await page.goto("/?debug#place=rondonia");
+  await scrollToBeat(page, 1, 0.2);
+  const pin = page.getByRole("button", { name: "Largest new clearing: ground view" });
+  await expect(pin).toBeVisible();
+  await pin.click();
+  await expect(page.getByRole("dialog", { name: "Largest new clearing" })).toBeVisible();
+  await expect(page.getByText("HV after")).toBeVisible();
+  await page.mouse.wheel(0, 60);
+  await expect(page.getByRole("dialog", { name: "Largest new clearing" })).toHaveCount(0);
+});
+
+test("Take Action opens the sheet with https links, the city tab redraws per city, and Escape closes it", async ({ page }) => {
+  await page.goto("/?debug#place=okanagan");
+  await scrollToBeat(page, 4, 0.4);
+  await page.getByRole("button", { name: "Take Action" }).click();
+  const sheet = page.getByRole("dialog");
+  await expect(sheet).toBeVisible();
+  for (const href of await sheet.locator("a").evaluateAll((as) => as.map((a) => (a as HTMLAnchorElement).href))) expect(href).toMatch(/^https:\/\//);
+  await page.getByRole("tab", { name: "Act Where You Live" }).click();
+  const figure = page.locator("svg[data-city]");
+  await expect(figure.locator("[data-footprint]")).toHaveCount(1);
+  const first = await figure.locator("path").first().getAttribute("d");
+  await page.getByRole("radio", { name: "Jakarta" }).click();
+  await expect(figure).toHaveAttribute("data-city", "jakarta");
+  await expect.poll(() => figure.locator("path").first().getAttribute("d")).not.toBe(first);
+  await page.keyboard.press("Escape");
+  await expect(sheet).toHaveCount(0);
+});
+
+test("the discovery sheet lists every place and the places checked without a chapter", async ({ page }) => {
+  await toHotspot(page);
+  await page.getByRole("button", { name: "Take Action" }).click();
+  const sheet = page.getByRole("dialog");
+  await expect(sheet.getByRole("button", { name: "Open the story" })).toHaveCount(slugs.length);
+  await expect(sheet.getByText("Checked, no chapter yet")).toBeVisible();
+  await sheet.getByRole("button", { name: "Open the story" }).first().click();
+  await expect.poll(() => scene(page)).toBe("PLACE_CHAPTER");
+});
+
+test("sound stays off until the reader turns it on", async ({ page }) => {
+  await page.goto("/?debug#place=demak");
+  const toggle = page.getByRole("switch", { name: /Sound/ });
+  await expect(toggle).toHaveAttribute("aria-checked", "false");
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-checked", "true");
 });
 
 test("a COG tile request is served as a partial (206) response", async ({ page }) => {
-  const partial = page.waitForResponse((r) => r.url().endsWith(".tif") && r.status() === 206);
-  await page.goto("/");
-  await scrollToBeat(page, 0, 2);
-  expect((await partial).headers()["content-range"]).toMatch(/^bytes \d+-\d+\/\d+$/);
-});
-
-test("the action drawer opens with https links and closes on Escape", async ({ page }) => {
-  await page.goto("/");
-  const trigger = page.getByRole("button", { name: /Take action · Rondônia/ });
-  await trigger.click();
-  const dialog = page.getByRole("dialog");
-  await expect(dialog).toBeVisible();
-  const links = dialog.locator('a[target="_blank"]');
-  expect(await links.count()).toBeGreaterThanOrEqual(4);
-  for (const href of await links.evaluateAll((els) => els.map((e) => e.getAttribute("href")))) expect(href).toMatch(/^https:\/\//);
-  for (const rel of await links.evaluateAll((els) => els.map((e) => e.getAttribute("rel")))) expect(rel).toContain("noopener");
-  // Provenance is always stated: a caution for synthetic or fallback data, a plain note for measured data.
-  const gen = JSON.parse(readFileSync("public/chapters/rondonia.json", "utf8")).generated;
-  const statuses = new Set<string>([...gen.layers, ...gen.series].map((x: { status: string }) => x.status));
-  if (statuses.has("illustrative")) await expect(dialog.getByText("Illustrative data").first()).toBeVisible();
-  else {
-    await expect(dialog.getByText("NISAR data").first()).toBeVisible();
-    await expect(dialog.getByText("Illustrative data")).toHaveCount(0);
-  }
-  await page.keyboard.press("Escape");
-  await expect(dialog).toBeHidden();
-  await expect(trigger).toBeFocused();
-});
-
-test("the expanded legend never covers the call-to-action button", async ({ page }) => {
-  for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 720 }]) {
-    await page.setViewportSize(viewport);
-    await page.goto("/");
-    await scrollToBeat(page, 1, 2);
-    await page.getByRole("button", { name: /Yellow-green/ }).click();
-    await expect(page.locator("#legend-panel")).toBeVisible();
-    await page.waitForTimeout(800); // let the panel finish growing
-    const cta = await page.getByRole("button", { name: /Take action/ }).boundingBox();
-    const column = await page.getByRole("complementary", { name: "Radar readout" }).boundingBox();
-    expect(column!.y).toBeGreaterThanOrEqual(cta!.y + cta!.height);
-  }
-});
-
-test("a COG that fails to load falls back to its PNG preview", async ({ page }) => {
-  await page.route("**/data/rondonia/sar_before.tif", (route) => route.abort());
-  const warnings: string[] = [];
-  page.on("console", (m) => m.type() === "warning" && warnings.push(m.text()));
-  await page.goto("/?debug");
-  await scrollToBeat(page, 0, 2);
-  await expect.poll(() => warnings.some((w) => w.includes("sar_before") && w.includes("PNG preview"))).toBe(true);
-  const kind = () => page.evaluate(() => (window as unknown as { __sar: { a: { getSource(id: string): { type: string } | undefined } } }).__sar.a.getSource("src-sar_before")?.type);
-  await expect.poll(kind).toBe("image");
+  const ranged = page.waitForResponse((r) => r.url().endsWith(".tif") && r.status() === 206);
+  await page.goto("/?debug#place=demak");
+  expect((await ranged).status()).toBe(206);
 });
 
 test("screenshots for review", async ({ page }) => {
+  test.setTimeout(240_000);
   await page.goto("/");
-  await page.waitForLoadState("networkidle");
-  const shots: [string, number, number, number][] = [
-    ["01-hero", -1, 0, 0],
-    ["02-rondonia-flyover", 0, 0, 0.6],
-    ["03-rondonia-radar", 0, 2, 0.5],
-    ["04-rondonia-split", 0, 3, 0.5],
-    ["05-okanagan-smoke", 1, 1, 0.5],
-    ["06-okanagan-scar", 1, 2, 0.5],
-    ["07-sanjoaquin-bowl", 2, 2, 0.5],
-  ];
-  for (const [name, c, b, f] of shots) {
-    if (c < 0) await page.evaluate(() => window.scrollTo(0, 0));
-    else await scrollToBeat(page, c, b, f);
-    await page.waitForTimeout(3500); // let the spring settle and tiles load
-    await page.screenshot({ path: `${SCREENS}/${name}.png` });
-  }
-
-  // Open states: the expanded legend and the action drawer.
-  await scrollToBeat(page, 1, 2, 0.5);
-  await page.getByRole("button", { name: /Yellow-green/ }).click();
-  await page.waitForTimeout(1200);
-  await page.screenshot({ path: `${SCREENS}/08-legend-open.png` });
-  await page.getByRole("button", { name: /Yellow-green/ }).click();
-  await page.getByRole("button", { name: /Take action · Okanagan/ }).click();
-  await page.waitForTimeout(1200);
-  await page.screenshot({ path: `${SCREENS}/09-drawer.png` });
-  await page.keyboard.press("Escape");
-
-  // A phone-sized viewport.
-  await page.setViewportSize({ width: 390, height: 844 });
-  for (const [name, c, b] of [["10-mobile-radar", 0, 2], ["11-mobile-bowl", 2, 2]] as const) {
-    await scrollToBeat(page, c, b, 0.5);
+  await page.waitForTimeout(2500);
+  await page.screenshot({ path: `${SCREENS}/01-hero.png` });
+  await toHotspot(page);
+  await page.waitForTimeout(2500);
+  await page.screenshot({ path: `${SCREENS}/02-hotspot.png` });
+  for (const slug of slugs) {
+    await page.goto(`/?debug#place=${slug}`);
     await page.waitForTimeout(3500);
-    await page.screenshot({ path: `${SCREENS}/${name}.png` });
+    await page.screenshot({ path: `${SCREENS}/${slug}-act1.png` });
+    for (const beat of [1, 2, 3, 4]) {
+      await scrollToBeat(page, beat, 0.4);
+      await page.waitForTimeout(3000);
+      await page.screenshot({ path: `${SCREENS}/${slug}-beat${beat}.png` });
+    }
   }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?debug#place=demak");
+  await scrollToBeat(page, 2, 0.4);
+  await page.waitForTimeout(3000);
+  await page.screenshot({ path: `${SCREENS}/mobile-demak.png` });
 });

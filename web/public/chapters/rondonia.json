@@ -550,7 +550,34 @@
         "license": "Open and free to use under NASA's Earth science data policy",
         "url": "https://www.earthdata.nasa.gov/data/projects/hls",
         "nasa": true
+      },
+      {
+        "id": "copernicus-dem",
+        "mission": "Copernicus DEM",
+        "product": "Copernicus DEM GLO-30 (30 m), resampled to 1,600 px on the longest side",
+        "collection": "cop-dem-glo-30",
+        "maturity": "n/a",
+        "granules": [
+          "Copernicus_DSM_COG_10_S10_00_W063_00_DEM",
+          "Copernicus_DSM_COG_10_S10_00_W064_00_DEM",
+          "Copernicus_DSM_COG_10_S10_00_W065_00_DEM",
+          "Copernicus_DSM_COG_10_S11_00_W063_00_DEM",
+          "Copernicus_DSM_COG_10_S11_00_W064_00_DEM",
+          "Copernicus_DSM_COG_10_S11_00_W065_00_DEM"
+        ],
+        "dates": [],
+        "provider": "European Space Agency and Airbus, via Microsoft Planetary Computer",
+        "license": "Copernicus DEM licence: free use with attribution. Produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018, provided under COPERNICUS by the European Union and ESA",
+        "url": "https://planetarycomputer.microsoft.com/dataset/cop-dem-glo-30",
+        "nasa": false
       }
-    ]
+    ],
+    "dem": {
+      "cog": "data/rondonia/dem.tif",
+      "bounds": [-64.115, -10.645, -62.585, -9.455],
+      "sourceIds": ["copernicus-dem"],
+      "bytes": 3935511,
+      "sha256": "5f41c0b607568e71b824dd670aeaa16e149e8a41610de6165a766e9fdc34b882"
+    }
   }
 }

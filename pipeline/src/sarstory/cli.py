@@ -132,6 +132,28 @@ def cmd_build(args: argparse.Namespace) -> int:
     return 1 if failed else 0
 
 
+def cmd_dem(args: argparse.Namespace) -> int:
+    from .dem import build_dem
+
+    failed = 0
+    for slug in args.slugs or sorted(p.stem for p in CHAPTERS_DIR.glob("*.json")):
+        try:
+            path = build_dem(slug)
+        except Exception as e:
+            print(f"FAIL  {slug}: {type(e).__name__}: {e}", file=sys.stderr)
+            failed += 1
+            continue
+        print(f"wrote {path.relative_to(path.parents[2])} (terrain)")
+    return 1 if failed else 0
+
+
+def cmd_globe(_: argparse.Namespace) -> int:
+    from .globe import build_globe
+
+    build_globe()
+    return 0
+
+
 def cmd_clean(_: argparse.Namespace) -> int:
     shutil.rmtree(CACHE_DIR, ignore_errors=True)
     print(f"removed {CACHE_DIR}")
@@ -146,6 +168,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--all", action="store_true", help="every chapter with a processing config")
     p.add_argument("--force", action="store_true", help="replace layers that hold real or fallback data")
     p.set_defaults(func=cmd_fixture)
+    p = sub.add_parser("dem", help="write Copernicus GLO-30 terrain COGs for chapters")
+    p.add_argument("slugs", nargs="*")
+    p.set_defaults(func=cmd_dem)
+    p = sub.add_parser("globe", help="save NASA Blue Marble tiles for the globe scenes")
+    p.set_defaults(func=cmd_globe)
     p = sub.add_parser("validate", help="check manifests against the schema and their asset files")
     p.add_argument("slugs", nargs="*")
     p.set_defaults(func=cmd_validate)

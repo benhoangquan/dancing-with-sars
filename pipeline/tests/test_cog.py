@@ -118,3 +118,24 @@ def test_ramp_preview_is_colored_with_transparent_nodata(tmp_path):
     assert (alpha == 0).any() and (alpha == 255).any()
     colored = arr[alpha == 255][:, :3]
     assert len(np.unique(colored, axis=0)) <= 3, "a constant value must map to one color"
+
+
+def test_globe_tiles_cover_every_zoom_and_are_saved_once(tmp_path):
+    import io
+
+    from PIL import Image
+
+    from sarstory.globe import build_globe, tile_keys
+
+    assert len(tile_keys(2)) == 1 + 4 + 16
+    calls = []
+
+    def fake_get(url):
+        calls.append(url)
+        buf = io.BytesIO()
+        Image.new("RGB", (256, 256), (10, 20, 60)).save(buf, "JPEG")
+        return buf.getvalue()
+
+    assert build_globe(tmp_path, max_zoom=1, get=fake_get, log=lambda *_: None) == 5
+    assert (tmp_path / "1" / "1" / "0.webp").exists() and "/1/0/1.jpeg" in calls[-2]
+    assert build_globe(tmp_path, max_zoom=1, get=fake_get, log=lambda *_: None) == 0

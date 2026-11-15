@@ -101,10 +101,35 @@ def dumps(obj: dict) -> str:
     return _dump(obj, 0) + "\n"
 
 
+CARRIED = ("dem", "impact", "landmarkReadings")  # written by their own commands, kept across `sar build`
+
+
+def carry_extras(new: dict, old: dict) -> None:
+    """Keep generated parts that other commands own (terrain, overlays, landmark readings) and the sources
+    they cite when a build replaces the generated block."""
+    gen, prev = new.get("generated"), old.get("generated")
+    if not gen or not prev:
+        return
+    have = {s["id"] for s in gen["sources"]}
+    for key in CARRIED:
+        if key in gen or key not in prev:
+            continue
+        gen[key] = prev[key]
+        cited = prev[key].get("sourceIds", []) if isinstance(prev[key], dict) else []
+        for src in prev["sources"]:
+            if src["id"] in cited and src["id"] not in have:
+                gen["sources"].append(src)
+                have.add(src["id"])
+
+
 def write_manifest(slug: str, obj: dict, chapters_dir: Path = CHAPTERS_DIR) -> Path:
-    """Validate then write. Raises ValueError with the schema errors and writes nothing if invalid."""
+    """Validate then write. Raises ValueError with the schema errors and writes nothing if invalid. Parts of
+    `generated` owned by other commands are carried over from the file on disk (see `carry_extras`)."""
     if obj.get("slug") != slug:
         raise ValueError(f"manifest slug {obj.get('slug')!r} does not match {slug!r}")
+    on_disk = manifest_path(slug, chapters_dir)
+    if on_disk.exists():
+        carry_extras(obj, json.loads(on_disk.read_text(encoding="utf-8")))
     errors = validate(obj)
     if not errors:
         errors, _ = check_invariants(obj)

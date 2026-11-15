@@ -180,6 +180,15 @@ def cmd_audio(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_recompress(args: argparse.Namespace) -> int:
+    from .cog import recompress_layers
+
+    for slug in args.slugs or sorted(p.stem for p in CHAPTERS_DIR.glob("*.json")):
+        saved = recompress_layers(slug, CHAPTERS_DIR)
+        print(f"{slug}: saved {saved / 1e6:.1f} MB")
+    return 0
+
+
 def cmd_globe(_: argparse.Namespace) -> int:
     from .globe import build_globe
 
@@ -222,6 +231,9 @@ def main(argv: list[str] | None = None) -> int:
     p.set_defaults(func=cmd_landmarks)
     p = sub.add_parser("cities", help="save reference city outlines for the city-scale comparison")
     p.set_defaults(func=cmd_cities)
+    p = sub.add_parser("recompress", help="store imagery layers as JPEG COGs with WebP previews")
+    p.add_argument("slugs", nargs="*")
+    p.set_defaults(func=cmd_recompress)
     p = sub.add_parser("globe", help="save NASA Blue Marble tiles for the globe scenes")
     p.set_defaults(func=cmd_globe)
     p = sub.add_parser("validate", help="check manifests against the schema and their asset files")

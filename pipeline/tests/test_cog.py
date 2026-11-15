@@ -6,7 +6,7 @@ import rasterio
 from PIL import Image
 from rasterio.transform import from_bounds
 
-from sarstory.cog import cog_info, sha256_file, write_cog, write_layer
+from sarstory.cog import cog_info, sha256_file, write_cog, write_cog_jpeg, write_layer
 from sarstory.manifest import schema
 
 BBOX = (-63.80, -10.40, -62.90, -9.70)
@@ -85,7 +85,7 @@ def test_write_layer_entry_matches_files_and_schema(tmp_path):
         data_dir=public / "data",
     )
     cog, png = public / entry["cog"], public / entry["preview"]
-    assert entry["cog"] == "data/demo/sar_after.tif" and entry["preview"] == "data/demo/sar_after.png"
+    assert entry["cog"] == "data/demo/sar_after.tif" and entry["preview"] == "data/demo/sar_after.webp"
     assert cog.stat().st_size == entry["bytes"] and sha256_file(cog) == entry["sha256"]
     img = Image.open(png)
     assert img.mode == "RGBA" and max(img.size) <= 1024
@@ -172,3 +172,41 @@ def test_synthesized_ambience_loops_seamlessly_and_encodes_under_budget(tmp_path
     write_wav(wav, synth("wind", seconds=LOOP_S))
     encode_loop(wav, mp3)
     assert 0 < mp3.stat().st_size <= MAX_BYTES
+
+
+def test_jpeg_cog_keeps_transparency_and_is_much_smaller(tmp_path):
+    rng = np.random.default_rng(1)
+    data = np.zeros((4, H, W), np.uint8)
+    data[:3] = rng.integers(60, 200, (3, H, W), dtype=np.uint8)
+    data[3] = 255
+    data[3, :40] = 0
+    lossless, jpeg = tmp_path / "a.tif", tmp_path / "b.tif"
+    write_cog(lossless, data, TR, "EPSG:4326")
+    write_cog_jpeg(jpeg, data, TR, "EPSG:4326")
+    assert jpeg.stat().st_size < lossless.stat().st_size
+    info = cog_info(jpeg)
+    assert info["crs"] == "EPSG:3857" and info["count"] == 3 and info["overviews"]
+    with rasterio.open(jpeg) as ds:
+        mask = ds.read_masks(1)
+    assert (mask == 0).any() and (mask == 255).any()
+
+
+def test_recompress_updates_the_manifest_and_stays_valid(tmp_path):
+    import shutil
+
+    from sarstory.cog import recompress_layers
+    from sarstory.config import CHAPTERS_DIR
+    from sarstory.manifest import read_manifest, validate, verify_assets
+
+    chapters = tmp_path / "public" / "chapters"
+    chapters.mkdir(parents=True)
+    obj = json.loads((CHAPTERS_DIR / "rondonia.json").read_text())
+    src = CHAPTERS_DIR.parent
+    shutil.copytree(src / "data" / "rondonia", tmp_path / "public" / "data" / "rondonia")
+    (chapters / "rondonia.json").write_text(json.dumps(obj))
+    first = recompress_layers("rondonia", chapters, tmp_path / "public" / "data")
+    assert first >= 0
+    again = recompress_layers("rondonia", chapters, tmp_path / "public" / "data")
+    assert again == 0, "layers already stored as JPEG are left alone"
+    new = read_manifest("rondonia", chapters)
+    assert validate(new) == [] and verify_assets(new, tmp_path / "public") == []

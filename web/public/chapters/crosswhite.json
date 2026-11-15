@@ -274,12 +274,12 @@
         "date": "2025-07-25/2025-08-30",
         "cog": "data/crosswhite/optical_baseline.tif",
         "render": { "type": "rgba" },
-        "preview": "data/crosswhite/optical_baseline.png",
+        "preview": "data/crosswhite/optical_baseline.webp",
         "bounds": [-121.289063, 44.087585, -119.882813, 45.336702],
         "sourceIds": ["hls"],
         "status": "real",
-        "bytes": 7406111,
-        "sha256": "028628257b503221ae2a573b30e299433848fe3fdd39fc3eedabcf3df9a800af"
+        "bytes": 1104078,
+        "sha256": "b04a62972209a4f60f14599d7e4cc2d0d0369348783c2ea0cae8532fcd300009"
       },
       {
         "id": "optical_smoke",
@@ -288,12 +288,12 @@
         "date": "2026-07-27",
         "cog": "data/crosswhite/optical_smoke.tif",
         "render": { "type": "rgba" },
-        "preview": "data/crosswhite/optical_smoke.png",
+        "preview": "data/crosswhite/optical_smoke.webp",
         "bounds": [-121.289063, 44.087585, -119.882813, 45.336702],
         "sourceIds": ["hls"],
         "status": "real",
-        "bytes": 6890805,
-        "sha256": "ad07f3591d318557fa0817dcb32229abb025a94391b0bb6cbab1915615e7548e"
+        "bytes": 933660,
+        "sha256": "cadc168e1c00d46c61b61946c0c4e2c14c943ca651c6747bbde959c6e005b55b"
       },
       {
         "id": "optical_after",
@@ -302,12 +302,12 @@
         "date": "2026-10-03/2026-10-23",
         "cog": "data/crosswhite/optical_after.tif",
         "render": { "type": "rgba" },
-        "preview": "data/crosswhite/optical_after.png",
+        "preview": "data/crosswhite/optical_after.webp",
         "bounds": [-121.289063, 44.087585, -119.882813, 45.336702],
         "sourceIds": ["hls"],
         "status": "real",
-        "bytes": 7649312,
-        "sha256": "38a8f5b52aec0763ee25328e7b109ff4758f9d14a51b60ef4a777ea36b972e83"
+        "bytes": 1226515,
+        "sha256": "92b55a1f3e29eaeb2861106c617efd7800733b59474676a7c5109e2047d611b3"
       },
       {
         "id": "sar_before",
@@ -321,12 +321,12 @@
           "HV": [-28.0, -8.0],
           "ratio": [0.0, 15.0]
         },
-        "preview": "data/crosswhite/sar_before.png",
+        "preview": "data/crosswhite/sar_before.webp",
         "bounds": [-121.289063, 44.087585, -119.882813, 45.336702],
         "sourceIds": ["nisar-gcov"],
         "status": "real",
-        "bytes": 8353708,
-        "sha256": "9b88a933b620addd4267d96cb1cd3f646548a4a664b0ab06efe31b9d9ce39925"
+        "bytes": 1354993,
+        "sha256": "ab90d5adadd514fd0f6a86d9a79ed5dd0fa85be52a231673c619be6c56672233"
       },
       {
         "id": "sar_after",
@@ -340,12 +340,12 @@
           "HV": [-28.0, -8.0],
           "ratio": [0.0, 15.0]
         },
-        "preview": "data/crosswhite/sar_after.png",
+        "preview": "data/crosswhite/sar_after.webp",
         "bounds": [-121.289063, 44.087585, -119.882813, 45.336702],
         "sourceIds": ["nisar-gcov"],
         "status": "real",
-        "bytes": 8363081,
-        "sha256": "193ecfe442994a8a3930fd7f4d7a76e7fd3c2047fa82747fd3872bcb89bace48"
+        "bytes": 1354989,
+        "sha256": "3b861836fce7e45aa76657aa34fca4034c75390f3074a82177ae749983caeff4"
       }
     ],
     "series": [

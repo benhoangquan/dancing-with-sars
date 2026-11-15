@@ -265,12 +265,12 @@
         "date": "2017-08-22/2017-11-10",
         "cog": "data/demak/optical_baseline.tif",
         "render": { "type": "rgba" },
-        "preview": "data/demak/optical_baseline.png",
+        "preview": "data/demak/optical_baseline.webp",
         "bounds": [110.390625, -7.362467, 111.09375, -6.664608],
         "sourceIds": ["hls"],
         "status": "real",
-        "bytes": 633311,
-        "sha256": "a283096f72d3142b3a91b68bf6fab272fe5fe115c02bfecf64d59f94722748f6"
+        "bytes": 90266,
+        "sha256": "7605f7c3e1a218903d37a4edba1e161f150a44fa54d889bee46e2066b71e6aa9"
       },
       {
         "id": "optical_2026",
@@ -279,12 +279,12 @@
         "date": "2026-06-01/2026-10-11",
         "cog": "data/demak/optical_2026.tif",
         "render": { "type": "rgba" },
-        "preview": "data/demak/optical_2026.png",
+        "preview": "data/demak/optical_2026.webp",
         "bounds": [110.390625, -7.362467, 111.09375, -6.664608],
         "sourceIds": ["hls"],
         "status": "real",
-        "bytes": 618928,
-        "sha256": "3687d54ac941086f3c07d25844029186b12e058ef47d4287f9c8b6d6791422d2"
+        "bytes": 91696,
+        "sha256": "69324fc4405945ecec7946a5f9f77e476afcc497d31e4d609bba2b42cb32a849"
       },
       {
         "id": "sar_2026",
@@ -298,12 +298,12 @@
           "HV": [-28.0, -8.0],
           "ratio": [0.0, 15.0]
         },
-        "preview": "data/demak/sar_2026.png",
+        "preview": "data/demak/sar_2026.webp",
         "bounds": [110.390625, -7.362467, 111.09375, -6.664608],
         "sourceIds": ["nisar-gcov"],
         "status": "real",
-        "bytes": 743478,
-        "sha256": "04cf529058b0449f865f6fc9aba71e5675edb8946550d685ae0bdbc59b3ccafc"
+        "bytes": 130865,
+        "sha256": "f6dc3c8d0731c1a4f9ca2a476ddb632ce4f2e8d320921c1d6ec3881b97b49cd3"
       }
     ],
     "series": [],

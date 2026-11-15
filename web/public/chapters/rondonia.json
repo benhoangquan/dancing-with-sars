@@ -252,12 +252,12 @@
         "date": "2026-06-18/2026-07-08",
         "cog": "data/rondonia/optical_before.tif",
         "render": { "type": "rgba" },
-        "preview": "data/rondonia/optical_before.png",
+        "preview": "data/rondonia/optical_before.webp",
         "bounds": [-63.984375, -10.487812, -62.578125, -9.449062],
         "sourceIds": ["hls"],
         "status": "real",
-        "bytes": 3997598,
-        "sha256": "00958c8125fb28c2aebf384c021be275ab061a3819bfa9270ec04b1a0ea71c1c"
+        "bytes": 583437,
+        "sha256": "c8e03b6be8043da9c010ae7ea9985e02e8629aa60deee282f4030417db135fb4"
       },
       {
         "id": "optical_after",
@@ -266,12 +266,12 @@
         "date": "2026-09-11/2026-10-03",
         "cog": "data/rondonia/optical_after.tif",
         "render": { "type": "rgba" },
-        "preview": "data/rondonia/optical_after.png",
+        "preview": "data/rondonia/optical_after.webp",
         "bounds": [-63.984375, -10.487812, -62.578125, -9.449062],
         "sourceIds": ["hls"],
         "status": "real",
-        "bytes": 3900792,
-        "sha256": "e68599ed2907ba7418037abf103aa4965d7ef0fa664ce7722c7676a2a557ead1"
+        "bytes": 558164,
+        "sha256": "bfde12658564d9520490fe36a8721d2aa1d0e83d76593b2fd1ac5bfd9e4f1f37"
       },
       {
         "id": "sar_before",
@@ -285,12 +285,12 @@
           "HV": [-28.0, -8.0],
           "ratio": [0.0, 15.0]
         },
-        "preview": "data/rondonia/sar_before.png",
+        "preview": "data/rondonia/sar_before.webp",
         "bounds": [-63.984375, -10.487812, -62.578125, -9.449062],
         "sourceIds": ["nisar-gcov"],
         "status": "real",
-        "bytes": 4807149,
-        "sha256": "e59e310f052495dcbd985deef06f8cafede87aab8b3f040b2b659c15f7f759d5"
+        "bytes": 882073,
+        "sha256": "4819afe81e1a31918414a2bd53ca253fe4e8ca0f3064afc75a9f616f01ad5ecb"
       },
       {
         "id": "sar_after",
@@ -304,12 +304,12 @@
           "HV": [-28.0, -8.0],
           "ratio": [0.0, 15.0]
         },
-        "preview": "data/rondonia/sar_after.png",
+        "preview": "data/rondonia/sar_after.webp",
         "bounds": [-63.984375, -10.487812, -62.578125, -9.449062],
         "sourceIds": ["nisar-gcov"],
         "status": "real",
-        "bytes": 4773131,
-        "sha256": "d3890dea65ce3d876e4aa09dd8d8ec712b67e01a26fc869f365690f93a1aa147"
+        "bytes": 870122,
+        "sha256": "5ce441c00683df6947c383c147bb59e7cddc7601aab0f44404e81d279c422843"
       },
       {
         "id": "hv_change",

@@ -250,12 +250,12 @@
         "date": "2025-07-02/2025-08-26",
         "cog": "data/okanagan/optical_baseline.tif",
         "render": { "type": "rgba" },
-        "preview": "data/okanagan/optical_baseline.png",
+        "preview": "data/okanagan/optical_baseline.webp",
         "bounds": [-119.882813, 49.61071, -118.828125, 50.289339],
         "sourceIds": ["hls"],
         "status": "real",
-        "bytes": 3279221,
-        "sha256": "d671a34a970040367e619aef6ce4b41586b2a65e3f1cd7efe7921340699644d7"
+        "bytes": 455923,
+        "sha256": "d64c13026a55d4b390e1d5f3f01c5fae2448e631ad67d743ee54608ca6b5afe2"
       },
       {
         "id": "optical_smoke",
@@ -264,12 +264,12 @@
         "date": "2026-08-16",
         "cog": "data/okanagan/optical_smoke.tif",
         "render": { "type": "rgba" },
-        "preview": "data/okanagan/optical_smoke.png",
+        "preview": "data/okanagan/optical_smoke.webp",
         "bounds": [-119.882813, 49.61071, -118.828125, 50.289339],
         "sourceIds": ["hls"],
         "status": "real",
-        "bytes": 3378119,
-        "sha256": "ac21e571cdb3361b33357ff2fbdb99f3cfa4815403f993edc8009505cccd546a"
+        "bytes": 459542,
+        "sha256": "ad9202ca85b08ec5241004dafc19a033f18f858a168f74f83eaa3d3e041c8cf1"
       },
       {
         "id": "optical_after",
@@ -278,12 +278,12 @@
         "date": "2026-09-01/2026-10-11",
         "cog": "data/okanagan/optical_after.tif",
         "render": { "type": "rgba" },
-        "preview": "data/okanagan/optical_after.png",
+        "preview": "data/okanagan/optical_after.webp",
         "bounds": [-119.882813, 49.61071, -118.828125, 50.289339],
         "sourceIds": ["hls"],
         "status": "real",
-        "bytes": 3324785,
-        "sha256": "034ad154ed9dbfa888872affd4aa17c48f7a1fa9f5e2446605e0f71c58668c1f"
+        "bytes": 468067,
+        "sha256": "19e52b8574529e23664be15c685d1760dccbe83c6506f848c24c5f57721f10ad"
       },
       {
         "id": "sar_before",
@@ -297,12 +297,12 @@
           "HV": [-28.0, -8.0],
           "ratio": [0.0, 15.0]
         },
-        "preview": "data/okanagan/sar_before.png",
+        "preview": "data/okanagan/sar_before.webp",
         "bounds": [-119.882813, 49.61071, -118.828125, 50.289339],
         "sourceIds": ["nisar-gcov"],
         "status": "real",
-        "bytes": 3880198,
-        "sha256": "5813b3c79748f8c048031174e2aac18422045880ba2e38731476b4e603f902b3"
+        "bytes": 584009,
+        "sha256": "1e6f7c9caa9b416fa179038bfea589aa5c52e9b0dd2027757e6d272242b5b0ea"
       },
       {
         "id": "sar_after",
@@ -316,12 +316,12 @@
           "HV": [-28.0, -8.0],
           "ratio": [0.0, 15.0]
         },
-        "preview": "data/okanagan/sar_after.png",
+        "preview": "data/okanagan/sar_after.webp",
         "bounds": [-119.882813, 49.61071, -118.828125, 50.289339],
         "sourceIds": ["nisar-gcov"],
         "status": "real",
-        "bytes": 3945547,
-        "sha256": "65a13f14a84f4034ee1567f378b72111d0e5b3dedaae56bc3ab767fcc355aa0c"
+        "bytes": 583929,
+        "sha256": "26b7fba48031f8888111a31245bb13d97efeda07602d445f52062e270152580b"
       }
     ],
     "series": [

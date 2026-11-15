@@ -5,6 +5,7 @@ import { CityScaleCompare } from "@/components/action/CityScaleCompare";
 import { RichText } from "@/components/ui/RichText";
 import { Sheet } from "@/components/ui/Sheet";
 import { formatNumber, formatStat } from "@/lib/format";
+import { REFERENCES } from "@/lib/references";
 import { chapterTokens } from "@/lib/tokens";
 import type { Chapter } from "@/types/chapter";
 
@@ -77,6 +78,16 @@ export function ActionModal({ chapter, open, onClose }: Props) {
               ))}
             </ul>
             <p className="text-[12px] leading-snug text-light-ink-dim">{provenanceLine(chapter)}</p>
+            <ul className="text-[12px] leading-snug text-light-ink-dim">
+              {[...new Set(Object.values(chapter.scaleAnchors ?? {}))].map((id) => (
+                <li key={id}>
+                  Comparison “{REFERENCES[id].name}”:{" "}
+                  <a href={REFERENCES[id].source.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+                    {REFERENCES[id].source.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
             <section aria-label="Organizations you can support" className="space-y-3">
               {action.organizations.map((o) => (
                 <article key={o.name} className="rounded-2xl border border-black/10 p-5">

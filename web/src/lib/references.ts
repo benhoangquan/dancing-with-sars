@@ -16,13 +16,13 @@ export const REFERENCES: Record<ScaleReference, Reference> = {
     id: "football-pitch",
     value: 0.714,
     name: "football pitch",
-    source: { name: "IFAB Laws of the Game, Law 1 (105 × 68 m pitch)", url: "https://www.theifab.com/laws/latest/the-field-of-play/" },
+    source: { name: "IFAB Laws of the Game, Law 1 (international pitches 100–110 × 64–75 m; 105 × 68 m used here)", url: "https://www.theifab.com/laws/latest/the-field-of-play/" },
   },
   "central-park": {
     id: "central-park",
     value: 341,
     name: "Central Park",
-    source: { name: "Central Park Conservancy (843 acres)", url: "https://www.centralparknyc.org/about" },
+    source: { name: "Central Park Conservancy: 843 acres (341 ha)", url: "https://www.centralparknyc.org/about" },
   },
   manhattan: {
     id: "manhattan",

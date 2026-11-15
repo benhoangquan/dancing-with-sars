@@ -8,15 +8,16 @@ Data contract: `schema/chapter.schema.json` (canonical) and `docs/data_contract.
 - `cd pipeline && uv run sar fixture --all && uv run sar validate` writes and validates the illustrative chapter data.
 - `cd pipeline && uv run sar discover --all` searches the public NISAR catalog (no login) and writes `pipeline/reports/`.
 - `cd pipeline && uv run sar fetch <slug>` then `uv run sar build <slug>` (add `--reuse-optical` to skip the network) make real layers. Fetch needs an Earthdata Login in `~/.netrc`.
+- After a build: `uv run sar dem`, `sar overture`, `sar landmarks`, `sar audio` (terrain, overlays, landmark readings, sound); `sar globe` and `sar cities` once. Each keeps the others' output.
 - `cd web && npm run verify` runs gen:types, type diff check, manifest validation, typecheck, lint, unit tests and the static build.
 - `cd web && npm run build && npm run smoke -- --trace off` runs the Playwright smoke tests against `out/`. Run `npx playwright install chromium` once. Screenshots land in `web/e2e/__screens__/` (ignored): look at them after a visual change.
-- Add `?debug` to the URL to expose the two maps as `window.__sar`.
+- Add `?debug` to the URL to expose the maps as `window.__sar` and `window.__globe`; `#place=<slug>` opens a place.
 
 ## Contract rules
 - `schema/chapter.schema.json` is the source. `web/src/types/chapter.ts` is generated: never edit it by hand.
 - Interface freeze: additive schema changes only, each logged in `docs/decisions.md`.
 - `generated` in a manifest is owned by `sar build` and `sar fixture`. Authored fields are everything else.
-- Numbers in story text come from `{stat:key}` tokens or sourced metrics, never typed by hand.
+- Numbers in story text come from `{stat:key}` (measured) or `{fact:key}` (cited) tokens, never typed by hand. Each ha/dB/cm figure has a scale anchor.
 - Every layer carries a provenance status: `real`, `fallback` or `illustrative`. The UI shows it.
 
 ## Repo rules (tested in `pipeline/tests/test_repo_rules.py`)

@@ -9,3 +9,5 @@ AI tools used in this repository, what they produced, and how the output was che
 No AI tool receives credentials. Earthdata Login is completed by the user in their own terminal.
 
 Models inside the product: none. The site is static and runs no model.
+
+2026-11-15 (v1 re-plan): the same tool wrote the globe, place and action components, the perimeter analysis, terrain, overlay, landmark, city and audio steps, and the story copy for Demak and Okanagan. Every figure in that copy is either a pipeline stat or a fact with a linked source; organization links and reference values were checked by HTTP and page reads on 2026-11-15.

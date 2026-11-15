@@ -7,6 +7,10 @@ import addFormats from "ajv-formats";
 
 const SCHEMA_URL = new URL("../../../schema/chapter.schema.json", import.meta.url);
 const TOKEN = /\{stat:([a-z0-9_]+)\}/g;
+const FACT = /\{fact:([a-z0-9_]+)\}/g;
+const BEATS = 5; // Act I, three Act II beats, Act III
+const FLYOVER_SECONDS = 20;
+const ANCHORED_UNITS = new Set(["ha", "km2", "dB", "cm/yr"]);
 const YEAR = /(?<!\d)(?:19|20)\d{2}(?!\d)/g;
 const PAD = 0.1;
 const ZOOM = [5, 16];
@@ -61,7 +65,12 @@ export function invariants(obj) {
   const stats = new Set(Object.keys(gen.stats));
   const notes = new Set(gen.annotations.map((a) => a.id));
   const sources = new Map(gen.sources.map((s) => [s.id, s]));
+  const facts = new Map((obj.facts ?? []).map((f) => [f.id, f]));
+  const anchors = obj.scaleAnchors ?? {};
+  const landmarks = new Map((obj.landmarks ?? []).map((l) => [l.id, l]));
   const groups = [
+    ["fact", (obj.facts ?? []).map((f) => f.id)],
+    ["landmark", (obj.landmarks ?? []).map((l) => l.id)],
     ["layer", gen.layers.map((l) => l.id)],
     ["series", gen.series.map((s) => s.id)],
     ["annotation", gen.annotations.map((a) => a.id)],
@@ -80,11 +89,32 @@ export function invariants(obj) {
   if (ts[0] !== 0 || ts[ts.length - 1] !== fly.duration)
     errs.push(`flyover.waypoints: first t must be 0 and last t must equal duration ${fly.duration}`);
   fly.waypoints.forEach((w, i) => checkCamera(`flyover.waypoints[${i}]`, w.camera, bbox, errs));
+  if (obj.beats.length !== BEATS) errs.push(`beats: need exactly ${BEATS} (Act I, three Act II beats, Act III), have ${obj.beats.length}`);
+  if (fly.duration !== FLYOVER_SECONDS) errs.push(`flyover.duration must be ${FLYOVER_SECONDS} s, is ${fly.duration}`);
+  if (!obj.openingCamera) errs.push("openingCamera is missing");
+  else {
+    checkCamera("openingCamera", obj.openingCamera, bbox, errs);
+    if (JSON.stringify(fly.waypoints[fly.waypoints.length - 1].camera) !== JSON.stringify(obj.openingCamera))
+      errs.push("flyover.waypoints: the last waypoint camera must equal openingCamera");
+  }
 
-  const checkText = (where, text) => {
+  const units = new Map([...Object.entries(gen.stats).map(([k, v]) => [k, v.unit]), ...[...facts].map(([k, f]) => [k, f.unit])]);
+  for (const key of Object.keys(anchors)) if (!units.has(key)) errs.push(`scaleAnchors: '${key}' is neither a stat nor a fact`);
+  for (const [id, lm] of landmarks) if (!inside({ center: lm.lonLat }, bbox)) errs.push(`landmark ${id}: ${JSON.stringify(lm.lonLat)} is outside the AOI bbox padded by 10%`);
+  for (const [id, readings] of Object.entries(gen.landmarkReadings ?? {})) {
+    if (!landmarks.has(id)) errs.push(`landmarkReadings: '${id}' is not a landmark`);
+    for (const r of readings) if (!layers.has(r.layerId)) errs.push(`landmarkReadings ${id}: layer '${r.layerId}' does not exist`);
+  }
+
+  const checkText = (where, text, anchored = false) => {
     for (const m of text.matchAll(TOKEN)) if (!stats.has(m[1])) errs.push(`${where}: token {stat:${m[1]}} has no stat`);
-    if (/\d/.test(text.replace(TOKEN, "").replace(YEAR, "")))
-      warns.push(`${where}: digits in text; use a {stat:key} token or a sourced metric`);
+    for (const m of text.matchAll(FACT)) if (!facts.has(m[1])) errs.push(`${where}: token {fact:${m[1]}} has no fact`);
+    if (anchored)
+      for (const m of [...text.matchAll(TOKEN), ...text.matchAll(FACT)])
+        if (ANCHORED_UNITS.has(units.get(m[1])) && !(m[1] in anchors))
+          errs.push(`${where}: '${m[1]}' (${units.get(m[1])}) needs a scaleAnchors entry`);
+    if (/\d/.test(text.replace(TOKEN, "").replace(FACT, "").replace(YEAR, "")))
+      warns.push(`${where}: digits in text; use a {stat:key} or {fact:key} token`);
   };
 
   for (const beat of obj.beats) {
@@ -102,15 +132,18 @@ export function invariants(obj) {
       if (!series.has(beat.readout.seriesId)) errs.push(`beat ${b}: readout series '${beat.readout.seriesId}' does not exist`);
       if (beat.readout.statKey && !stats.has(beat.readout.statKey)) errs.push(`beat ${b}: readout stat '${beat.readout.statKey}' does not exist`);
     }
-    checkText(`beat ${b} body`, beat.body);
+    checkText(`beat ${b} body`, beat.body, true);
   }
   checkText("action.body", obj.action.body);
   for (const m of obj.action.metrics)
     if (m.statKey && !stats.has(m.statKey)) errs.push(`action metric '${m.label}': stat '${m.statKey}' does not exist`);
 
-  for (const [kind, items] of [["layer", gen.layers], ["series", gen.series]])
+  for (const name of ["impact", "dem"])
+    for (const sid of gen[name]?.sourceIds ?? []) if (!sources.has(sid)) errs.push(`${name}: unknown source '${sid}'`);
+  const groupsWithStatus = [["layer", gen.layers], ["series", gen.series], ...(gen.footprint ? [["footprint", [gen.footprint]]] : [])];
+  for (const [kind, items] of groupsWithStatus)
     for (const it of items) {
-      const where = `${kind} ${it.id}`;
+      const where = `${kind} ${it.id ?? ""}`.trim();
       for (const sid of it.sourceIds) if (!sources.has(sid)) errs.push(`${where}: unknown source '${sid}'`);
       const synthetic = it.sourceIds.some((s) => sources.get(s)?.mission === "Synthetic");
       if (it.status === "illustrative" && !synthetic) errs.push(`${where}: illustrative data must cite a Synthetic source`);
@@ -138,6 +171,18 @@ export function assetErrors(obj, publicDir) {
   }
   const v = obj.generated.flyover.video;
   if (v) for (const key of ["src", "poster"]) if (!existsSync(new URL(v[key], publicDir))) errs.push(`flyover video: ${key} file ${v[key]} is missing`);
+  for (const [name, item, key] of [["dem", obj.generated.dem, "cog"], ["impact", obj.generated.impact, "geojson"]]) {
+    if (!item) continue;
+    const f = new URL(item[key], publicDir);
+    if (!existsSync(f)) errs.push(`${name}: file ${item[key]} is missing`);
+    else if (statSync(f).size !== item.bytes) errs.push(`${name}: bytes ${statSync(f).size} != manifest ${item.bytes}`);
+    else if (sha(f) !== item.sha256) errs.push(`${name}: sha256 does not match ${item[key]}`);
+  }
+  const files = [
+    ...(obj.landmarks ?? []).filter((l) => l.photo).map((l) => [`landmark ${l.id} photo`, l.photo.src]),
+    ...Object.entries(obj.soundscape ?? {}).map(([k, snd]) => [`soundscape ${k}`, snd.src]),
+  ];
+  for (const [where, src] of files) if (!existsSync(new URL(src, publicDir))) errs.push(`${where}: file ${src} is missing`);
   return errs;
 }
 

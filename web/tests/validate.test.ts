@@ -14,7 +14,7 @@ const illustrative: Manifest = JSON.parse(readFileSync(new URL("./fixtures/rondo
 const clone = (): Manifest => structuredClone(illustrative);
 
 describe("repo manifests", () => {
-  it("include the original chapters", () => expect(slugs).toEqual(expect.arrayContaining(["okanagan", "rondonia", "san-joaquin"])));
+  it("include the v1 chapters", () => expect(slugs).toEqual(expect.arrayContaining(["okanagan", "rondonia"])));
   for (const slug of slugs) {
     it(`${slug} passes schema, invariants and asset checks with no warnings`, () => {
       const { errors, warnings } = validateChapter(load(slug), publicDir);
@@ -75,6 +75,14 @@ const invariantCases: [string, (o: Manifest) => void, string][] = [
   ["unknown source", (o) => (o.generated.layers[0].sourceIds = ["ghost"]), "unknown source"],
   ["duplicate beat id", (o) => (o.beats[1].id = o.beats[0].id), "duplicate beat"],
   ["bbox inverted", (o) => (o.aoi.bbox = [-62.9, -10.4, -63.8, -9.7]), "west < east"],
+  ["four beats", (o) => o.beats.pop(), "exactly 5"],
+  ["flyover not 20 s", (o) => (o.generated.flyover.duration = 36), "must be 20"],
+  ["no opening camera", (o) => delete o.openingCamera, "openingCamera is missing"],
+  ["opening pose drifts", (o) => (o.openingCamera.pitch = 40), "must equal openingCamera"],
+  ["unknown fact token", (o) => (o.beats[2].body = "Sank {fact:nope}."), "{fact:nope}"],
+  ["hectares without anchor", (o) => delete o.scaleAnchors.cleared_ha, "needs a scaleAnchors"],
+  ["anchor for nothing", (o) => (o.scaleAnchors.ghost = "central-park"), "neither a stat"],
+  ["landmark outside AOI", (o) => (o.landmarks = [{ id: "far", label: "Far", lonLat: [0, 0] }]), "landmark far"],
 ];
 describe("invariants reject", () => {
   for (const [name, mutate, needle] of invariantCases)

@@ -39,40 +39,33 @@ seed = 3303
 max_px = 640
 
 [flyover]
-duration = 36
+duration = 20  # Act I; the last waypoint is the chapter's openingCamera (pitch 52)
 exaggeration = 3.0
 
 [[flyover.waypoints]]
 t = 0
-center = [-119.50, 36.15]
+center = [-119.500, 36.150]
 zoom = 8.9
 pitch = 0
 bearing = 0
 
 [[flyover.waypoints]]
-t = 8
-center = [-119.60, 36.05]
+t = 7
+center = [-119.500, 36.150]
 zoom = 9.6
-pitch = 55
-bearing = 30
+pitch = 45
+bearing = -15
 
 [[flyover.waypoints]]
-t = 16
-center = [-119.55, 36.12]
+t = 14
+center = [-119.500, 36.150]
 zoom = 10.2
-pitch = 50
-bearing = -20
+pitch = 55
+bearing = -5
 
 [[flyover.waypoints]]
-t = 26
-center = [-119.50, 36.10]
-zoom = 10.4
-pitch = 25
-bearing = 10
-
-[[flyover.waypoints]]
-t = 36
-center = [-119.50, 36.15]
-zoom = 9.5
-pitch = 0
+t = 20
+center = [-119.500, 36.150]
+zoom = 10.6
+pitch = 52
 bearing = 0

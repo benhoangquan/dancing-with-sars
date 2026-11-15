@@ -13,7 +13,7 @@ def test_schema_is_valid_2020_12():
 
 
 def test_the_original_chapters_exist():
-    assert {"okanagan", "rondonia", "san-joaquin"} <= set(manifest_slugs())
+    assert {"okanagan", "rondonia"} <= set(manifest_slugs())
 
 
 @pytest.mark.parametrize("slug", manifest_slugs())

@@ -8,7 +8,12 @@
   "title": "The ground is sinking",
   "dek": "Pumping groundwater lowers the land. Repeat radar passes measure that sinking in centimeters, across a whole valley at once.",
   "aoi": {
-    "bbox": [-119.95, 35.85, -119.05, 36.45],
+    "bbox": [
+      -119.95,
+      35.85,
+      -119.05,
+      36.45
+    ],
     "placeName": "San Joaquin Valley",
     "countryCode": "US"
   },
@@ -16,17 +21,30 @@
     "product": "GUNW",
     "band": "L",
     "mechanism": "interferometric-phase",
-    "polarizations": ["HH"],
+    "polarizations": [
+      "HH"
+    ],
     "explainer": "Two radar passes see the same ground. If the surface moved between them, the returning wave is shifted by a fraction of a wavelength. That phase shift converts to centimeters of motion along the radar's line of sight. Where the surface changes too much, the phase is noise and coherence is low."
   },
   "legend": [
     {
       "id": "displacement",
-      "layerIds": ["displacement"],
+      "layerIds": [
+        "displacement"
+      ],
       "swatch": {
         "kind": "ramp",
-        "stops": ["#ff7a59", "#b34a38", "#2c2c2e", "#3a6ea8", "#64b5ff"],
-        "domain": [-15, 15],
+        "stops": [
+          "#ff7a59",
+          "#b34a38",
+          "#2c2c2e",
+          "#3a6ea8",
+          "#64b5ff"
+        ],
+        "domain": [
+          -15,
+          15
+        ],
         "unit": "cm"
       },
       "label": "Red to blue",
@@ -34,11 +52,20 @@
     },
     {
       "id": "coherence",
-      "layerIds": ["coherence"],
+      "layerIds": [
+        "coherence"
+      ],
       "swatch": {
         "kind": "ramp",
-        "stops": ["#000000", "#969696", "#ffffff"],
-        "domain": [0, 1],
+        "stops": [
+          "#000000",
+          "#969696",
+          "#ffffff"
+        ],
+        "domain": [
+          0,
+          1
+        ],
         "unit": "ratio"
       },
       "label": "Dark to light",
@@ -46,8 +73,13 @@
     },
     {
       "id": "optical_fields",
-      "layerIds": ["optical_after"],
-      "swatch": { "kind": "solid", "color": "#5C8038" },
+      "layerIds": [
+        "optical_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#5C8038"
+      },
       "label": "Green and tan patches",
       "meaning": "Fields in visible light: crops and bare soil."
     }
@@ -60,7 +92,11 @@
       "body": "The San Joaquin Valley is flat farmland watered by canals and wells. Nothing in this view appears to move.",
       "stage": {
         "mode": "flyover",
-        "flyover": { "from": 0, "to": 8, "playback": "scrub" },
+        "flyover": {
+          "from": 0,
+          "to": 20,
+          "playback": "play-hold"
+        },
         "left": "optical_after",
         "right": "coherence",
         "swipe": 0.5
@@ -73,7 +109,11 @@
       "body": "Two radar passes see the same ground. If the surface moved between them, the return signal is shifted by a fraction of a wavelength, and that shift converts to centimeters.",
       "stage": {
         "mode": "radar",
-        "flyover": { "from": 8, "to": 16, "playback": "scrub" },
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
         "left": "optical_after",
         "right": "displacement",
         "swipe": 0.5
@@ -86,13 +126,23 @@
       "body": "The deepest point sank {stat:max_subsidence_cm} in this series, a rate of {stat:rate_cm_per_month}. Around it, {stat:area_over_5cm_ha} sank past the five-centimeter mark.",
       "stage": {
         "mode": "radar",
-        "flyover": { "from": 16, "to": 26, "playback": "scrub" },
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
         "left": "optical_after",
         "right": "displacement",
         "swipe": 0.5,
-        "annotations": ["deepest_point", "subsidence_bowl"]
+        "annotations": [
+          "deepest_point",
+          "subsidence_bowl"
+        ]
       },
-      "readout": { "seriesId": "displacement_hotspot", "statKey": "max_subsidence_cm" }
+      "readout": {
+        "seriesId": "displacement_hotspot",
+        "statKey": "max_subsidence_cm"
+      }
     },
     {
       "id": "pumping",
@@ -100,14 +150,22 @@
       "headline": "Water out, land down",
       "body": "When groundwater is pumped faster than it refills, the soil layers that held the water compact. Much of that compaction does not reverse.",
       "stage": {
-        "mode": "split",
-        "flyover": { "from": 26, "to": 32, "playback": "scrub" },
+        "mode": "radar",
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
         "left": "optical_after",
         "right": "displacement",
         "swipe": 0.5,
-        "annotations": ["deepest_point"]
+        "annotations": [
+          "deepest_point"
+        ]
       },
-      "readout": { "seriesId": "displacement_hotspot" }
+      "readout": {
+        "seriesId": "displacement_hotspot"
+      }
     },
     {
       "id": "act",
@@ -115,8 +173,12 @@
       "headline": "Clean water for the valley",
       "body": "Sinking land can damage canals and wells, and falling water tables can leave household wells dry. Two organizations work with valley communities on water and housing.",
       "stage": {
-        "mode": "flyover",
-        "flyover": { "from": 32, "to": 36, "playback": "play-hold" },
+        "mode": "radar",
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
         "left": "optical_after",
         "right": "displacement",
         "swipe": 0.5
@@ -165,7 +227,10 @@
           "label": "Donate to Community Water Center",
           "url": "https://www.communitywatercenter.org/donate/"
         },
-        "verified": { "on": "2026-11-14", "how": "HTTP 200 on homepage and donate page" }
+        "verified": {
+          "on": "2026-11-14",
+          "how": "HTTP 200 on homepage and donate page"
+        }
       },
       {
         "name": "Self-Help Enterprises",
@@ -193,10 +258,19 @@
         "label": "Optical",
         "date": "2026-10-03",
         "cog": "data/san-joaquin/optical_after.tif",
-        "render": { "type": "rgba" },
+        "render": {
+          "type": "rgba"
+        },
         "preview": "data/san-joaquin/optical_after.png",
-        "bounds": [-120.234375, 35.46067, -118.828125, 36.597889],
-        "sourceIds": ["synthetic"],
+        "bounds": [
+          -120.234375,
+          35.46067,
+          -118.828125,
+          36.597889
+        ],
+        "sourceIds": [
+          "synthetic"
+        ],
         "status": "illustrative",
         "bytes": 444840,
         "sha256": "130e9c191c96183fc98593d8e97fc17b24aa6bbea69f80f4ce94228cc303abc4"
@@ -207,15 +281,33 @@
         "label": "Radar composite",
         "date": "2026-06-17/2026-10-03",
         "cog": "data/san-joaquin/sar_after.tif",
-        "render": { "type": "rgba" },
+        "render": {
+          "type": "rgba"
+        },
         "stretch": {
-          "HH": [-20.0, 0.0],
-          "HV": [-28.0, -8.0],
-          "ratio": [0.0, 15.0]
+          "HH": [
+            -20.0,
+            0.0
+          ],
+          "HV": [
+            -28.0,
+            -8.0
+          ],
+          "ratio": [
+            0.0,
+            15.0
+          ]
         },
         "preview": "data/san-joaquin/sar_after.png",
-        "bounds": [-120.234375, 35.46067, -118.828125, 36.597889],
-        "sourceIds": ["synthetic"],
+        "bounds": [
+          -120.234375,
+          35.46067,
+          -118.828125,
+          36.597889
+        ],
+        "sourceIds": [
+          "synthetic"
+        ],
         "status": "illustrative",
         "bytes": 1027222,
         "sha256": "cbd17907a36e69ee4333a8b38b5e6128a7d1d30f072c91e49355b1076697f683"
@@ -229,12 +321,22 @@
         "render": {
           "type": "ramp",
           "scheme": "SarDivergingDark",
-          "domain": [-15, 15],
+          "domain": [
+            -15,
+            15
+          ],
           "unit": "cm"
         },
         "preview": "data/san-joaquin/displacement.png",
-        "bounds": [-120.234375, 35.46067, -118.828125, 36.597889],
-        "sourceIds": ["synthetic"],
+        "bounds": [
+          -120.234375,
+          35.46067,
+          -118.828125,
+          36.597889
+        ],
+        "sourceIds": [
+          "synthetic"
+        ],
         "status": "illustrative",
         "bytes": 1347793,
         "sha256": "a6726cf4705b71a35b4febd30310f39822569dec69c02dd8301b06f000a1ffe0"
@@ -248,12 +350,22 @@
         "render": {
           "type": "ramp",
           "scheme": "BrewerGreys9",
-          "domain": [0, 1],
+          "domain": [
+            0,
+            1
+          ],
           "unit": "ratio"
         },
         "preview": "data/san-joaquin/coherence.png",
-        "bounds": [-120.234375, 35.46067, -118.828125, 36.597889],
-        "sourceIds": ["synthetic"],
+        "bounds": [
+          -120.234375,
+          35.46067,
+          -118.828125,
+          36.597889
+        ],
+        "sourceIds": [
+          "synthetic"
+        ],
         "status": "illustrative",
         "bytes": 1227098,
         "sha256": "43825f78588e10fffb6aab557aeffb70cfa7dd3fec6a7dcd78180c4c351487e5"
@@ -266,33 +378,95 @@
         "unit": "cm",
         "kind": "displacement",
         "points": [
-          { "t": "2026-06-17", "v": 0.0 },
-          { "t": "2026-06-29", "v": -1.67 },
-          { "t": "2026-07-11", "v": -3.1 },
-          { "t": "2026-07-23", "v": -4.51 },
-          { "t": "2026-08-04", "v": -5.81 },
-          { "t": "2026-08-16", "v": -7.01 },
-          { "t": "2026-08-28", "v": -8.37 },
-          { "t": "2026-09-09", "v": -9.64 },
-          { "t": "2026-09-21", "v": -10.81 },
-          { "t": "2026-10-03", "v": -12.0 }
+          {
+            "t": "2026-06-17",
+            "v": 0.0
+          },
+          {
+            "t": "2026-06-29",
+            "v": -1.67
+          },
+          {
+            "t": "2026-07-11",
+            "v": -3.1
+          },
+          {
+            "t": "2026-07-23",
+            "v": -4.51
+          },
+          {
+            "t": "2026-08-04",
+            "v": -5.81
+          },
+          {
+            "t": "2026-08-16",
+            "v": -7.01
+          },
+          {
+            "t": "2026-08-28",
+            "v": -8.37
+          },
+          {
+            "t": "2026-09-09",
+            "v": -9.64
+          },
+          {
+            "t": "2026-09-21",
+            "v": -10.81
+          },
+          {
+            "t": "2026-10-03",
+            "v": -12.0
+          }
         ],
         "reference": {
           "label": "Stable reference area",
           "points": [
-            { "t": "2026-06-17", "v": -0.06 },
-            { "t": "2026-06-29", "v": -0.05 },
-            { "t": "2026-07-11", "v": 0.16 },
-            { "t": "2026-07-23", "v": 0.16 },
-            { "t": "2026-08-04", "v": 0.17 },
-            { "t": "2026-08-16", "v": -0.17 },
-            { "t": "2026-08-28", "v": -0.2 },
-            { "t": "2026-09-09", "v": -0.09 },
-            { "t": "2026-09-21", "v": 0.15 },
-            { "t": "2026-10-03", "v": 0.07 }
+            {
+              "t": "2026-06-17",
+              "v": -0.06
+            },
+            {
+              "t": "2026-06-29",
+              "v": -0.05
+            },
+            {
+              "t": "2026-07-11",
+              "v": 0.16
+            },
+            {
+              "t": "2026-07-23",
+              "v": 0.16
+            },
+            {
+              "t": "2026-08-04",
+              "v": 0.17
+            },
+            {
+              "t": "2026-08-16",
+              "v": -0.17
+            },
+            {
+              "t": "2026-08-28",
+              "v": -0.2
+            },
+            {
+              "t": "2026-09-09",
+              "v": -0.09
+            },
+            {
+              "t": "2026-09-21",
+              "v": 0.15
+            },
+            {
+              "t": "2026-10-03",
+              "v": 0.07
+            }
           ]
         },
-        "sourceIds": ["synthetic"],
+        "sourceIds": [
+          "synthetic"
+        ],
         "status": "illustrative"
       }
     ],
@@ -333,7 +507,10 @@
         {
           "t": 0,
           "camera": {
-            "center": [-119.5, 36.15],
+            "center": [
+              -119.5,
+              36.15
+            ],
             "zoom": 8.9,
             "pitch": 0,
             "bearing": 0
@@ -342,7 +519,10 @@
         {
           "t": 8,
           "camera": {
-            "center": [-119.6, 36.05],
+            "center": [
+              -119.6,
+              36.05
+            ],
             "zoom": 9.6,
             "pitch": 55,
             "bearing": 30
@@ -351,7 +531,10 @@
         {
           "t": 16,
           "camera": {
-            "center": [-119.55, 36.12],
+            "center": [
+              -119.55,
+              36.12
+            ],
             "zoom": 10.2,
             "pitch": 50,
             "bearing": -20
@@ -360,7 +543,10 @@
         {
           "t": 26,
           "camera": {
-            "center": [-119.5, 36.1],
+            "center": [
+              -119.5,
+              36.1
+            ],
             "zoom": 10.4,
             "pitch": 25,
             "bearing": 10
@@ -369,7 +555,10 @@
         {
           "t": 36,
           "camera": {
-            "center": [-119.5, 36.15],
+            "center": [
+              -119.5,
+              36.15
+            ],
             "zoom": 9.5,
             "pitch": 0,
             "bearing": 0
@@ -384,7 +573,10 @@
         "kind": "pin",
         "geometry": {
           "type": "Point",
-          "coordinates": [-119.583672, 36.118]
+          "coordinates": [
+            -119.583672,
+            36.118
+          ]
         }
       },
       {
@@ -395,11 +587,26 @@
           "type": "Polygon",
           "coordinates": [
             [
-              [-119.727812, 36.260286],
-              [-119.414219, 36.260286],
-              [-119.414219, 35.987143],
-              [-119.727812, 35.987143],
-              [-119.727812, 36.260286]
+              [
+                -119.727812,
+                36.260286
+              ],
+              [
+                -119.414219,
+                36.260286
+              ],
+              [
+                -119.414219,
+                35.987143
+              ],
+              [
+                -119.727812,
+                35.987143
+              ],
+              [
+                -119.727812,
+                36.260286
+              ]
             ]
           ]
         }
@@ -420,5 +627,17 @@
         "nasa": false
       }
     ]
+  },
+  "openingCamera": {
+    "center": [
+      -119.5,
+      36.15
+    ],
+    "zoom": 10.6,
+    "pitch": 52,
+    "bearing": 0
+  },
+  "scaleAnchors": {
+    "area_over_5cm_ha": "central-park"
   }
 }

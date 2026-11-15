@@ -3,6 +3,7 @@
 import json
 import shutil
 from datetime import date, timedelta
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -17,6 +18,8 @@ from sarstory.nisar import build_gunw
 from sarstory.nisar.fetch import save_pair, save_tile, tile_path
 from sarstory.nisar.gcov import Tile
 from sarstory.nisar.gunw import Pair
+
+TEST_DATA = Path(__file__).parent / "data"
 
 RES, EPSG = 60.0, 32720
 H, W = 80, 100
@@ -65,8 +68,10 @@ def fake_optical(slug, specs, bbox, lattice, data_dir, log=print):
 def workspace(tmp_path, monkeypatch):
     chapters = tmp_path / "public" / "chapters"
     chapters.mkdir(parents=True)
-    for slug in ("rondonia", "san-joaquin"):
-        shutil.copy(CHAPTERS_DIR / f"{slug}.json", chapters / f"{slug}.json")
+    shutil.copy(CHAPTERS_DIR / "rondonia.json", chapters / "rondonia.json")
+    shutil.copy(
+        TEST_DATA / "san-joaquin.json", chapters / "san-joaquin.json"
+    )  # off the site; keeps GUNW tested
     monkeypatch.setattr(gcov_build, "build_layers", fake_optical)
     monkeypatch.setattr(build_gunw, "build_layers", fake_optical)
     return tmp_path, chapters

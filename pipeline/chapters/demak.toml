@@ -24,40 +24,33 @@ stretch_ratio = [0.0, 15.0]
 min_coverage = 0.9  # share of the study area a granule footprint must cover
 
 [flyover]
-duration = 36
+duration = 20  # Act I; the last waypoint is the chapter's openingCamera (pitch 52)
 exaggeration = 1.5
 
 [[flyover.waypoints]]
 t = 0
 center = [110.575, -6.900]
-zoom = 10.5
+zoom = 9.6
 pitch = 0
 bearing = 0
 
 [[flyover.waypoints]]
-t = 8
-center = [110.575, -6.900]
-zoom = 11.5
-pitch = 58
-bearing = -28
+t = 7
+center = [110.540, -6.910]
+zoom = 10.4
+pitch = 45
+bearing = 15
 
 [[flyover.waypoints]]
-t = 16
-center = [110.575, -6.900]
-zoom = 12.4
+t = 14
+center = [110.510, -6.920]
+zoom = 11.2
 pitch = 55
-bearing = 10
-
-[[flyover.waypoints]]
-t = 26
-center = [110.575, -6.900]
-zoom = 13.2
-pitch = 40
 bearing = 20
 
 [[flyover.waypoints]]
-t = 36
-center = [110.575, -6.900]
-zoom = 11.3
-pitch = 0
-bearing = 0
+t = 20
+center = [110.500, -6.925]
+zoom = 11.9
+pitch = 52
+bearing = 15

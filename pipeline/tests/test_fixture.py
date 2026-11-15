@@ -2,7 +2,7 @@ import json
 import shutil
 
 import pytest
-from conftest import fixture_slugs
+from conftest import authored_path, fixture_slugs
 
 from sarstory import fixture
 from sarstory.config import CHAPTERS_DIR
@@ -17,7 +17,7 @@ def built(tmp_path_factory):
     chapters = root / "public" / "chapters"
     chapters.mkdir(parents=True)
     for s in fixture_slugs():
-        shutil.copy(CHAPTERS_DIR / f"{s}.json", chapters / f"{s}.json")
+        shutil.copy(authored_path(s), chapters / f"{s}.json")
         fixture.build_fixture(s, data_dir=root / "public" / "data", chapters_dir=chapters, force=True)
     return root
 

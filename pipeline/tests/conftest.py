@@ -1,6 +1,7 @@
 import copy
 import json
 import shutil
+from pathlib import Path
 
 import pytest
 
@@ -12,9 +13,17 @@ def manifest_slugs() -> list[str]:
     return sorted(p.stem for p in CHAPTERS_DIR.glob("*.json"))
 
 
+TEST_DATA = Path(__file__).parent / "data"
+OFF_SITE = {"san-joaquin"}  # authored manifest kept in tests/data so its fixture and GUNW build stay tested
+
+
+def authored_path(slug: str) -> Path:
+    return TEST_DATA / f"{slug}.json" if slug in OFF_SITE else CHAPTERS_DIR / f"{slug}.json"
+
+
 def fixture_slugs() -> list[str]:
     """Chapters that define illustrative data. Chapters added later with real data only have no fixture."""
-    return [s for s in manifest_slugs() if "fixture" in load_config(s)]
+    return sorted({s for s in manifest_slugs() if "fixture" in load_config(s)} | OFF_SITE)
 
 
 @pytest.fixture(scope="session")
@@ -32,7 +41,7 @@ def fixture_manifests(tmp_path_factory) -> dict[str, dict]:
     chapters.mkdir(parents=True)
     out = {}
     for slug in fixture_slugs():
-        shutil.copy(CHAPTERS_DIR / f"{slug}.json", chapters / f"{slug}.json")
+        shutil.copy(authored_path(slug), chapters / f"{slug}.json")
         path = fixture.build_fixture(
             slug, data_dir=root / "public" / "data", chapters_dir=chapters, force=True
         )

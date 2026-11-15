@@ -53,7 +53,7 @@ export type NumberPair = [number, number];
  * This interface was referenced by `Chapter`'s JSON-Schema
  * via the `definition` "Unit".
  */
-export type Unit = "dB" | "cm" | "ha" | "m" | "ratio" | "%" | "count" | "cm/month" | "m/day";
+export type Unit = "dB" | "cm" | "ha" | "m" | "ratio" | "%" | "count" | "cm/month" | "m/day" | "cm/yr" | "km2";
 /**
  * This interface was referenced by `Chapter`'s JSON-Schema
  * via the `definition` "StageMode".
@@ -93,10 +93,13 @@ export type ImpactMetric = ImpactMetricStat | ImpactMetricValue;
  */
 export type HttpsUrl = string;
 /**
+ * This interface was referenced by `undefined`'s JSON-Schema definition
+ * via the `patternProperty` "^[a-z0-9_]+$".
+ *
  * This interface was referenced by `Chapter`'s JSON-Schema
- * via the `definition` "DateOrRange".
+ * via the `definition` "ScaleReference".
  */
-export type DateOrRange = string;
+export type ScaleReference = "football-pitch" | "central-park" | "manhattan" | "echo-power" | "per-decade";
 /**
  * Relative to web/public. No leading slash, scheme or '..'.
  *
@@ -104,6 +107,11 @@ export type DateOrRange = string;
  * via the `definition` "AssetPath".
  */
 export type AssetPath = string;
+/**
+ * This interface was referenced by `Chapter`'s JSON-Schema
+ * via the `definition` "DateOrRange".
+ */
+export type DateOrRange = string;
 /**
  * This interface was referenced by `Chapter`'s JSON-Schema
  * via the `definition` "LayerRender".
@@ -140,6 +148,10 @@ export interface Chapter {
     bbox: BBox;
     placeName: string;
     countryCode: string;
+    /**
+     * ISO 3166-1 alpha-3, shown in globe callouts as 'Name · ISO3'.
+     */
+    iso3?: string;
   };
   radar: {
     product: "GCOV" | "GUNW" | "GOFF";
@@ -166,6 +178,31 @@ export interface Chapter {
     | [Beat, Beat, Beat, Beat, Beat, Beat]
     | [Beat, Beat, Beat, Beat, Beat, Beat, Beat];
   action: ActionContent;
+  /**
+   * Where the chapter's hotspot pin sits on the globe. Defaults to the bbox centre.
+   */
+  globe?: {
+    pin: LonLat;
+  };
+  openingCamera?: Camera1;
+  /**
+   * Sourced numbers for {fact:id} tokens.
+   */
+  facts?: Fact[];
+  /**
+   * Stat or fact key -> the everyday reference it is compared with.
+   */
+  scaleAnchors?: {
+    [k: string]: ScaleReference;
+  };
+  /**
+   * @maxItems 3
+   */
+  landmarks?: [] | [Landmark] | [Landmark, Landmark] | [Landmark, Landmark, Landmark];
+  soundscape?: {
+    before: Sound;
+    after: Sound;
+  };
   generated: Generated;
 }
 /**
@@ -248,6 +285,18 @@ export interface ActionContent {
    * @maxItems 3
    */
   organizations: [Organization, Organization] | [Organization, Organization, Organization];
+  /**
+   * Tab 2 of the action modal: what someone can do where they live.
+   */
+  local?: {
+    headline: string;
+    body: string;
+    /**
+     * @minItems 1
+     * @maxItems 4
+     */
+    steps: [string] | [string, string] | [string, string, string] | [string, string, string, string];
+  };
 }
 /**
  * This interface was referenced by `Chapter`'s JSON-Schema
@@ -296,6 +345,66 @@ export interface Organization {
   };
 }
 /**
+ * Pose where Act I's flyover ends and the Act II map opens. Equals the last flyover waypoint.
+ */
+export interface Camera1 {
+  center: LonLat;
+  zoom: number;
+  pitch: number;
+  bearing: number;
+}
+/**
+ * This interface was referenced by `Chapter`'s JSON-Schema
+ * via the `definition` "Fact".
+ */
+export interface Fact {
+  id: Id;
+  value: number;
+  unit: Unit;
+  decimals: number;
+  label: string;
+  source: MetricSource;
+}
+/**
+ * This interface was referenced by `Chapter`'s JSON-Schema
+ * via the `definition` "Landmark".
+ */
+export interface Landmark {
+  id: Id;
+  label: string;
+  lonLat: LonLat;
+  note?: string;
+  photo?: Photo;
+}
+/**
+ * This interface was referenced by `Chapter`'s JSON-Schema
+ * via the `definition` "Photo".
+ */
+export interface Photo {
+  src: AssetPath;
+  credit: string;
+  license: string;
+  licenseUrl: HttpsUrl;
+  sourceUrl: HttpsUrl;
+  caption: string;
+  /**
+   * How close to the pin the photo was taken, in plain words.
+   */
+  where: string;
+}
+/**
+ * This interface was referenced by `Chapter`'s JSON-Schema
+ * via the `definition` "Sound".
+ */
+export interface Sound {
+  src: AssetPath;
+  label: string;
+  credit: string;
+  license: string;
+  sourceUrl: HttpsUrl;
+  synthesized: boolean;
+}
+/**
  * This interface was referenced by `Chapter`'s JSON-Schema
  * via the `definition` "Generated".
  */
@@ -306,10 +415,7 @@ export interface Generated {
    * @minItems 1
    */
   layers: [Layer, ...Layer[]];
-  /**
-   * @minItems 1
-   */
-  series: [Series, ...Series[]];
+  series: Series[];
   stats: {
     [k: string]: Stat;
   };
@@ -319,6 +425,62 @@ export interface Generated {
    * @minItems 1
    */
   sources: [Source, ...Source[]];
+  /**
+   * Terrain for the map and the flyover, read with cog://...#dem.
+   */
+  dem?: {
+    cog: AssetPath;
+    bounds: BBox;
+    /**
+     * @minItems 1
+     */
+    sourceIds: [string, ...string[]];
+    bytes: number;
+    sha256: string;
+  };
+  landmarkReadings?: {
+    /**
+     * This interface was referenced by `undefined`'s JSON-Schema definition
+     * via the `patternProperty` "^[a-z0-9_]+$".
+     */
+    [k: string]: Reading[];
+  };
+  /**
+   * Buildings, roads and territories near the change, drawn on the radar stage.
+   */
+  impact?: {
+    geojson: AssetPath;
+    bytes: number;
+    sha256: string;
+    counts: {
+      /**
+       * This interface was referenced by `undefined`'s JSON-Schema definition
+       * via the `patternProperty` "^[a-z0-9_]+$".
+       */
+      [k: string]: number;
+    };
+    /**
+     * @minItems 1
+     */
+    sourceIds: [string, ...string[]];
+  };
+  /**
+   * The area compared with a city in the action modal.
+   */
+  footprint?: {
+    /**
+     * equal-area: a square of a cited area; the shape is not the real one.
+     */
+    kind: "shape" | "equal-area";
+    label: string;
+    areaHa: number;
+    geometry: PolygonGeometry | MultiPolygonGeometry;
+    /**
+     * @minItems 1
+     */
+    sourceIds: [string, ...string[]];
+    status: DataStatus;
+  };
 }
 /**
  * This interface was referenced by `Chapter`'s JSON-Schema
@@ -458,7 +620,17 @@ export interface PolygonGeometry {
  */
 export interface Source {
   id: string;
-  mission: "NISAR" | "Sentinel-1" | "HLS" | "NASADEM" | "Synthetic";
+  mission:
+    | "NISAR"
+    | "Sentinel-1"
+    | "HLS"
+    | "NASADEM"
+    | "Synthetic"
+    | "Copernicus DEM"
+    | "Overture Maps"
+    | "OpenStreetMap"
+    | "BC Wildfire Service"
+    | "Wikimedia Commons";
   product: string;
   collection: string;
   maturity: "beta" | "provisional" | "validated" | "n/a";
@@ -468,4 +640,29 @@ export interface Source {
   license: string;
   url: HttpsUrl;
   nasa: boolean;
+}
+/**
+ * This interface was referenced by `Chapter`'s JSON-Schema
+ * via the `definition` "Reading".
+ */
+export interface Reading {
+  label: string;
+  value: number;
+  unit: Unit;
+  decimals: number;
+  layerId: Id;
+}
+/**
+ * This interface was referenced by `Chapter`'s JSON-Schema
+ * via the `definition` "MultiPolygonGeometry".
+ */
+export interface MultiPolygonGeometry {
+  type: "MultiPolygon";
+  /**
+   * @minItems 1
+   */
+  coordinates: [
+    [[LonLat, LonLat, LonLat, LonLat, ...LonLat[]], ...[LonLat, LonLat, LonLat, LonLat, ...LonLat[]][]],
+    ...[[LonLat, LonLat, LonLat, LonLat, ...LonLat[]], ...[LonLat, LonLat, LonLat, LonLat, ...LonLat[]][]][]
+  ];
 }

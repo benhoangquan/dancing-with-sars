@@ -8,60 +8,125 @@
   "title": "Roads open the forest from the inside",
   "dek": "Under cloud, a standing forest and a cleared one can look alike from orbit. L-band radar tells them apart, and shows where new roads and clearings spread between two passes.",
   "aoi": {
-    "bbox": [-63.8, -10.4, -62.9, -9.7],
+    "bbox": [
+      -63.8,
+      -10.4,
+      -62.9,
+      -9.7
+    ],
     "placeName": "Rondônia",
-    "countryCode": "BR"
+    "countryCode": "BR",
+    "iso3": "BRA"
+  },
+  "globe": {
+    "pin": [
+      -63.35,
+      -10.05
+    ]
+  },
+  "openingCamera": {
+    "center": [
+      -63.53,
+      -9.85
+    ],
+    "zoom": 11.3,
+    "pitch": 52,
+    "bearing": -15
   },
   "radar": {
     "product": "GCOV",
     "band": "L",
     "mechanism": "volume-scattering-loss",
-    "polarizations": ["HH", "HV"],
+    "polarizations": [
+      "HH",
+      "HV"
+    ],
     "explainer": "NISAR's L-band radar has a wavelength of about 24 cm. It passes between leaves and bounces off branches and trunks, and that scattering returns strongly in the cross-polarized HV channel. Bare ground and pasture return far less HV, so a drop in HV marks canopy that is gone."
   },
   "legend": [
     {
       "id": "sar_forest",
-      "layerIds": ["sar_before", "sar_after"],
-      "swatch": { "kind": "solid", "color": "#B0D853" },
+      "layerIds": [
+        "sar_before",
+        "sar_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#B0D853"
+      },
       "label": "Yellow-green",
       "meaning": "Standing forest. Branches and leaves scatter the radar in every direction, so the cross-polarized HV channel is strong."
     },
     {
       "id": "sar_cleared",
-      "layerIds": ["sar_before", "sar_after"],
-      "swatch": { "kind": "solid", "color": "#646E7A" },
+      "layerIds": [
+        "sar_before",
+        "sar_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#646E7A"
+      },
       "label": "Slate grey",
       "meaning": "Cleared ground. Bare soil and pasture return much less HV."
     },
     {
       "id": "sar_water",
-      "layerIds": ["sar_before", "sar_after"],
-      "swatch": { "kind": "solid", "color": "#3E457E" },
+      "layerIds": [
+        "sar_before",
+        "sar_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#3E457E"
+      },
       "label": "Indigo",
       "meaning": "Rivers and open water. They reflect the radar away, so very little returns."
     },
     {
       "id": "optical_forest",
-      "layerIds": ["optical_before", "optical_after"],
-      "swatch": { "kind": "solid", "color": "#1C4222" },
+      "layerIds": [
+        "optical_before",
+        "optical_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#1C4222"
+      },
       "label": "Dark green",
       "meaning": "Forest canopy in visible light."
     },
     {
       "id": "optical_cleared",
-      "layerIds": ["optical_before", "optical_after"],
-      "swatch": { "kind": "solid", "color": "#B0966E" },
+      "layerIds": [
+        "optical_before",
+        "optical_after"
+      ],
+      "swatch": {
+        "kind": "solid",
+        "color": "#B0966E"
+      },
       "label": "Tan",
       "meaning": "Roads and cleared land in visible light."
     },
     {
       "id": "hv_drop",
-      "layerIds": ["hv_change"],
+      "layerIds": [
+        "hv_change"
+      ],
       "swatch": {
         "kind": "ramp",
-        "stops": ["#ffffcc", "#fed976", "#fd8d3c", "#e31a1c", "#800026"],
-        "domain": [2, 10],
+        "stops": [
+          "#ffffcc",
+          "#fed976",
+          "#fd8d3c",
+          "#e31a1c",
+          "#800026"
+        ],
+        "domain": [
+          2,
+          10
+        ],
         "unit": "dB"
       },
       "label": "HV drop",
@@ -76,7 +141,11 @@
       "body": "This stretch of Rondônia sits in the Amazon's arc of deforestation, where branch roads leave a main road like the bones of a fish.",
       "stage": {
         "mode": "flyover",
-        "flyover": { "from": 0, "to": 8, "playback": "scrub" },
+        "flyover": {
+          "from": 0,
+          "to": 20,
+          "playback": "play-hold"
+        },
         "left": "optical_before",
         "right": "sar_before",
         "swipe": 0.5
@@ -89,7 +158,11 @@
       "body": "An optical image records the light that ground reflects. NISAR sends its own signal, passes through cloud and smoke, and measures how much returns from branches, trunks and bare soil.",
       "stage": {
         "mode": "radar",
-        "flyover": { "from": 8, "to": 16, "playback": "scrub" },
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
         "left": "optical_before",
         "right": "sar_before",
         "swipe": 0.5
@@ -99,34 +172,73 @@
       "id": "fishbone",
       "eyebrow": "Between two radar passes",
       "headline": "The fishbone spreads",
-      "body": "The same ground, before and after. Where branch roads opened new clearings, the HV signal fell by {stat:hv_drop_db} on average.",
+      "body": "The same ground, before and after. Where new clearings opened, the HV signal fell by {stat:hv_drop_db} on average.",
       "stage": {
         "mode": "radar",
-        "flyover": { "from": 16, "to": 26, "playback": "scrub" },
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
         "left": "sar_before",
         "right": "sar_after",
         "swipe": 0.5,
-        "overlays": ["hv_change"],
-        "annotations": ["largest_clearing", "new_clearing"]
+        "overlays": [
+          "hv_change"
+        ],
+        "annotations": [
+          "new_clearing"
+        ],
+        "camera": {
+          "center": [
+            -63.568,
+            -9.818
+          ],
+          "zoom": 12.4,
+          "pitch": 30,
+          "bearing": 0
+        }
       },
-      "readout": { "seriesId": "hv_cleared", "statKey": "hv_drop_db" }
+      "readout": {
+        "seriesId": "hv_cleared",
+        "statKey": "hv_drop_db"
+      }
     },
     {
       "id": "measured",
       "eyebrow": "Measured",
       "headline": "Hectares, not impressions",
-      "body": "Pixels whose HV fell past the threshold add up to {stat:cleared_ha} of forest cleared. Each radar date adds a point to the series, {stat:n_dates} dates in all.",
+      "body": "Pixels whose HV fell past the threshold add up to {stat:cleared_ha} of new clearing between the two windows, across {stat:n_dates} radar dates.",
       "stage": {
-        "mode": "split",
-        "flyover": { "from": 26, "to": 32, "playback": "scrub" },
+        "mode": "radar",
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
         "left": "optical_after",
         "right": "sar_after",
         "swipe": 0.5,
-        "flyoverLayer": "optical_after",
-        "overlays": ["hv_change"],
-        "annotations": ["new_clearing"]
+        "overlays": [
+          "hv_change"
+        ],
+        "annotations": [
+          "new_clearing"
+        ],
+        "camera": {
+          "center": [
+            -63.56,
+            -9.83
+          ],
+          "zoom": 11.6,
+          "pitch": 45,
+          "bearing": -10
+        }
       },
-      "readout": { "seriesId": "hv_cleared", "statKey": "cleared_ha" }
+      "readout": {
+        "seriesId": "hv_cleared",
+        "statKey": "cleared_ha"
+      }
     },
     {
       "id": "act",
@@ -134,14 +246,22 @@
       "headline": "Keep the canopy standing",
       "body": "Radar shows where clearing starts. Keeping forest standing depends on land protection and on the communities who live in it. Two organizations work on that in the Amazon.",
       "stage": {
-        "mode": "flyover",
-        "flyover": { "from": 32, "to": 36, "playback": "play-hold" },
+        "mode": "radar",
+        "flyover": {
+          "from": 20,
+          "to": 20,
+          "playback": "play-hold"
+        },
         "left": "optical_after",
         "right": "sar_after",
         "swipe": 0.5
       }
     }
   ],
+  "scaleAnchors": {
+    "cleared_ha": "central-park",
+    "hv_drop_db": "echo-power"
+  },
   "action": {
     "headline": "Protect the forest behind the roads",
     "body": "This analysis mapped {stat:cleared_ha} of new clearing in the study area. These organizations protect Amazon forest and the people who live in it.",
@@ -180,8 +300,14 @@
         "url": "https://www.rainforesttrust.org/",
         "focus": "Permanently protects habitat critical for species and the planet.",
         "region": "Rainforests worldwide",
-        "cta": { "label": "Support Rainforest Trust", "url": "https://www.rainforesttrust.org/" },
-        "verified": { "on": "2026-11-14", "how": "HTTP 200 on homepage" }
+        "cta": {
+          "label": "Support Rainforest Trust",
+          "url": "https://www.rainforesttrust.org/"
+        },
+        "verified": {
+          "on": "2026-11-14",
+          "how": "HTTP 200 on homepage"
+        }
       },
       {
         "name": "Amazon Conservation Team",
@@ -192,13 +318,25 @@
           "label": "Donate to Amazon Conservation Team",
           "url": "https://www.amazonteam.org/donate/"
         },
-        "verified": { "on": "2026-11-14", "how": "HTTP 200 on homepage and donate page" }
+        "verified": {
+          "on": "2026-11-14",
+          "how": "HTTP 200 on homepage and donate page"
+        }
       }
-    ]
+    ],
+    "local": {
+      "headline": "Act where you live",
+      "body": "Most forest cleared in Rondônia becomes cattle pasture. What you buy and who you vote for reach this far.",
+      "steps": [
+        "Ask the shops you use where their beef, leather and soy come from, and whether they track deforestation in their supply chains.",
+        "Support organizations that defend Indigenous land rights in the Amazon.",
+        "Share this chapter: the radar shows what clouds hide."
+      ]
+    }
   },
   "generated": {
     "pipelineVersion": "0.1.0+fixture",
-    "builtAt": "2025-11-14T06:00:00Z",
+    "builtAt": "2026-11-15T08:03:53Z",
     "layers": [
       {
         "id": "optical_before",
@@ -206,10 +344,19 @@
         "label": "Optical, before",
         "date": "2026-06-17/2026-07-11",
         "cog": "data/rondonia/optical_before.tif",
-        "render": { "type": "rgba" },
+        "render": {
+          "type": "rgba"
+        },
         "preview": "data/rondonia/optical_before.png",
-        "bounds": [-63.984375, -10.487812, -62.578125, -9.102097],
-        "sourceIds": ["synthetic"],
+        "bounds": [
+          -63.984375,
+          -10.487812,
+          -62.578125,
+          -9.102097
+        ],
+        "sourceIds": [
+          "synthetic"
+        ],
         "status": "illustrative",
         "bytes": 376832,
         "sha256": "4b1a28825aba01c1b1baf58edbf2dfdd998d9b8f9289e6bc5bd116f91a208d35"
@@ -220,10 +367,19 @@
         "label": "Optical, after",
         "date": "2026-09-09/2026-10-03",
         "cog": "data/rondonia/optical_after.tif",
-        "render": { "type": "rgba" },
+        "render": {
+          "type": "rgba"
+        },
         "preview": "data/rondonia/optical_after.png",
-        "bounds": [-63.984375, -10.487812, -62.578125, -9.102097],
-        "sourceIds": ["synthetic"],
+        "bounds": [
+          -63.984375,
+          -10.487812,
+          -62.578125,
+          -9.102097
+        ],
+        "sourceIds": [
+          "synthetic"
+        ],
         "status": "illustrative",
         "bytes": 402536,
         "sha256": "25271bd1c4dad82b2f8cc0f8688c479c7cc57ba75a4f2bc4dd80af33813ace5e"
@@ -234,15 +390,33 @@
         "label": "Radar composite, before",
         "date": "2026-06-17/2026-07-11",
         "cog": "data/rondonia/sar_before.tif",
-        "render": { "type": "rgba" },
+        "render": {
+          "type": "rgba"
+        },
         "stretch": {
-          "HH": [-20.0, 0.0],
-          "HV": [-28.0, -8.0],
-          "ratio": [0.0, 15.0]
+          "HH": [
+            -20.0,
+            0.0
+          ],
+          "HV": [
+            -28.0,
+            -8.0
+          ],
+          "ratio": [
+            0.0,
+            15.0
+          ]
         },
         "preview": "data/rondonia/sar_before.png",
-        "bounds": [-63.984375, -10.487812, -62.578125, -9.102097],
-        "sourceIds": ["synthetic"],
+        "bounds": [
+          -63.984375,
+          -10.487812,
+          -62.578125,
+          -9.102097
+        ],
+        "sourceIds": [
+          "synthetic"
+        ],
         "status": "illustrative",
         "bytes": 923506,
         "sha256": "cb8ab5b13b995638365f4d8bd0602dc675b5e68c52e8cd900873d109048e2e0d"
@@ -253,15 +427,33 @@
         "label": "Radar composite, after",
         "date": "2026-09-09/2026-10-03",
         "cog": "data/rondonia/sar_after.tif",
-        "render": { "type": "rgba" },
+        "render": {
+          "type": "rgba"
+        },
         "stretch": {
-          "HH": [-20.0, 0.0],
-          "HV": [-28.0, -8.0],
-          "ratio": [0.0, 15.0]
+          "HH": [
+            -20.0,
+            0.0
+          ],
+          "HV": [
+            -28.0,
+            -8.0
+          ],
+          "ratio": [
+            0.0,
+            15.0
+          ]
         },
         "preview": "data/rondonia/sar_after.png",
-        "bounds": [-63.984375, -10.487812, -62.578125, -9.102097],
-        "sourceIds": ["synthetic"],
+        "bounds": [
+          -63.984375,
+          -10.487812,
+          -62.578125,
+          -9.102097
+        ],
+        "sourceIds": [
+          "synthetic"
+        ],
         "status": "illustrative",
         "bytes": 933568,
         "sha256": "df4f67fcb546e5484838a4b669f5a25234300449c2e3aaf49943ca6d35533cae"
@@ -275,12 +467,22 @@
         "render": {
           "type": "ramp",
           "scheme": "BrewerYlOrRd9",
-          "domain": [2, 10],
+          "domain": [
+            2,
+            10
+          ],
           "unit": "dB"
         },
         "preview": "data/rondonia/hv_change.png",
-        "bounds": [-63.984375, -10.487812, -62.578125, -9.102097],
-        "sourceIds": ["synthetic"],
+        "bounds": [
+          -63.984375,
+          -10.487812,
+          -62.578125,
+          -9.102097
+        ],
+        "sourceIds": [
+          "synthetic"
+        ],
         "status": "illustrative",
         "bytes": 49651,
         "sha256": "76a78e54530f0117780147343f38835fc81667483fe3c0ed0bf8070b333a7735"
@@ -293,33 +495,95 @@
         "unit": "dB",
         "kind": "hv-backscatter",
         "points": [
-          { "t": "2026-06-17", "v": -13.2 },
-          { "t": "2026-06-29", "v": -13.32 },
-          { "t": "2026-07-11", "v": -13.67 },
-          { "t": "2026-07-23", "v": -14.0 },
-          { "t": "2026-08-04", "v": -15.28 },
-          { "t": "2026-08-16", "v": -16.11 },
-          { "t": "2026-08-28", "v": -17.27 },
-          { "t": "2026-09-09", "v": -18.15 },
-          { "t": "2026-09-21", "v": -18.49 },
-          { "t": "2026-10-03", "v": -18.7 }
+          {
+            "t": "2026-06-17",
+            "v": -13.2
+          },
+          {
+            "t": "2026-06-29",
+            "v": -13.32
+          },
+          {
+            "t": "2026-07-11",
+            "v": -13.67
+          },
+          {
+            "t": "2026-07-23",
+            "v": -14.0
+          },
+          {
+            "t": "2026-08-04",
+            "v": -15.28
+          },
+          {
+            "t": "2026-08-16",
+            "v": -16.11
+          },
+          {
+            "t": "2026-08-28",
+            "v": -17.27
+          },
+          {
+            "t": "2026-09-09",
+            "v": -18.15
+          },
+          {
+            "t": "2026-09-21",
+            "v": -18.49
+          },
+          {
+            "t": "2026-10-03",
+            "v": -18.7
+          }
         ],
         "reference": {
           "label": "Intact forest",
           "points": [
-            { "t": "2026-06-17", "v": -12.96 },
-            { "t": "2026-06-29", "v": -13.35 },
-            { "t": "2026-07-11", "v": -14.04 },
-            { "t": "2026-07-23", "v": -13.11 },
-            { "t": "2026-08-04", "v": -13.49 },
-            { "t": "2026-08-16", "v": -13.45 },
-            { "t": "2026-08-28", "v": -13.12 },
-            { "t": "2026-09-09", "v": -13.43 },
-            { "t": "2026-09-21", "v": -13.24 },
-            { "t": "2026-10-03", "v": -13.19 }
+            {
+              "t": "2026-06-17",
+              "v": -12.96
+            },
+            {
+              "t": "2026-06-29",
+              "v": -13.35
+            },
+            {
+              "t": "2026-07-11",
+              "v": -14.04
+            },
+            {
+              "t": "2026-07-23",
+              "v": -13.11
+            },
+            {
+              "t": "2026-08-04",
+              "v": -13.49
+            },
+            {
+              "t": "2026-08-16",
+              "v": -13.45
+            },
+            {
+              "t": "2026-08-28",
+              "v": -13.12
+            },
+            {
+              "t": "2026-09-09",
+              "v": -13.43
+            },
+            {
+              "t": "2026-09-21",
+              "v": -13.24
+            },
+            {
+              "t": "2026-10-03",
+              "v": -13.19
+            }
           ]
         },
-        "sourceIds": ["synthetic"],
+        "sourceIds": [
+          "synthetic"
+        ],
         "status": "illustrative"
       }
     ],
@@ -361,52 +625,55 @@
       }
     },
     "flyover": {
-      "duration": 36,
+      "duration": 20,
       "exaggeration": 1.5,
       "waypoints": [
         {
           "t": 0,
           "camera": {
-            "center": [-63.35, -10.05],
+            "center": [
+              -63.35,
+              -10.05
+            ],
             "zoom": 8.9,
             "pitch": 0,
             "bearing": 0
           }
         },
         {
-          "t": 8,
+          "t": 7,
           "camera": {
-            "center": [-63.45, -10.12],
-            "zoom": 9.9,
-            "pitch": 58,
-            "bearing": -28
+            "center": [
+              -63.42,
+              -9.98
+            ],
+            "zoom": 9.8,
+            "pitch": 45,
+            "bearing": -20
           }
         },
         {
-          "t": 16,
+          "t": 14,
           "camera": {
-            "center": [-63.3, -9.98],
-            "zoom": 10.5,
-            "pitch": 62,
-            "bearing": 22
+            "center": [
+              -63.5,
+              -9.88
+            ],
+            "zoom": 10.6,
+            "pitch": 55,
+            "bearing": -10
           }
         },
         {
-          "t": 26,
+          "t": 20,
           "camera": {
-            "center": [-63.28, -10.04],
-            "zoom": 10.8,
-            "pitch": 35,
-            "bearing": 30
-          }
-        },
-        {
-          "t": 36,
-          "camera": {
-            "center": [-63.35, -10.05],
-            "zoom": 9.7,
-            "pitch": 0,
-            "bearing": 0
+            "center": [
+              -63.53,
+              -9.85
+            ],
+            "zoom": 11.3,
+            "pitch": 52,
+            "bearing": -15
           }
         }
       ]
@@ -418,7 +685,10 @@
         "kind": "pin",
         "geometry": {
           "type": "Point",
-          "coordinates": [-63.377371, -10.050206]
+          "coordinates": [
+            -63.377371,
+            -10.050206
+          ]
         }
       },
       {
@@ -429,11 +699,26 @@
           "type": "Polygon",
           "coordinates": [
             [
-              [-63.44, -9.942629],
-              [-63.297969, -9.942629],
-              [-63.297969, -10.031873],
-              [-63.44, -10.031873],
-              [-63.44, -9.942629]
+              [
+                -63.44,
+                -9.942629
+              ],
+              [
+                -63.297969,
+                -9.942629
+              ],
+              [
+                -63.297969,
+                -10.031873
+              ],
+              [
+                -63.44,
+                -10.031873
+              ],
+              [
+                -63.44,
+                -9.942629
+              ]
             ]
           ]
         }

@@ -53,40 +53,33 @@ seed = 1101
 max_px = 640
 
 [flyover]
-duration = 36
+duration = 20  # Act I; the last waypoint is the chapter's openingCamera (pitch 52)
 exaggeration = 1.5
 
 [[flyover.waypoints]]
 t = 0
-center = [-63.35, -10.05]
+center = [-63.350, -10.050]
 zoom = 8.9
 pitch = 0
 bearing = 0
 
 [[flyover.waypoints]]
-t = 8
-center = [-63.45, -10.12]
-zoom = 9.9
-pitch = 58
-bearing = -28
+t = 7
+center = [-63.420, -9.980]
+zoom = 9.8
+pitch = 45
+bearing = -20
 
 [[flyover.waypoints]]
-t = 16
-center = [-63.50, -9.90]
-zoom = 10.8
+t = 14
+center = [-63.500, -9.880]
+zoom = 10.6
 pitch = 55
-bearing = 10
+bearing = -10
 
 [[flyover.waypoints]]
-t = 26
-center = [-63.547, -9.818]   # the largest new clearing found in the data
-zoom = 11.8
-pitch = 40
-bearing = 20
-
-[[flyover.waypoints]]
-t = 36
-center = [-63.35, -10.05]
-zoom = 9.7
-pitch = 0
-bearing = 0
+t = 20
+center = [-63.530, -9.850]
+zoom = 11.3
+pitch = 52
+bearing = -15

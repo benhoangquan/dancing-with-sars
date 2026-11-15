@@ -25,6 +25,9 @@ def cmd_fixture(args: argparse.Namespace) -> int:
         if args.all and "fixture" not in load_config(slug):
             print(f"skip  {slug}: no [fixture] config, so no illustrative data exists for it")
             continue
+        if args.all and not (CHAPTERS_DIR / f"{slug}.json").exists():
+            print(f"skip  {slug}: no chapter manifest, so it is not on the site")
+            continue
         try:
             path = fixture.build_fixture(slug, force=args.force)
         except (RuntimeError, ValueError, FileNotFoundError) as e:

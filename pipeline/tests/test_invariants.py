@@ -77,6 +77,46 @@ def run(obj, mutate):
         ),
         ("duplicate beat id", lambda o: o["beats"][1].update(id=o["beats"][0]["id"]), "duplicate beat"),
         ("bbox inverted", lambda o: o["aoi"].update(bbox=[-62.9, -10.4, -63.8, -9.7]), "west < east"),
+        ("four beats", lambda o: o["beats"].pop(), "exactly 5"),
+        ("flyover not 20 s", lambda o: o["generated"]["flyover"].update(duration=36), "must be 20"),
+        ("no opening camera", lambda o: o.pop("openingCamera"), "openingCamera is missing"),
+        ("opening pose drifts", lambda o: o["openingCamera"].update(pitch=40), "must equal openingCamera"),
+        ("unknown fact token", lambda o: o["beats"][2].update(body="Sank {fact:nope}."), "{fact:nope}"),
+        ("hectares without anchor", lambda o: o["scaleAnchors"].pop("cleared_ha"), "needs a scaleAnchors"),
+        ("anchor for nothing", lambda o: o["scaleAnchors"].update(ghost="central-park"), "neither a stat"),
+        (
+            "landmark outside AOI",
+            lambda o: o.update(landmarks=[{"id": "far", "label": "Far", "lonLat": [0, 0]}]),
+            "landmark far",
+        ),
+        (
+            "reading for unknown landmark",
+            lambda o: o["generated"].update(
+                landmarkReadings={
+                    "ghost": [
+                        {"label": "HV", "value": 1, "unit": "dB", "decimals": 1, "layerId": "sar_after"}
+                    ]
+                }
+            ),
+            "not a landmark",
+        ),
+        (
+            "footprint cites unknown source",
+            lambda o: o["generated"].update(
+                footprint={
+                    "kind": "shape",
+                    "label": "x",
+                    "areaHa": 1,
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[[-63, -10], [-63.1, -10], [-63.1, -9.9], [-63, -10]]],
+                    },
+                    "sourceIds": ["ghost"],
+                    "status": "real",
+                }
+            ),
+            "footprint: unknown source",
+        ),
     ],
 )
 def test_invariant_errors(rondonia, name, mutate, needle):
@@ -89,3 +129,27 @@ def test_digits_in_text_warn_but_years_do_not(rondonia):
     assert any("digits" in w for w in warns)
     _, warns = run(rondonia, lambda o: o["beats"][0].update(body="Data from 2026 and 1999."))
     assert warns == []
+
+
+def test_fact_tokens_resolve_and_count_as_sourced_numbers(rondonia):
+    fact = {
+        "id": "sinking",
+        "value": 10,
+        "unit": "cm/yr",
+        "decimals": 0,
+        "label": "Subsidence",
+        "source": {"name": "Study", "url": "https://example.org/x", "accessed": "2026-11-15"},
+    }
+    errs, warns = run(
+        rondonia,
+        lambda o: (
+            o.update(facts=[fact]),
+            o["scaleAnchors"].update(sinking="per-decade"),
+            o["beats"][2].update(body="Ground sinks {fact:sinking} here."),
+        ),
+    )
+    assert errs == [] and warns == []
+    errs, _ = run(
+        rondonia, lambda o: (o.update(facts=[fact]), o["beats"][2].update(body="Sinks {fact:sinking}."))
+    )
+    assert any("needs a scaleAnchors" in e for e in errs)

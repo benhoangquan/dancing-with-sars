@@ -10,7 +10,17 @@
   "aoi": {
     "bbox": [-63.8, -10.4, -62.9, -9.7],
     "placeName": "Rondônia",
-    "countryCode": "BR"
+    "countryCode": "BR",
+    "iso3": "BRA"
+  },
+  "globe": {
+    "pin": [-63.35, -10.05]
+  },
+  "openingCamera": {
+    "center": [-63.53, -9.85],
+    "zoom": 11.3,
+    "pitch": 52,
+    "bearing": -15
   },
   "radar": {
     "product": "GCOV",
@@ -76,7 +86,7 @@
       "body": "This stretch of Rondônia sits in the Amazon's arc of deforestation, where branch roads leave a main road like the bones of a fish.",
       "stage": {
         "mode": "flyover",
-        "flyover": { "from": 0, "to": 8, "playback": "scrub" },
+        "flyover": { "from": 0, "to": 20, "playback": "play-hold" },
         "left": "optical_before",
         "right": "sar_before",
         "swipe": 0.5
@@ -89,7 +99,7 @@
       "body": "An optical image records the light that ground reflects. NISAR sends its own signal, passes through cloud and smoke, and measures how much returns from branches, trunks and bare soil.",
       "stage": {
         "mode": "radar",
-        "flyover": { "from": 8, "to": 16, "playback": "scrub" },
+        "flyover": { "from": 20, "to": 20, "playback": "play-hold" },
         "left": "optical_before",
         "right": "sar_before",
         "swipe": 0.5
@@ -102,7 +112,7 @@
       "body": "The same ground, before and after. Where new clearings opened, the HV signal fell by {stat:hv_drop_db} on average.",
       "stage": {
         "mode": "radar",
-        "flyover": { "from": 16, "to": 26, "playback": "scrub" },
+        "flyover": { "from": 20, "to": 20, "playback": "play-hold" },
         "left": "sar_before",
         "right": "sar_after",
         "swipe": 0.5,
@@ -121,16 +131,21 @@
       "id": "measured",
       "eyebrow": "Measured",
       "headline": "Hectares, not impressions",
-      "body": "Pixels whose HV fell past the threshold add up to {stat:cleared_ha} of forest cleared. Each radar date adds a point to the series, {stat:n_dates} dates in all.",
+      "body": "Pixels whose HV fell past the threshold add up to {stat:cleared_ha} of new clearing between the two windows, across {stat:n_dates} radar dates.",
       "stage": {
-        "mode": "split",
-        "flyover": { "from": 26, "to": 32, "playback": "scrub" },
+        "mode": "radar",
+        "flyover": { "from": 20, "to": 20, "playback": "play-hold" },
         "left": "optical_after",
         "right": "sar_after",
         "swipe": 0.5,
-        "flyoverLayer": "optical_after",
         "overlays": ["hv_change"],
-        "annotations": ["new_clearing"]
+        "annotations": ["new_clearing"],
+        "camera": {
+          "center": [-63.56, -9.83],
+          "zoom": 11.6,
+          "pitch": 45,
+          "bearing": -10
+        }
       },
       "readout": { "seriesId": "hv_cleared", "statKey": "cleared_ha" }
     },
@@ -140,14 +155,15 @@
       "headline": "Keep the canopy standing",
       "body": "Radar shows where clearing starts. Keeping forest standing depends on land protection and on the communities who live in it. Two organizations work on that in the Amazon.",
       "stage": {
-        "mode": "flyover",
-        "flyover": { "from": 32, "to": 36, "playback": "play-hold" },
+        "mode": "radar",
+        "flyover": { "from": 20, "to": 20, "playback": "play-hold" },
         "left": "optical_after",
         "right": "sar_after",
         "swipe": 0.5
       }
     }
   ],
+  "scaleAnchors": { "cleared_ha": "central-park", "hv_drop_db": "echo-power" },
   "action": {
     "headline": "Protect the forest behind the roads",
     "body": "This analysis mapped {stat:cleared_ha} of new clearing in the study area. These organizations protect Amazon forest and the people who live in it.",
@@ -200,11 +216,20 @@
         },
         "verified": { "on": "2026-11-14", "how": "HTTP 200 on homepage and donate page" }
       }
-    ]
+    ],
+    "local": {
+      "headline": "Act where you live",
+      "body": "Most forest cleared in Rondônia becomes cattle pasture. What you buy and who you vote for reach this far.",
+      "steps": [
+        "Ask the shops you use where their beef, leather and soy come from, and whether they track deforestation in their supply chains.",
+        "Support organizations that defend Indigenous land rights in the Amazon.",
+        "Share this chapter: the radar shows what clouds hide."
+      ]
+    }
   },
   "generated": {
     "pipelineVersion": "0.1.0+nisar",
-    "builtAt": "2026-11-15T03:52:00Z",
+    "builtAt": "2026-11-15T08:02:52Z",
     "layers": [
       {
         "id": "optical_before",
@@ -361,7 +386,7 @@
       }
     },
     "flyover": {
-      "duration": 36,
+      "duration": 20,
       "exaggeration": 1.5,
       "waypoints": [
         {
@@ -374,39 +399,30 @@
           }
         },
         {
-          "t": 8,
+          "t": 7,
           "camera": {
-            "center": [-63.45, -10.12],
-            "zoom": 9.9,
-            "pitch": 58,
-            "bearing": -28
+            "center": [-63.42, -9.98],
+            "zoom": 9.8,
+            "pitch": 45,
+            "bearing": -20
           }
         },
         {
-          "t": 16,
+          "t": 14,
           "camera": {
-            "center": [-63.5, -9.9],
-            "zoom": 10.8,
+            "center": [-63.5, -9.88],
+            "zoom": 10.6,
             "pitch": 55,
-            "bearing": 10
+            "bearing": -10
           }
         },
         {
-          "t": 26,
+          "t": 20,
           "camera": {
-            "center": [-63.547, -9.818],
-            "zoom": 11.8,
-            "pitch": 40,
-            "bearing": 20
-          }
-        },
-        {
-          "t": 36,
-          "camera": {
-            "center": [-63.35, -10.05],
-            "zoom": 9.7,
-            "pitch": 0,
-            "bearing": 0
+            "center": [-63.53, -9.85],
+            "zoom": 11.3,
+            "pitch": 52,
+            "bearing": -15
           }
         }
       ]

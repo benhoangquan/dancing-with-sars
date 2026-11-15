@@ -10,7 +10,17 @@
   "aoi": {
     "bbox": [-119.85, 49.75, -119.15, 50.25],
     "placeName": "Okanagan Valley",
-    "countryCode": "CA"
+    "countryCode": "CA",
+    "iso3": "CAN"
+  },
+  "globe": {
+    "pin": [-119.5, 50.0]
+  },
+  "openingCamera": {
+    "center": [-119.53, 50.08],
+    "zoom": 11.6,
+    "pitch": 52,
+    "bearing": -20
   },
   "radar": {
     "product": "GCOV",
@@ -83,7 +93,7 @@
       "body": "In August 2026 wildfires burned in the Okanagan, in forest above the lakes. This view starts from the ground before the fires.",
       "stage": {
         "mode": "flyover",
-        "flyover": { "from": 0, "to": 8, "playback": "scrub" },
+        "flyover": { "from": 0, "to": 20, "playback": "play-hold" },
         "left": "optical_before",
         "right": "sar_before",
         "swipe": 0.5
@@ -96,7 +106,7 @@
       "body": "About {stat:smoke_cloud_pct} of this optical scene sits under haze. Radar is not affected: it measures the ground through the smoke.",
       "stage": {
         "mode": "radar",
-        "flyover": { "from": 8, "to": 16, "playback": "scrub" },
+        "flyover": { "from": 20, "to": 20, "playback": "play-hold" },
         "left": "optical_smoke",
         "right": "sar_after",
         "swipe": 0.5,
@@ -110,7 +120,7 @@
       "body": "The same hillsides, before and after. Where the canopy burned, HV fell by {stat:hv_drop_db} on average. Lakes stay dark in both: water reflects radar away.",
       "stage": {
         "mode": "radar",
-        "flyover": { "from": 16, "to": 26, "playback": "scrub" },
+        "flyover": { "from": 20, "to": 20, "playback": "play-hold" },
         "left": "sar_before",
         "right": "sar_after",
         "swipe": 0.5,
@@ -125,8 +135,8 @@
       "headline": "Counting what burned",
       "body": "The burn scar covers {stat:burned_ha} of the study area. The series shows burned area growing radar date by radar date, across {stat:n_dates} dates.",
       "stage": {
-        "mode": "split",
-        "flyover": { "from": 26, "to": 32, "playback": "scrub" },
+        "mode": "radar",
+        "flyover": { "from": 20, "to": 20, "playback": "play-hold" },
         "left": "optical_before",
         "right": "sar_after",
         "swipe": 0.5,
@@ -141,14 +151,15 @@
       "headline": "Help burned forest recover",
       "body": "A burn scar is the start of recovery work: replanting, erosion control and forest management. Two organizations fund reforestation.",
       "stage": {
-        "mode": "flyover",
-        "flyover": { "from": 32, "to": 36, "playback": "play-hold" },
+        "mode": "radar",
+        "flyover": { "from": 20, "to": 20, "playback": "play-hold" },
         "left": "optical_before",
         "right": "sar_after",
         "swipe": 0.5
       }
     }
   ],
+  "scaleAnchors": { "burned_ha": "central-park", "hv_drop_db": "echo-power" },
   "action": {
     "headline": "Help burned forest recover",
     "body": "This analysis mapped {stat:burned_ha} of burn scar in the study area. These organizations fund tree planting and forest restoration.",
@@ -201,11 +212,20 @@
         "cta": { "label": "Support American Forests", "url": "https://www.americanforests.org/" },
         "verified": { "on": "2026-11-14", "how": "HTTP 200 on homepage; region read from its About page" }
       }
-    ]
+    ],
+    "local": {
+      "headline": "Act where you live",
+      "body": "Wildfire seasons are getting longer across western North America. Preparing where you live helps firefighters and neighbours.",
+      "steps": [
+        "Learn your local wildfire or emergency alert system and sign up for it.",
+        "Clear dry material within a few metres of buildings, following your local FireSmart or Firewise guidance.",
+        "Support forest restoration after fires, through the organizations on the first tab."
+      ]
+    }
   },
   "generated": {
     "pipelineVersion": "0.1.0+fixture",
-    "builtAt": "2026-11-15T02:17:12Z",
+    "builtAt": "2026-11-15T08:02:49Z",
     "layers": [
       {
         "id": "optical_before",
@@ -346,52 +366,43 @@
       }
     },
     "flyover": {
-      "duration": 36,
+      "duration": 20,
       "exaggeration": 2.0,
       "waypoints": [
         {
           "t": 0,
           "camera": {
             "center": [-119.5, 50.0],
-            "zoom": 9.4,
+            "zoom": 9.0,
             "pitch": 0,
             "bearing": 0
           }
         },
         {
-          "t": 8,
+          "t": 7,
           "camera": {
-            "center": [-119.6, 49.92],
-            "zoom": 10.2,
-            "pitch": 65,
-            "bearing": -35
-          }
-        },
-        {
-          "t": 16,
-          "camera": {
-            "center": [-119.45, 50.05],
-            "zoom": 10.6,
-            "pitch": 70,
-            "bearing": 25
-          }
-        },
-        {
-          "t": 26,
-          "camera": {
-            "center": [-119.42, 50.02],
-            "zoom": 10.9,
-            "pitch": 40,
-            "bearing": 15
-          }
-        },
-        {
-          "t": 36,
-          "camera": {
-            "center": [-119.5, 50.0],
+            "center": [-119.52, 50.03],
             "zoom": 9.9,
-            "pitch": 0,
-            "bearing": 0
+            "pitch": 45,
+            "bearing": -15
+          }
+        },
+        {
+          "t": 14,
+          "camera": {
+            "center": [-119.53, 50.06],
+            "zoom": 10.8,
+            "pitch": 55,
+            "bearing": -25
+          }
+        },
+        {
+          "t": 20,
+          "camera": {
+            "center": [-119.53, 50.08],
+            "zoom": 11.6,
+            "pitch": 52,
+            "bearing": -20
           }
         }
       ]

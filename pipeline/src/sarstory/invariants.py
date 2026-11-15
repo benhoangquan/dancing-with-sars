@@ -9,6 +9,10 @@ from __future__ import annotations
 import re
 
 TOKEN = re.compile(r"\{stat:([a-z0-9_]+)\}")
+FACT = re.compile(r"\{fact:([a-z0-9_]+)\}")
+BEATS = 5  # Act I, three Act II beats, Act III
+FLYOVER_SECONDS = 20.0
+ANCHORED_UNITS = {"ha", "km2", "dB", "cm/yr"}  # figures that must be paired with an everyday reference
 YEAR = re.compile(r"(?<!\d)(?:19|20)\d{2}(?!\d)")
 PAD = 0.10
 ZOOM_RANGE, PITCH_RANGE = (5.0, 16.0), (0.0, 85.0)
@@ -54,7 +58,12 @@ def check_invariants(obj: dict) -> tuple[list[str], list[str]]:
     stats = set(gen["stats"])
     notes = {a["id"] for a in gen["annotations"]}
     sources = {s["id"]: s for s in gen["sources"]}
+    facts = {f["id"]: f for f in obj.get("facts", [])}
+    anchors = obj.get("scaleAnchors", {})
+    landmarks = {lm["id"]: lm for lm in obj.get("landmarks", [])}
     for kind, ids in (
+        ("fact", [f["id"] for f in obj.get("facts", [])]),
+        ("landmark", [lm["id"] for lm in obj.get("landmarks", [])]),
         ("layer", [lyr["id"] for lyr in gen["layers"]]),
         ("series", [s["id"] for s in gen["series"]]),
         ("annotation", [a["id"] for a in gen["annotations"]]),
@@ -81,13 +90,49 @@ def check_invariants(obj: dict) -> tuple[list[str], list[str]]:
         )
     for i, wp in enumerate(wps):
         _check_camera(f"flyover.waypoints[{i}]", wp["camera"], bbox, errs)
+    if len(obj["beats"]) != BEATS:
+        errs.append(
+            f"beats: need exactly {BEATS} (Act I, three Act II beats, Act III), have {len(obj['beats'])}"
+        )
+    if flyover["duration"] != FLYOVER_SECONDS:
+        errs.append(f"flyover.duration must be {FLYOVER_SECONDS:g} s, is {flyover['duration']}")
+    opening = obj.get("openingCamera")
+    if opening is None:
+        errs.append("openingCamera is missing")
+    else:
+        _check_camera("openingCamera", opening, bbox, errs)
+        if wps[-1]["camera"] != opening:
+            errs.append("flyover.waypoints: the last waypoint camera must equal openingCamera")
 
-    def check_text(where: str, text: str) -> None:
+    units = {k: v["unit"] for k, v in gen["stats"].items()} | {k: f["unit"] for k, f in facts.items()}
+    for key in anchors:
+        if key not in units:
+            errs.append(f"scaleAnchors: {key!r} is neither a stat nor a fact")
+    for lid, lm in landmarks.items():
+        w, s_, e, n = _padded(bbox)
+        lon, lat = lm["lonLat"]
+        if not (w <= lon <= e and s_ <= lat <= n):
+            errs.append(f"landmark {lid}: {lm['lonLat']} is outside the AOI bbox padded by 10%")
+    for lid, readings in gen.get("landmarkReadings", {}).items():
+        if lid not in landmarks:
+            errs.append(f"landmarkReadings: {lid!r} is not a landmark")
+        for r in readings:
+            if r["layerId"] not in layers:
+                errs.append(f"landmarkReadings {lid}: layer {r['layerId']!r} does not exist")
+
+    def check_text(where: str, text: str, anchored: bool = False) -> None:
         for key in TOKEN.findall(text):
             if key not in stats:
                 errs.append(f"{where}: token {{stat:{key}}} has no stat")
-        if re.search(r"\d", YEAR.sub("", TOKEN.sub("", text))):
-            warns.append(f"{where}: digits in text; use a {{stat:key}} token or a sourced metric")
+        for key in FACT.findall(text):
+            if key not in facts:
+                errs.append(f"{where}: token {{fact:{key}}} has no fact")
+        if anchored:
+            for key in TOKEN.findall(text) + FACT.findall(text):
+                if units.get(key) in ANCHORED_UNITS and key not in anchors:
+                    errs.append(f"{where}: {key!r} ({units[key]}) needs a scaleAnchors entry")
+        if re.search(r"\d", YEAR.sub("", FACT.sub("", TOKEN.sub("", text)))):
+            warns.append(f"{where}: digits in text; use a {{stat:key}} or {{fact:key}} token")
 
     for beat in obj["beats"]:
         b, st = beat["id"], beat["stage"]
@@ -113,16 +158,26 @@ def check_invariants(obj: dict) -> tuple[list[str], list[str]]:
                 errs.append(f"beat {b}: readout series {ro['seriesId']!r} does not exist")
             if "statKey" in ro and ro["statKey"] not in stats:
                 errs.append(f"beat {b}: readout stat {ro['statKey']!r} does not exist")
-        check_text(f"beat {b} body", beat["body"])
+        check_text(f"beat {b} body", beat["body"], anchored=True)
 
     check_text("action.body", obj["action"]["body"])
     for m in obj["action"]["metrics"]:
         if "statKey" in m and m["statKey"] not in stats:
             errs.append(f"action metric {m['label']!r}: stat {m['statKey']!r} does not exist")
 
-    for item_kind, items in (("layer", gen["layers"]), ("series", gen["series"])):
+    extras = [("footprint", gen["footprint"])] if "footprint" in gen else []
+    for name in ("impact", "dem"):
+        if name in gen:
+            for sid in gen[name]["sourceIds"]:
+                if sid not in sources:
+                    errs.append(f"{name}: unknown source {sid!r}")
+    for item_kind, items in (
+        ("layer", gen["layers"]),
+        ("series", gen["series"]),
+        *((k, [v]) for k, v in extras),
+    ):
         for it in items:
-            where = f"{item_kind} {it['id']}"
+            where = f"{item_kind} {it.get('id', '')}".strip()
             for sid in it["sourceIds"]:
                 if sid not in sources:
                     errs.append(f"{where}: unknown source {sid!r}")

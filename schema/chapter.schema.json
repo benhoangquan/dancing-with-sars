@@ -22,7 +22,8 @@
       "properties": {
         "bbox": { "$ref": "#/$defs/BBox" },
         "placeName": { "type": "string", "minLength": 1 },
-        "countryCode": { "type": "string", "pattern": "^[A-Z]{2}$" }
+        "countryCode": { "type": "string", "pattern": "^[A-Z]{2}$" },
+        "iso3": { "type": "string", "pattern": "^[A-Z]{3}$", "description": "ISO 3166-1 alpha-3, shown in globe callouts as 'Name · ISO3'." }
       }
     },
     "radar": {
@@ -40,6 +41,22 @@
     "legend": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/LegendEntry" } },
     "beats": { "type": "array", "minItems": 4, "maxItems": 7, "items": { "$ref": "#/$defs/Beat" } },
     "action": { "$ref": "#/$defs/ActionContent" },
+    "globe": {
+      "type": "object", "additionalProperties": false, "required": ["pin"],
+      "properties": { "pin": { "$ref": "#/$defs/LonLat" } },
+      "description": "Where the chapter's hotspot pin sits on the globe. Defaults to the bbox centre."
+    },
+    "openingCamera": { "$ref": "#/$defs/Camera", "description": "Pose where Act I's flyover ends and the Act II map opens. Equals the last flyover waypoint." },
+    "facts": { "type": "array", "items": { "$ref": "#/$defs/Fact" }, "description": "Sourced numbers for {fact:id} tokens." },
+    "scaleAnchors": {
+      "type": "object", "patternProperties": { "^[a-z0-9_]+$": { "$ref": "#/$defs/ScaleReference" } }, "additionalProperties": false,
+      "description": "Stat or fact key -> the everyday reference it is compared with."
+    },
+    "landmarks": { "type": "array", "maxItems": 3, "items": { "$ref": "#/$defs/Landmark" } },
+    "soundscape": {
+      "type": "object", "additionalProperties": false, "required": ["before", "after"],
+      "properties": { "before": { "$ref": "#/$defs/Sound" }, "after": { "$ref": "#/$defs/Sound" } }
+    },
     "generated": { "$ref": "#/$defs/Generated" }
   },
   "$defs": {
@@ -61,7 +78,62 @@
     "HttpsUrl": { "type": "string", "pattern": "^https://[^\\s]+$" },
     "Color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
     "Id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
-    "Unit": { "enum": ["dB", "cm", "ha", "m", "ratio", "%", "count", "cm/month", "m/day"] },
+    "Unit": { "enum": ["dB", "cm", "ha", "m", "ratio", "%", "count", "cm/month", "m/day", "cm/yr", "km2"] },
+    "ScaleReference": { "enum": ["football-pitch", "central-park", "manhattan", "echo-power", "per-decade"] },
+    "Fact": {
+      "type": "object", "additionalProperties": false, "required": ["id", "value", "unit", "decimals", "label", "source"],
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "value": { "type": "number" },
+        "unit": { "$ref": "#/$defs/Unit" },
+        "decimals": { "type": "integer", "minimum": 0, "maximum": 6 },
+        "label": { "type": "string", "minLength": 1 },
+        "source": { "$ref": "#/$defs/MetricSource" }
+      }
+    },
+    "Photo": {
+      "type": "object", "additionalProperties": false, "required": ["src", "credit", "license", "licenseUrl", "sourceUrl", "caption", "where"],
+      "properties": {
+        "src": { "$ref": "#/$defs/AssetPath" },
+        "credit": { "type": "string", "minLength": 1 },
+        "license": { "type": "string", "minLength": 1 },
+        "licenseUrl": { "$ref": "#/$defs/HttpsUrl" },
+        "sourceUrl": { "$ref": "#/$defs/HttpsUrl" },
+        "caption": { "type": "string", "minLength": 1 },
+        "where": { "type": "string", "minLength": 1, "description": "How close to the pin the photo was taken, in plain words." }
+      }
+    },
+    "Landmark": {
+      "type": "object", "additionalProperties": false, "required": ["id", "label", "lonLat"],
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "label": { "type": "string", "minLength": 1 },
+        "lonLat": { "$ref": "#/$defs/LonLat" },
+        "note": { "type": "string", "minLength": 1 },
+        "photo": { "$ref": "#/$defs/Photo" }
+      }
+    },
+    "Sound": {
+      "type": "object", "additionalProperties": false, "required": ["src", "label", "credit", "license", "sourceUrl", "synthesized"],
+      "properties": {
+        "src": { "$ref": "#/$defs/AssetPath" },
+        "label": { "type": "string", "minLength": 1 },
+        "credit": { "type": "string", "minLength": 1 },
+        "license": { "type": "string", "minLength": 1 },
+        "sourceUrl": { "$ref": "#/$defs/HttpsUrl" },
+        "synthesized": { "type": "boolean" }
+      }
+    },
+    "Reading": {
+      "type": "object", "additionalProperties": false, "required": ["label", "value", "unit", "decimals", "layerId"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "value": { "type": "number" },
+        "unit": { "$ref": "#/$defs/Unit" },
+        "decimals": { "type": "integer", "minimum": 0, "maximum": 6 },
+        "layerId": { "$ref": "#/$defs/Id" }
+      }
+    },
     "StageMode": { "enum": ["flyover", "radar", "split"] },
     "DataStatus": { "enum": ["real", "fallback", "illustrative"] },
     "Camera": {
@@ -173,7 +245,16 @@
         "headline": { "type": "string", "minLength": 1 },
         "body": { "type": "string", "minLength": 1 },
         "metrics": { "type": "array", "minItems": 2, "maxItems": 4, "items": { "$ref": "#/$defs/ImpactMetric" } },
-        "organizations": { "type": "array", "minItems": 2, "maxItems": 3, "items": { "$ref": "#/$defs/Organization" } }
+        "organizations": { "type": "array", "minItems": 2, "maxItems": 3, "items": { "$ref": "#/$defs/Organization" } },
+        "local": {
+          "type": "object", "additionalProperties": false, "required": ["headline", "body", "steps"],
+          "properties": {
+            "headline": { "type": "string", "minLength": 1 },
+            "body": { "type": "string", "minLength": 1 },
+            "steps": { "type": "array", "minItems": 1, "maxItems": 4, "items": { "type": "string", "minLength": 1 } }
+          },
+          "description": "Tab 2 of the action modal: what someone can do where they live."
+        }
       }
     },
     "LayerRender": {
@@ -277,6 +358,13 @@
         "coordinates": { "type": "array", "minItems": 1, "items": { "type": "array", "minItems": 4, "items": { "$ref": "#/$defs/LonLat" } } }
       }
     },
+    "MultiPolygonGeometry": {
+      "type": "object", "additionalProperties": false, "required": ["type", "coordinates"],
+      "properties": {
+        "type": { "const": "MultiPolygon" },
+        "coordinates": { "type": "array", "minItems": 1, "items": { "type": "array", "minItems": 1, "items": { "type": "array", "minItems": 4, "items": { "$ref": "#/$defs/LonLat" } } } }
+      }
+    },
     "Annotation": {
       "type": "object", "additionalProperties": false, "required": ["id", "label", "kind", "geometry"],
       "properties": {
@@ -291,7 +379,7 @@
       "required": ["id", "mission", "product", "collection", "maturity", "granules", "dates", "provider", "license", "url", "nasa"],
       "properties": {
         "id": { "type": "string", "minLength": 1 },
-        "mission": { "enum": ["NISAR", "Sentinel-1", "HLS", "NASADEM", "Synthetic"] },
+        "mission": { "enum": ["NISAR", "Sentinel-1", "HLS", "NASADEM", "Synthetic", "Copernicus DEM", "Overture Maps", "OpenStreetMap", "BC Wildfire Service", "Wikimedia Commons"] },
         "product": { "type": "string", "minLength": 1 },
         "collection": { "type": "string", "minLength": 1 },
         "maturity": { "enum": ["beta", "provisional", "validated", "n/a"] },
@@ -310,11 +398,48 @@
         "pipelineVersion": { "type": "string", "minLength": 1 },
         "builtAt": { "type": "string", "format": "date-time" },
         "layers": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Layer" } },
-        "series": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Series" } },
+        "series": { "type": "array", "items": { "$ref": "#/$defs/Series" } },
         "stats": { "type": "object", "patternProperties": { "^[a-z0-9_]+$": { "$ref": "#/$defs/Stat" } }, "additionalProperties": false },
         "flyover": { "$ref": "#/$defs/Flyover" },
         "annotations": { "type": "array", "items": { "$ref": "#/$defs/Annotation" } },
-        "sources": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Source" } }
+        "sources": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Source" } },
+        "dem": {
+          "type": "object", "additionalProperties": false, "required": ["cog", "bounds", "sourceIds", "bytes", "sha256"],
+          "properties": {
+            "cog": { "$ref": "#/$defs/AssetPath" },
+            "bounds": { "$ref": "#/$defs/BBox" },
+            "sourceIds": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+            "bytes": { "type": "integer", "minimum": 0 },
+            "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+          },
+          "description": "Terrain for the map and the flyover, read with cog://...#dem."
+        },
+        "landmarkReadings": {
+          "type": "object", "patternProperties": { "^[a-z0-9_]+$": { "type": "array", "items": { "$ref": "#/$defs/Reading" } } }, "additionalProperties": false
+        },
+        "impact": {
+          "type": "object", "additionalProperties": false, "required": ["geojson", "bytes", "sha256", "counts", "sourceIds"],
+          "properties": {
+            "geojson": { "$ref": "#/$defs/AssetPath" },
+            "bytes": { "type": "integer", "minimum": 0 },
+            "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "counts": { "type": "object", "patternProperties": { "^[a-z0-9_]+$": { "type": "integer", "minimum": 0 } }, "additionalProperties": false },
+            "sourceIds": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+          },
+          "description": "Buildings, roads and territories near the change, drawn on the radar stage."
+        },
+        "footprint": {
+          "type": "object", "additionalProperties": false, "required": ["kind", "label", "areaHa", "geometry", "sourceIds", "status"],
+          "properties": {
+            "kind": { "enum": ["shape", "equal-area"], "description": "equal-area: a square of a cited area; the shape is not the real one." },
+            "label": { "type": "string", "minLength": 1 },
+            "areaHa": { "type": "number", "exclusiveMinimum": 0 },
+            "geometry": { "oneOf": [{ "$ref": "#/$defs/PolygonGeometry" }, { "$ref": "#/$defs/MultiPolygonGeometry" }] },
+            "sourceIds": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+            "status": { "$ref": "#/$defs/DataStatus" }
+          },
+          "description": "The area compared with a city in the action modal."
+        }
       }
     }
   }

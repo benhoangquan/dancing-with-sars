@@ -2,6 +2,8 @@
 
 An interactive scrollytelling site that turns NASA-ISRO NISAR L-band radar data into six short stories about forests, fires and flooded land. Built for the 2026 NASA Space Apps Challenge.
 
+**Live site: <https://benhoangquan.github.io/dancing-with-sars/>**
+
 <!-- demo: add docs/demo.gif and an image link here once the recording exists -->
 
 The reader starts on the NASA Blue Marble globe and picks a red pin. Each place has three acts: a 20-second terrain flyover, a radar stage with a before/after swipe (landmarks, roads and buildings overlaid), and an action sheet with organizations to contact and a "your city scale" comparison. Grey pins mark places where we checked NISAR data and found no change we could defend.
@@ -42,6 +44,8 @@ Six other candidate sites (Tartar, San Joaquin, Madre de Dios, Sundarbans, Alask
 ## Quickstart
 
 The data under `web/public/` is committed, so the site builds without credentials.
+
+GitHub Pages deploys `web/out` on every push to `main` (`.github/workflows/pages.yml`, base path `/dancing-with-sars`).
 
 ```bash
 cd pipeline && uv sync && uv run sar validate
